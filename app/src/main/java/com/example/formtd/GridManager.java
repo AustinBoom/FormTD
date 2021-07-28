@@ -16,18 +16,19 @@ public class GridManager {
         this.deviceWidth = width;
         this.deviceHeight = height;
         this.tileWidth = 0;
-        System.out.println(width + "  " + height);
+        //System.out.println(width + "  " + height);
         createGrid();
     }
 
     //Create the size of the squares given the size constraints
     private void createGrid(){
         //Get numbers needed to fill grid
-        //TODO make optimization to map width and start. If not divisible by xGridAmount (20), then create offset.
         int xMapWidth = deviceWidth - deviceWidth/20;   //total map width
-        int xMapStart = deviceWidth/40;                 //Where the map starts (left margin)
-        int yMapStart = deviceHeight/40;
         this.tileWidth = xMapWidth/xGridAmount;
+        int mapOffset = (xMapWidth - (tileWidth * xGridAmount))/2;      //Make extra space even on each side of screen
+
+        int xMapStart = deviceWidth/40 + mapOffset;     //Where the map starts (left margin)
+        int yMapStart = deviceHeight/40;
         int xPos = xMapStart;
         int yPos = yMapStart;
 
@@ -42,11 +43,9 @@ public class GridManager {
             yPos += tileWidth;
         }
 
-//        //Print array
-//        for (int y = 0; y < yGridAmount; y++) {
-//            for (int x = 0; x < xGridAmount; x++) {
+//        for (int y = 0; y < yGridAmount; y++) {       //test print
+//            for (int x = 0; x < xGridAmount; x++)
 //                System.out.print("(" + grid[y][x].x + ", " + grid[y][x].y +  ") ");
-//            }
 //            System.out.println();
 //        }
     }
