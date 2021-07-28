@@ -18,6 +18,9 @@ public class DefenceView extends View implements View.OnTouchListener {
     int deviceWidth;
     int deviceHeight;
 
+    //Defence View
+    GridManager grid;
+
     public DefenceView(Context context) {
         super(context);
         this.context = context;
@@ -47,11 +50,12 @@ public class DefenceView extends View implements View.OnTouchListener {
                 deviceWidth*39/40, deviceHeight*3/4, paint);
     }
 
+    //CRUCIAL measurement, this method is called once and initializes a GridManager
     protected void onMeasure(int widthMeasure, int heightMeasure){
         deviceWidth = MeasureSpec.getSize(widthMeasure);
         deviceHeight = MeasureSpec.getSize(heightMeasure);
 
-        System.out.println(deviceWidth + "  " + deviceHeight);
+        grid = new GridManager(deviceWidth, deviceHeight);
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
