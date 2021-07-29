@@ -7,14 +7,22 @@ import androidx.annotation.Nullable;
 
 //Class when given the grid and location touch will return where to draw the highlighted section.
 public class PlacementManager {
+    //Data from GridManager.
     private Point[][] grid;
     private int tileWidth;
+    private int xMapStart;
+    private int yMapStart;
+
+    //Data for placement functionality.
     private boolean highlighted;
     private RectanglePoints currentRectangleHighlight;
 
-    public PlacementManager(Point[][] grid, int tileWidth){
+    public PlacementManager(Point[][] grid, int tileWidth, int xMapStart, int yMapStart){
         this.grid = grid;
         this.tileWidth = tileWidth;
+        this.xMapStart = xMapStart;
+        this.yMapStart = yMapStart;
+
         this.highlighted = false;
         this.currentRectangleHighlight = new RectanglePoints();
     }
@@ -26,24 +34,25 @@ public class PlacementManager {
 
     public void setHighlightPlacement(int xTouch, int yTouch){
         highlighted = true;
-        currentRectangleHighlight.left = 100;
-        currentRectangleHighlight.top = 100;
-        currentRectangleHighlight.right = 300;
-        currentRectangleHighlight.bottom = 300;
 
-        //put logic to find the coordinates here. Use the nearest point and then add two tile widths
-        //in each direction to create the other points.
-        for (int i = 0; i < grid[0].length - 1; i++) {  //TODO eventually do length-1 to account for the 2x2 shape.
-            if(grid[0][i].x < xTouch){
-                currentRectangleHighlight.left = grid[0][i].x;
-                currentRectangleHighlight.right = currentRectangleHighlight.left + (tileWidth * 2);
+        int xOuterboundary = xMapStart + (grid[0].length * tileWidth);
+        int yOuterboundary = yMapStart + (grid.length * tileWidth);
+
+        //make sure touch is in bounds
+        if(xTouch > xMapStart && yTouch > yMapStart && xTouch < xOuterboundary && yTouch < yOuterboundary) {
+            //Round touch to the nearest grid point.
+            for (int i = 0; i < grid[0].length - 1; i++) {      //Round x to nearest grid.
+                if (grid[0][i].x < xTouch) {
+                    currentRectangleHighlight.left = grid[0][i].x;
+                    currentRectangleHighlight.right = currentRectangleHighlight.left + (tileWidth * 2);
+                }
             }
-        }
 
-        for (int i = 0; i < grid.length - 1; i++) {  //TODO eventually do length-1 to account for the 2x2 shape.
-            if(grid[i][0].y < yTouch){
-                currentRectangleHighlight.top = grid[i][0].y;
-                currentRectangleHighlight.bottom = currentRectangleHighlight.top + (tileWidth * 2);
+            for (int i = 0; i < grid.length - 1; i++) {         //Round y to nearest grid.
+                if (grid[i][0].y < yTouch) {
+                    currentRectangleHighlight.top = grid[i][0].y;
+                    currentRectangleHighlight.bottom = currentRectangleHighlight.top + (tileWidth * 2);
+                }
             }
         }
 

@@ -47,7 +47,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         gridManager = new GridManager(deviceWidth, deviceHeight);
         grid = gridManager.getGrid();
-        placementManager = new PlacementManager(grid, gridManager.getTileWidth());
+        placementManager = new PlacementManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
@@ -96,7 +96,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 right = left + gridManager.getTileWidth();
                 top = grid[y][x].y;
                 bottom = top + gridManager.getTileWidth();
-                paint.setARGB(75, ran.nextInt(255) , ran.nextInt(255), ran.nextInt(255));
+                paint.setARGB(25, ran.nextInt(255) , ran.nextInt(255), ran.nextInt(255));
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }

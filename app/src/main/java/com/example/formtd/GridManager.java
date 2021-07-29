@@ -10,6 +10,8 @@ public class GridManager {
     private static final int yGridAmount = 28;  //28 TALL GRID
     private int tileWidth;                      //This width applies to both x and y.
     private Point[][] grid;
+    private int xMapStart;
+    private int yMapStart;
 
 
 
@@ -17,7 +19,8 @@ public class GridManager {
         this.deviceWidth = width;
         this.deviceHeight = height;
         this.tileWidth = 0;
-        //System.out.println(width + "  " + height);
+        this.xMapStart = 0;
+        this.yMapStart = 0;
         createGrid();
     }
 
@@ -28,8 +31,8 @@ public class GridManager {
         this.tileWidth = xMapWidth/xGridAmount;
         int mapOffset = (xMapWidth - (tileWidth * xGridAmount))/2;      //Make extra space even on each side of screen
 
-        int xMapStart = deviceWidth/40 + mapOffset;     //Where the map starts (left margin)
-        int yMapStart = deviceHeight/40;
+        this.xMapStart = deviceWidth/40 + mapOffset;     //Where the map starts (left margin)
+        this.yMapStart = deviceHeight/40;
         int xPos = xMapStart;
         int yPos = yMapStart;
 
@@ -57,5 +60,13 @@ public class GridManager {
 
     public int getTileWidth(){
         return tileWidth;
+    }
+
+    public int getxMapStart() {
+        return xMapStart;
+    }
+
+    public int getyMapStart() {
+        return yMapStart;
     }
 }
