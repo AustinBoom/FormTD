@@ -8,8 +8,10 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -28,11 +30,13 @@ public class DefenceView extends View implements View.OnTouchListener {
     public DefenceView(Context context) {
         super(context);
         this.context = context;
+        setOnTouchListener(this);
     }
 
     public DefenceView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         this.context = context;
+        setOnTouchListener(this);
     }
 
     //CRUCIAL measurement, this method is called once and initializes a GridManager
@@ -54,9 +58,14 @@ public class DefenceView extends View implements View.OnTouchListener {
     //When screen is touched, respond!
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        invalidate();
+        Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY() + "eeeeeeeeeeeee");
 
-        return false;
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY() + "eeeeeeeeeeeee");
+            Toast.makeText(context, "OIEF", Toast.LENGTH_SHORT).show();
+            invalidate();
+        }
+        return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
     }
 
     //Draw listener that updates the view.
