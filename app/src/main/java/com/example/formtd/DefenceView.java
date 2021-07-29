@@ -24,7 +24,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     int deviceHeight;
 
     //Defence View
-    GridManager gridManager;
+    GridManager gridManager;                //Creates/updates grid
+    PlacementManager placementManager;      //Manages placement via touch.
     Point[][] grid;
 
     public DefenceView(Context context) {
@@ -39,13 +40,14 @@ public class DefenceView extends View implements View.OnTouchListener {
         setOnTouchListener(this);
     }
 
-    //CRUCIAL measurement, this method is called once and initializes a GridManager
+    //CRUCIAL measurement, this method initializes a GridManager
     protected void onMeasure(int widthMeasure, int heightMeasure){
         deviceWidth = MeasureSpec.getSize(widthMeasure);
         deviceHeight = MeasureSpec.getSize(heightMeasure);
 
         gridManager = new GridManager(deviceWidth, deviceHeight);
         grid = gridManager.getGrid();
+        placementManager = new PlacementManager(grid, gridManager.getTileWidth());
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
@@ -58,11 +60,10 @@ public class DefenceView extends View implements View.OnTouchListener {
     //When screen is touched, respond!
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY() + "eeeeeeeeeeeee");
-
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY() + "eeeeeeeeeeeee");
-            Toast.makeText(context, "OIEF", Toast.LENGTH_SHORT).show();
+            Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY());
+            placementManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
+
             invalidate();
         }
         return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
@@ -77,6 +78,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawRect(deviceWidth/40, deviceHeight/40,
                 deviceWidth*39/40, deviceHeight*3/4, paint);
         drawGrid(canvas);
+        drawHighLight(canvas);
     }
 
     //Draws the points represented by a grid using random colors. For testing purposes.
@@ -94,10 +96,22 @@ public class DefenceView extends View implements View.OnTouchListener {
                 right = left + gridManager.getTileWidth();
                 top = grid[y][x].y;
                 bottom = top + gridManager.getTileWidth();
-                paint.setARGB(255, ran.nextInt(255) , ran.nextInt(255), ran.nextInt(255));
+                paint.setARGB(75, ran.nextInt(255) , ran.nextInt(255), ran.nextInt(255));
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }
+    }
+
+    private void drawHighLight(Canvas canvas){
+        //Get the highlighted points. If null then there is no highlight to draw; simply do nothing.
+        RectanglePoints rectanglePoints = placementManager.getHighlightPlacement();
+        if(rectanglePoints != null){
+            Paint paint = new Paint();
+            paint.setARGB(150, 50, 255, 50);
+            canvas.drawRect(rectanglePoints.left, rectanglePoints.top,
+                    rectanglePoints.right, rectanglePoints.bottom, paint);
+        }
+
     }
 
 

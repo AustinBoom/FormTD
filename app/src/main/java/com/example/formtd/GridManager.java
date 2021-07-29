@@ -1,6 +1,7 @@
 package com.example.formtd;
 
 import android.graphics.Point;
+import android.util.Log;
 
 public class GridManager {
     private int deviceWidth;
