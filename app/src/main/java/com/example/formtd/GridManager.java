@@ -1,7 +1,12 @@
 package com.example.formtd;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 
+import java.util.Random;
+
+//Manages creation and data of the grid.
 public class GridManager {
     private int deviceWidth;
     private int deviceHeight;
@@ -54,6 +59,27 @@ public class GridManager {
 //        }
     }
 
+    //Draws the grid background
+    public void drawGrid(Canvas canvas){
+        //Print array
+        Paint paint = new Paint();
+        Random ran = new Random();
+        int left;
+        int top;
+        int right;
+        int bottom;
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[y].length; x++) {
+                left = grid[y][x].x;
+                right = left + tileWidth;
+                top = grid[y][x].y;
+                bottom = top + tileWidth;
+                paint.setARGB(255, 155 - (6*((x+(y%2))%2)), 180 - (6*((x+(y%2))%2)), 255 - (6*((x+(y%2))%2))); //makes a checkeredboard
+                canvas.drawRect(left, top, right, bottom, paint);
+            }
+        }
+    }
+
     public Point[][] getGrid(){
         return grid;
     }
@@ -69,4 +95,5 @@ public class GridManager {
     public int getyMapStart() {
         return yMapStart;
     }
+
 }

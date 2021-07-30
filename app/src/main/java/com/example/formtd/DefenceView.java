@@ -26,8 +26,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     //Defence View
     GridManager gridManager;                //Creates/updates grid
     PlacementManager placementManager;      //Manages placement via touch.
-    TowerManager towerManager;
-    Point[][] grid;
+    TowerManager towerManager;              //Manages existing towers and spot availability.
+    Point[][] grid;                         //The grid which is used among different managers.
 
     public DefenceView(Context context) {
         super(context);
@@ -65,44 +65,46 @@ public class DefenceView extends View implements View.OnTouchListener {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             //Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY());
             placementManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
-
-            invalidate();
+            invalidate(); //Boiler plate
         }
         return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
     }
 
     //Draw listener that updates the view.
     public void onDraw(Canvas canvas){
-
         //Just to test drawview
         Paint paint = new Paint();
         paint.setARGB(255, 50, 70, 90);
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
-        drawGrid(canvas);
+        gridManager.drawGrid(canvas);
+        drawSpawnMidEndPoints(canvas);
         drawHighLight(canvas);
     }
 
-    //Draws the points represented by a grid using random colors. For testing purposes.
-    private void drawGrid(Canvas canvas){
-        //Print array
+    //Draws the spawn point, midpoint, and endpoint. This is hard coded since it's part of the world.
+    private void drawSpawnMidEndPoints(Canvas canvas){
         Paint paint = new Paint();
-        Random ran = new Random();
-        int left;
-        int top;
-        int right;
-        int bottom;
-        for (int y = 0; y < grid.length; y++) {
-            for (int x = 0; x < grid[y].length; x++) {
-                left = grid[y][x].x;
-                right = left + gridManager.getTileWidth();
-                top = grid[y][x].y;
-                bottom = top + gridManager.getTileWidth();
-                paint.setARGB(255, 155 - (6*((x+(y%2))%2)), 180 - (6*((x+(y%2))%2)), 255 - (6*((x+(y%2))%2))); //makes a checkeredboard
-                canvas.drawRect(left, top, right, bottom, paint);
-            }
-        }
+        paint.setARGB(255, 65, 5, 35);
+        //Draw spawnpoint
+        RectanglePoints corner = new RectanglePoints(grid[0][0].x, grid[0][0].y, grid[0][grid[0].length-1].x + gridManager.getTileWidth(), grid[1][0].y);
+        canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 20, 20, paint);
+        //Draw endpoint
+        corner.top = grid[grid.length-1][0].y;
+        corner.bottom = grid[grid.length-1][0].y + gridManager.getTileWidth();
+        canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 20, 20, paint);
+        //Draw midpoint
+        corner.left = grid[grid.length/2][grid[0].length/2 - 1].x;
+        corner.top = grid[grid.length/2 - 1][grid[0].length/2].y;
+        corner.right = corner.left + gridManager.getTileWidth() * 2;
+        corner.bottom = corner.top + gridManager.getTileWidth() * 2;
+        canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 20, 20, paint);
+
+
     }
 
+
+
+    //Draw the highlight from the point tapped on the map
     private void drawHighLight(Canvas canvas){
         //Get the highlighted points. If null then there is no highlight to draw; simply do nothing.
         RectanglePoints rectanglePoints = placementManager.getHighlightPlacement();

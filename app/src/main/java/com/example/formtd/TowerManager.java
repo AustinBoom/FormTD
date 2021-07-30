@@ -3,6 +3,7 @@ package com.example.formtd;
 import android.graphics.Point;
 import android.util.Log;
 
+//Manages existing towers and spot availability.
 public class TowerManager {
     Point[][] grid;
     private boolean[][] spotAvailable;
@@ -22,10 +23,10 @@ public class TowerManager {
             spotAvailable[0][x] = false;
             spotAvailable[spotAvailable.length-1][x] = false;
         }
-        spotAvailable[spotAvailable.length/2][spotAvailable[0].length/2] = false;
-        spotAvailable[spotAvailable.length/2][spotAvailable[0].length/2 + 1] = false;
-        spotAvailable[spotAvailable.length/2 + 1][spotAvailable[0].length/2] = false;
-        spotAvailable[spotAvailable.length/2 + 1][spotAvailable[0].length/2 + 1] = false;
+        spotAvailable[spotAvailable.length/2 - 1][spotAvailable[0].length/2 - 1] = false;       //top left
+        spotAvailable[spotAvailable.length/2 - 1][spotAvailable[0].length/2] = false;           //top right
+        spotAvailable[spotAvailable.length/2][spotAvailable[0].length/2 - 1] = false;   //bottom left
+        spotAvailable[spotAvailable.length/2][spotAvailable[0].length/2] = false;       //bottom right
 
 
 //        //test output
