@@ -2,7 +2,6 @@ package com.example.formtd;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 
 import java.util.Random;
 
@@ -14,7 +13,7 @@ public class GridManager {
     private static final int yGridAmount = 28;  //30 TALL GRID
     private int margin = 50;                    //Since this is a denominator, the smaller the bigger the margin gets.
     private int tileWidth;                      //This width applies to both x and y.
-    private Point[][] grid;
+    private Grid[][] grid;
     private int xMapStart;
     private int yMapStart;
 
@@ -42,10 +41,10 @@ public class GridManager {
         int yPos = yMapStart;
 
         //Now fill the grid array
-        grid = new Point[yGridAmount][xGridAmount];
+        grid = new Grid[yGridAmount][xGridAmount];
         for (int y = 0; y < yGridAmount; y++) {
             for (int x = 0; x < xGridAmount; x++) {
-                grid[y][x] = new Point(xPos, yPos);
+                grid[y][x] = new Grid(xPos, yPos);
                 xPos += tileWidth;
             }
             xPos = xMapStart;   //Reset x pos since it will repeat on each new line
@@ -78,9 +77,31 @@ public class GridManager {
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }
+
+        drawSpawnMidEndPoints(canvas);
     }
 
-    public Point[][] getGrid(){
+    //Draws the spawn point, midpoint, and endpoint. This is hard coded since it's part of the world.
+    private void drawSpawnMidEndPoints(Canvas canvas){
+        Paint paint = new Paint();
+        paint.setARGB(255, 65, 5, 35);
+        //Draw spawnpoint
+        RectanglePoints corner = new RectanglePoints(grid[0][0].x, grid[0][0].y, grid[0][grid[0].length-1].x + tileWidth, grid[1][0].y);
+        canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 20, 20, paint);
+        //Draw endpoint
+        corner.top = grid[grid.length-1][0].y;
+        corner.bottom = grid[grid.length-1][0].y + tileWidth;
+        canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 20, 20, paint);
+        //Draw midpoint
+        corner.left = grid[grid.length/2][grid[0].length/2 - 1].x;
+        corner.top = grid[grid.length/2 - 1][grid[0].length/2].y;
+        corner.right = corner.left + tileWidth * 2;
+        corner.bottom = corner.top + tileWidth * 2;
+        canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 20, 20, paint);
+
+    }
+
+    public Grid[][] getGrid(){
         return grid;
     }
 

@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 //Class when given the grid and location touch will return where to draw the highlighted section.
 public class PlacementManager {
     //Data from GridManager.
-    private Point[][] grid;
+    private Grid[][] grid;
     private int tileWidth;
     private int xMapStart;
     private int yMapStart;
@@ -17,7 +17,7 @@ public class PlacementManager {
     private boolean highlighted;
     private RectanglePoints currentRectangleHighlight;
 
-    public PlacementManager(Point[][] grid, int tileWidth, int xMapStart, int yMapStart){
+    public PlacementManager(Grid[][] grid, int tileWidth, int xMapStart, int yMapStart){
         this.grid = grid;
         this.tileWidth = tileWidth;
         this.xMapStart = xMapStart;

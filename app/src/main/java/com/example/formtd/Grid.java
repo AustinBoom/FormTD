@@ -8,7 +8,7 @@ public class Grid {
     public Grid(){
         this.x = 0;
         this.y = 0;
-        this.available = false;
+        this.available = true;
     }
 
     public Grid(int x, int y){

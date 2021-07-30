@@ -1,38 +1,35 @@
 package com.example.formtd;
 
-import android.graphics.Point;
 import android.util.Log;
 
 //Manages existing towers and spot availability.
 public class TowerManager {
-    Point[][] grid;
-    private boolean[][] spotAvailable;
+    Grid[][] grid;
     private int tileWidth;
 
-    public TowerManager(Point[][] grid, int tileWidth) {
+    public TowerManager(Grid[][] grid, int tileWidth) {
         this.grid = grid;
         this.tileWidth = tileWidth;
-        this.spotAvailable = new boolean[grid.length][grid[0].length];
-        for (int y = 0; y < spotAvailable.length; y++) {
-            for (int x = 0; x < spotAvailable[0].length; x++) {
-                spotAvailable[y][x] = true;
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[0].length; x++) {
+                grid[y][x].available = true;
             }
         }
         //Make the spawn, mid and endpoints unavailable spots.
-        for (int x = 0; x < spotAvailable[0].length; x++) {
-            spotAvailable[0][x] = false;
-            spotAvailable[spotAvailable.length-1][x] = false;
+        for (int x = 0; x < grid[0].length; x++) {
+            grid[0][x].available = false;
+            grid[grid.length-1][x].available = false;
         }
-        spotAvailable[spotAvailable.length/2 - 1][spotAvailable[0].length/2 - 1] = false;       //top left
-        spotAvailable[spotAvailable.length/2 - 1][spotAvailable[0].length/2] = false;           //top right
-        spotAvailable[spotAvailable.length/2][spotAvailable[0].length/2 - 1] = false;   //bottom left
-        spotAvailable[spotAvailable.length/2][spotAvailable[0].length/2] = false;       //bottom right
+        grid[grid.length/2 - 1][grid[0].length/2 - 1].available = false;       //top left
+        grid[grid.length/2 - 1][grid[0].length/2].available = false;           //top right
+        grid[grid.length/2][grid[0].length/2 - 1].available = false;   //bottom left
+        grid[grid.length/2][grid[0].length/2].available = false;       //bottom right
 
 
 //        //test output
-//        for (int y = 0; y < spotAvailable.length; y++) {
-//            for (int x = 0; x < spotAvailable[0].length; x++) {
-//                if (spotAvailable[y][x])
+//        for (int y = 0; y < grid.length; y++) {
+//            for (int x = 0; x < grid[0].length; x++) {
+//                if (grid[y][x].available)
 //                    System.out.print("T ");
 //                else
 //                    System.out.print("F ");
@@ -41,9 +38,6 @@ public class TowerManager {
 //        }
     }
 
-    public boolean[][] getAllSpotsAvailable(){
-        return spotAvailable;
-    }
     public boolean checkSpotAvailability(int left, int top){
         //Get index by going to coordinate
         boolean lefttop = false;
@@ -56,13 +50,13 @@ public class TowerManager {
         for (int y = 0; y < grid.length; y++) {
             for (int x = 0; x < grid[0].length; x++) {
                 if(grid[y][x].x == left && grid[y][x].y == top)
-                    lefttop = spotAvailable[y][x];
+                    lefttop = grid[y][x].available;
                 if(grid[y][x].x == left && grid[y][x].y == bottom)
-                    leftbottom = spotAvailable[y][x];
+                    leftbottom = grid[y][x].available;
                 if(grid[y][x].x == right && grid[y][x].y == top)
-                    righttop = spotAvailable[y][x];
+                    righttop = grid[y][x].available;
                 if(grid[y][x].x == right && grid[y][x].y == bottom)
-                    rightbottom = spotAvailable[y][x];
+                    rightbottom = grid[y][x].available;
             }
         }
 
