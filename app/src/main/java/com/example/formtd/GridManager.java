@@ -6,7 +6,7 @@ public class GridManager {
     private int deviceWidth;
     private int deviceHeight;
     private static final int xGridAmount = 20;  //20 WIDE GRID
-    private static final int yGridAmount = 30;  //30 TALL GRID
+    private static final int yGridAmount = 28;  //30 TALL GRID
     private int margin = 50;                    //Since this is a denominator, the smaller the bigger the margin gets.
     private int tileWidth;                      //This width applies to both x and y.
     private Point[][] grid;

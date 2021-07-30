@@ -26,6 +26,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     //Defence View
     GridManager gridManager;                //Creates/updates grid
     PlacementManager placementManager;      //Manages placement via touch.
+    TowerManager towerManager;
     Point[][] grid;
 
     public DefenceView(Context context) {
@@ -48,6 +49,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         gridManager = new GridManager(deviceWidth, deviceHeight);
         grid = gridManager.getGrid();
         placementManager = new PlacementManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
+        towerManager = new TowerManager(grid, gridManager.getTileWidth());
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
@@ -95,7 +97,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 right = left + gridManager.getTileWidth();
                 top = grid[y][x].y;
                 bottom = top + gridManager.getTileWidth();
-                paint.setARGB(255, 155 - (7*((x+(y%2))%2)), 180 - (7*((x+(y%2))%2)), 255 - (7*((x+(y%2))%2))); //makes a checkeredboard
+                paint.setARGB(255, 155 - (6*((x+(y%2))%2)), 180 - (6*((x+(y%2))%2)), 255 - (6*((x+(y%2))%2))); //makes a checkeredboard
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }
@@ -106,7 +108,11 @@ public class DefenceView extends View implements View.OnTouchListener {
         RectanglePoints rectanglePoints = placementManager.getHighlightPlacement();
         if(rectanglePoints != null){
             Paint paint = new Paint();
-            paint.setARGB(120, 50, 255, 50);
+            if(towerManager.checkSpotAvailability(rectanglePoints.left, rectanglePoints.top))
+                paint.setARGB(100, 50, 255, 50);
+            else
+                paint.setARGB(100, 255, 50, 50);
+
             canvas.drawRect(rectanglePoints.left, rectanglePoints.top,
                     rectanglePoints.right, rectanglePoints.bottom, paint);
         }
