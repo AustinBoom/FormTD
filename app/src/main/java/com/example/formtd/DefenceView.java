@@ -61,7 +61,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY());
+            //Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY());
             placementManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
             invalidate();
@@ -74,9 +74,8 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         //Just to test drawview
         Paint paint = new Paint();
-        paint.setARGB(255, 155, 180, 255);
-        canvas.drawRect(deviceWidth/40, deviceHeight/40,
-                deviceWidth*39/40, deviceHeight*3/4, paint);
+        paint.setARGB(255, 50, 70, 90);
+        canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
         drawGrid(canvas);
         drawHighLight(canvas);
     }
@@ -96,7 +95,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 right = left + gridManager.getTileWidth();
                 top = grid[y][x].y;
                 bottom = top + gridManager.getTileWidth();
-                paint.setARGB(25, ran.nextInt(255) , ran.nextInt(255), ran.nextInt(255));
+                paint.setARGB(255, 155 - (7*((x+(y%2))%2)), 180 - (7*((x+(y%2))%2)), 255 - (7*((x+(y%2))%2))); //makes a checkeredboard
                 canvas.drawRect(left, top, right, bottom, paint);
             }
         }
@@ -107,7 +106,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         RectanglePoints rectanglePoints = placementManager.getHighlightPlacement();
         if(rectanglePoints != null){
             Paint paint = new Paint();
-            paint.setARGB(150, 50, 255, 50);
+            paint.setARGB(120, 50, 255, 50);
             canvas.drawRect(rectanglePoints.left, rectanglePoints.top,
                     rectanglePoints.right, rectanglePoints.bottom, paint);
         }

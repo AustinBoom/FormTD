@@ -22,7 +22,6 @@ public class PlacementManager {
         this.tileWidth = tileWidth;
         this.xMapStart = xMapStart;
         this.yMapStart = yMapStart;
-
         this.highlighted = false;
         this.currentRectangleHighlight = new RectanglePoints();
     }
@@ -65,8 +64,9 @@ public class PlacementManager {
                 }
             }
         }
-
-
+        else{
+            turnOffHighlight();
+        }
     }
 
 
