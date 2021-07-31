@@ -1,16 +1,28 @@
 package com.example.formtd;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
+import java.util.Random;
+
 public class Tower {
     private int left;
     private int top;
     private int right;
     private int bottom;
 
-    public Tower(int left, int top, int right, int bottom){
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
+    public Tower(RectanglePoints rect){
+        this.left = rect.left;
+        this.top = rect.top;
+        this.right = rect.right;
+        this.bottom = rect.bottom;
+    }
+
+    public void build(Canvas canvas){
+        Paint paint = new Paint();
+        Random r = new Random();
+        paint.setARGB(255, 255, 0, 255);
+        canvas.drawRect(left, top, right, bottom, paint);
     }
 
 }

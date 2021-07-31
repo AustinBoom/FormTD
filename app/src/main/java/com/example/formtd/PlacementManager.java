@@ -1,77 +1,90 @@
 package com.example.formtd;
 
-import androidx.annotation.Nullable;
-
-//Class when given the grid and location touch will return where to draw the highlighted section.
+//Manages existing towers and spot availability.
 public class PlacementManager {
-    //Data from GridManager.
-    private Grid[][] grid;
+    Grid[][] grid;
     private int tileWidth;
-    private int xMapStart;
-    private int yMapStart;
 
-    //Data for placement functionality.
-    private boolean highlighted;
-    private RectanglePoints currentRectangleHighlight;
-
-    public PlacementManager(Grid[][] grid, int tileWidth, int xMapStart, int yMapStart){
+    public PlacementManager(Grid[][] grid, int tileWidth) {
         this.grid = grid;
         this.tileWidth = tileWidth;
-        this.xMapStart = xMapStart;
-        this.yMapStart = yMapStart;
-        this.highlighted = false;
-        this.currentRectangleHighlight = new RectanglePoints();
-    }
-
-    public void turnOffHighlight(){
-        highlighted = false;
-    }
-
-
-    public void setHighlightPlacement(int xTouch, int yTouch){
-        highlighted = true;
-
-        int xOuterboundary = xMapStart + (grid[0].length * tileWidth);
-        int yOuterboundary = yMapStart + (grid.length * tileWidth);
-
-        //make sure touch is in bounds
-        if(xTouch > xMapStart && yTouch > yMapStart && xTouch < xOuterboundary && yTouch < yOuterboundary) {
-            //Round touch to the nearest grid point.
-            for (int i = 0; i < grid[0].length - 1; i++) {      //Round x to nearest grid.
-                if (grid[0][i].x < xTouch) {
-                    //If touch leans slightly left, scoot over to the right one to make placement under finger
-                    if(xTouch - grid[0][i].x < grid[0][i+1].x - xTouch && i > 0)
-                        currentRectangleHighlight.left = grid[0][i-1].x;
-                    else
-                        currentRectangleHighlight.left = grid[0][i].x;
-
-                    currentRectangleHighlight.right = currentRectangleHighlight.left + (tileWidth * 2);
-                }
-            }
-
-            for (int i = 0; i < grid.length - 1; i++) {         //Round y to nearest grid.
-                if (grid[i][0].y < yTouch) {
-                    //If touch leans slightly down, scoot up one to make placement under finger
-                    if(yTouch - grid[i][0].y < grid[i+1][0].y - yTouch && i > 0)
-                        currentRectangleHighlight.top = grid[i-1][0].y;
-                    else
-                        currentRectangleHighlight.top = grid[i][0].y;
-
-                    currentRectangleHighlight.bottom = currentRectangleHighlight.top + (tileWidth * 2);
-                }
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[0].length; x++) {
+                grid[y][x].available = true;
             }
         }
-        else{
-            turnOffHighlight();
+        //Make the spawn, mid and endpoints unavailable spots.
+        for (int x = 0; x < grid[0].length; x++) {
+            grid[0][x].available = false;
+            grid[grid.length-1][x].available = false;
         }
+        grid[grid.length/2 - 1][grid[0].length/2 - 1].available = false;       //top left
+        grid[grid.length/2 - 1][grid[0].length/2].available = false;           //top right
+        grid[grid.length/2][grid[0].length/2 - 1].available = false;   //bottom left
+        grid[grid.length/2][grid[0].length/2].available = false;       //bottom right
+
+
+//        //test output
+//        for (int y = 0; y < grid.length; y++) {
+//            for (int x = 0; x < grid[0].length; x++) {
+//                if (grid[y][x].available)
+//                    System.out.print("T ");
+//                else
+//                    System.out.print("F ");
+//            }
+//            System.out.println();
+//        }
     }
 
+    public boolean checkSpotAvailability(int left, int top){
+        //Get index by going to coordinate
+        boolean lefttop = false;
+        boolean leftbottom = false;
+        boolean righttop = false;
+        boolean rightbottom = false;
+        int right = left + tileWidth;
+        int bottom = top + tileWidth;
 
-    @Nullable       //May return null if no highlight to return
-    public RectanglePoints getHighlightPlacement(){
-        if(highlighted)
-            return currentRectangleHighlight;
-        return null;
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[0].length; x++) {
+                if(grid[y][x].x == left && grid[y][x].y == top)
+                    lefttop = grid[y][x].available;
+                if(grid[y][x].x == left && grid[y][x].y == bottom)
+                    leftbottom = grid[y][x].available;
+                if(grid[y][x].x == right && grid[y][x].y == top)
+                    righttop = grid[y][x].available;
+                if(grid[y][x].x == right && grid[y][x].y == bottom)
+                    rightbottom = grid[y][x].available;
+            }
+        }
+
+        return lefttop & leftbottom & righttop & rightbottom;
+    }
+
+    public boolean checkSpotAvailability(RectanglePoints rectanglePoints){
+        //Get index by going to coordinate
+        boolean lefttop = false;
+        boolean leftbottom = false;
+        boolean righttop = false;
+        boolean rightbottom = false;
+        int left = rectanglePoints.left;
+        int top = rectanglePoints.top;
+        int right = rectanglePoints.right;
+        int bottom = rectanglePoints.bottom;
+
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[0].length; x++) {
+                if(grid[y][x].x == left && grid[y][x].y == top)
+                    lefttop = grid[y][x].available;
+                if(grid[y][x].x == left && grid[y][x].y == bottom)
+                    leftbottom = grid[y][x].available;
+                if(grid[y][x].x == right && grid[y][x].y == top)
+                    righttop = grid[y][x].available;
+                if(grid[y][x].x == right && grid[y][x].y == bottom)
+                    rightbottom = grid[y][x].available;
+            }
+        }
+
+        return lefttop & leftbottom & righttop & rightbottom;
     }
 }
-
