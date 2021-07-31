@@ -66,11 +66,11 @@ public class DefenceView extends View implements View.OnTouchListener {
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
             if(ifTouchIsInBuildButton(motionEvent)){
-                System.out.println("CLICKEDDDDDDDDDDDDDDDDDDDDDD");
                 if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
-                    towers.add(new Tower(highlightManager.getHighlightPlacement()));
+                    towers.add(new Tower(highlightManager.getHighlightPlacement(), placementManager));
                 }
             }
+            grid = placementManager.updateGrid();
             invalidate(); //Boiler plate
         }
         return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
@@ -109,7 +109,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     private void drawTowers(Canvas canvas){
         for (int i = 0; i < towers.size(); i++) {
-            towers.get(i).build(canvas);
+            towers.get(i).drawTower(canvas);
         }
     }
 

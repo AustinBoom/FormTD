@@ -36,6 +36,10 @@ public class PlacementManager {
 //        }
     }
 
+    public Grid[][] updateGrid(){
+        return grid;
+    }
+
     public boolean checkSpotAvailability(int left, int top){
         //Get index by going to coordinate
         boolean lefttop = false;
@@ -69,8 +73,8 @@ public class PlacementManager {
         boolean rightbottom = false;
         int left = rectanglePoints.left;
         int top = rectanglePoints.top;
-        int right = rectanglePoints.right;
-        int bottom = rectanglePoints.bottom;
+        int right = left + tileWidth;
+        int bottom = top + tileWidth;
 
         for (int y = 0; y < grid.length; y++) {
             for (int x = 0; x < grid[0].length; x++) {
@@ -86,5 +90,46 @@ public class PlacementManager {
         }
 
         return lefttop & leftbottom & righttop & rightbottom;
+    }
+
+    public void placeTower(RectanglePoints rectanglePoints){
+        int left = rectanglePoints.left;
+        int top = rectanglePoints.top;
+        int right = left + tileWidth;
+        int bottom = top + tileWidth;
+
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[0].length; x++) {
+                if(grid[y][x].x == left && grid[y][x].y == top)
+                    grid[y][x].available = false;
+                if(grid[y][x].x == left && grid[y][x].y == bottom)
+                    grid[y][x].available  = false;
+                if(grid[y][x].x == right && grid[y][x].y == top)
+                    grid[y][x].available  = false;
+                if(grid[y][x].x == right && grid[y][x].y == bottom)
+                    grid[y][x].available = false;
+            }
+        }
+    }
+
+    //todo needs to be tested.
+    public void removeTower(RectanglePoints rectanglePoints){
+        int left = rectanglePoints.left;
+        int top = rectanglePoints.top;
+        int right = left + tileWidth;
+        int bottom = top + tileWidth;
+
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < grid[0].length; x++) {
+                if(grid[y][x].x == left && grid[y][x].y == top)
+                    grid[y][x].available = true;
+                if(grid[y][x].x == left && grid[y][x].y == bottom)
+                    grid[y][x].available  = true;
+                if(grid[y][x].x == right && grid[y][x].y == top)
+                    grid[y][x].available  = true;
+                if(grid[y][x].x == right && grid[y][x].y == bottom)
+                    grid[y][x].available = true;
+            }
+        }
     }
 }
