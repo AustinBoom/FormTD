@@ -1,8 +1,5 @@
 package com.example.formtd;
 
-import android.graphics.Point;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 
 //Class when given the grid and location touch will return where to draw the highlighted section.

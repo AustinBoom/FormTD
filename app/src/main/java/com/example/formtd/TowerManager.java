@@ -1,7 +1,5 @@
 package com.example.formtd;
 
-import android.util.Log;
-
 //Manages existing towers and spot availability.
 public class TowerManager {
     Grid[][] grid;

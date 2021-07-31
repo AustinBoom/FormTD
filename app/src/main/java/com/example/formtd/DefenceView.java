@@ -1,7 +1,5 @@
 package com.example.formtd;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,8 +14,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     //World
     int deviceWidth;
     int deviceHeight;
-
-    //Defence View
+    AssetManager asset;
     GridManager gridManager;                //Creates/updates grid
     PlacementManager placementManager;      //Manages placement via touch.
     TowerManager towerManager;              //Manages existing towers and spot availability.
@@ -27,13 +24,16 @@ public class DefenceView extends View implements View.OnTouchListener {
         super(context);
         this.context = context;
         setOnTouchListener(this);
+        asset = new AssetManager(context);
     }
 
     public DefenceView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         this.context = context;
         setOnTouchListener(this);
+        asset = new AssetManager(context);
     }
+
 
     //CRUCIAL measurement, this method initializes a GridManager
     protected void onMeasure(int widthMeasure, int heightMeasure){
@@ -44,6 +44,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         grid = gridManager.getGrid();
         placementManager = new PlacementManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
         towerManager = new TowerManager(grid, gridManager.getTileWidth());
+        asset.rescale(deviceWidth, deviceHeight);
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
@@ -64,6 +65,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
     }
 
+
     //Draw listener that updates the view.
     @Override
     public void onDraw(Canvas canvas){
@@ -72,6 +74,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         paint.setARGB(255, 50, 70, 90);
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
         gridManager.drawGrid(canvas);
+        drawUI(canvas);
         drawHighLight(canvas);
     }
 
@@ -83,14 +86,16 @@ public class DefenceView extends View implements View.OnTouchListener {
         if(rectanglePoints != null){
             Paint paint = new Paint();
             if(towerManager.checkSpotAvailability(rectanglePoints.left, rectanglePoints.top))
-                paint.setARGB(100, 50, 255, 50);
+                paint.setARGB(80, 50, 255, 50);
             else
-                paint.setARGB(100, 255, 50, 50);
+                paint.setARGB(80, 255, 50, 50);
 
-            canvas.drawRect(rectanglePoints.left, rectanglePoints.top,
-                    rectanglePoints.right, rectanglePoints.bottom, paint);
+            canvas.drawRect(rectanglePoints.left, rectanglePoints.top, rectanglePoints.right, rectanglePoints.bottom, paint);
         }
+    }
 
+    private void drawUI(Canvas canvas){
+        canvas.drawBitmap(asset.BUILD, 500, 1600, null);
     }
 
 
