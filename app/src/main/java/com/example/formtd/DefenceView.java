@@ -23,6 +23,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     Grid[][] grid;                         //The grid which is used among different managers.
     ArrayList<Tower> towers;
 
+
     public DefenceView(Context context) {
         super(context);
         this.context = context;
@@ -77,6 +78,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
 
+
     //Draw listener that updates the view.
     @Override
     public void onDraw(Canvas canvas){
@@ -88,7 +90,6 @@ public class DefenceView extends View implements View.OnTouchListener {
         drawUI(canvas);
         drawTowers(canvas);
         drawHighLight(canvas);
-
     }
 
 
@@ -124,6 +125,5 @@ public class DefenceView extends View implements View.OnTouchListener {
         }
         return false;
     }
-
 
 }

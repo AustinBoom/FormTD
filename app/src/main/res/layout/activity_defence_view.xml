@@ -8,15 +8,21 @@
 
 <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <view
-        android:id="@+id/drawing_area"
+        android:id="@+id/defenceView"
         class="com.example.formtd.DefenceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+    <view
+        android:id="@+id/enemyDrawable"
+        class="com.example.formtd.EnemyDrawable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
