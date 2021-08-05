@@ -19,10 +19,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <view
-        android:id="@+id/enemyDrawable"
-        class="com.example.formtd.EnemyDrawable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
 </FrameLayout>

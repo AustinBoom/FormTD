@@ -1,13 +1,20 @@
 package com.example.formtd;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class DefenceView extends View implements View.OnTouchListener {
     //Boiler Plate
@@ -22,6 +29,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     PlacementManager placementManager;              //Manages existing towers and spot availability.
     Grid[][] grid;                         //The grid which is used among different managers.
     ArrayList<Tower> towers;
+    Path path;
+    int y = 0;
 
 
     public DefenceView(Context context) {
@@ -30,6 +39,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         setOnTouchListener(this);
         asset = new AssetManager(context);
         towers = new ArrayList<>();
+        y = 500;
     }
 
     public DefenceView(Context context, AttributeSet attributeSet) {
@@ -55,9 +65,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         setMeasuredDimension(deviceWidth, deviceHeight);
     }
 
-
-
-    //---------------------------------
+    
 
     //When screen is touched, respond!
     @Override
@@ -74,6 +82,12 @@ public class DefenceView extends View implements View.OnTouchListener {
             grid = placementManager.updateGrid();
             invalidate(); //Boiler plate
         }
+
+       // ObjectAnimator animator = ObjectAnimator.ofFloat(view, View.ALPHA, 0.1f, 0.9f);
+        //animator.setDuration(250);
+       // // set all the animation-related stuff you want (interpolator etc.)
+      //  animator.start();
+
         return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
     }
 
@@ -90,6 +104,10 @@ public class DefenceView extends View implements View.OnTouchListener {
         drawUI(canvas);
         drawTowers(canvas);
         drawHighLight(canvas);
+        drawTestBall(canvas);
+
+
+        invalidate();       //CRITICAL FOR ANIMATION. This makes drawview continulously update
     }
 
 
@@ -102,7 +120,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             if(placementManager.checkSpotAvailability(rectanglePoints.left, rectanglePoints.top))
                 paint.setARGB(80, 50, 255, 50);
             else
-                paint.setARGB(80, 255, 50, 50);
+                paint.setARGB(110, 255, 50, 50);
 
             canvas.drawRect(rectanglePoints.left, rectanglePoints.top, rectanglePoints.right, rectanglePoints.bottom, paint);
         }
@@ -125,5 +143,36 @@ public class DefenceView extends View implements View.OnTouchListener {
         }
         return false;
     }
+
+    private void drawTestBall(Canvas canvas){
+        Paint paint = new Paint();
+        paint.setARGB(255, 255, 255, 0);
+        canvas.drawCircle(100, y, 50, paint);
+
+//        Timer timer = new Timer();
+//        TimerTask update = new UpdateTask();
+//        timer.scheduleAtFixedRate(update, 1000, 1000);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+
+            public void run() {
+                y += 1;
+                handler.postDelayed(this, 6000); // for interval...
+                //TODO Put invalidate here/only when something is updated
+            }
+        };
+        handler.postDelayed(runnable, 0); // for initial delay..
+
+    }
+
+    //Make this do something it needs to do
+    class UpdateTask extends TimerTask {
+
+        @Override
+        public void run() {
+         //   y += 1;
+        }
+    }
+
 
 }
