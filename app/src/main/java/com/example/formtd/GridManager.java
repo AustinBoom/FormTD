@@ -16,6 +16,7 @@ public class GridManager {
     private Grid[][] grid;
     private int xMapStart;
     private int yMapStart;
+    Paint paint;
 
 
 
@@ -25,6 +26,7 @@ public class GridManager {
         this.tileWidth = 0;
         this.xMapStart = 0;
         this.yMapStart = 0;
+        paint = new Paint();
         createGrid();
     }
 
@@ -61,8 +63,6 @@ public class GridManager {
     //Draws the grid background
     public void drawGrid(Canvas canvas){
         //Print array
-        Paint paint = new Paint();
-        Random ran = new Random();
         int left;
         int top;
         int right;
