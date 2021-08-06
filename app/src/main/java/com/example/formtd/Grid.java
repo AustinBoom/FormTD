@@ -16,9 +16,6 @@ public class Grid {
         this.y = y;
     }
 
-    public Grid(boolean available){
-        this.available = available;
-    }
 
     public Grid(int x, int y, boolean available){
         this.x = x;

@@ -16,14 +16,33 @@ import static android.os.SystemClock.sleep;
 public class AssetManager {
     final Handler handler;
     private Runnable runnable;
+    private int tileWidth;
+
+    //UI and other
+    public Bitmap TAPTOSTART;
+    public Bitmap TAPTOSTARTONE;
+    public Bitmap TAPTOSTARTTWO;
     public Bitmap BUILD;
     public Bitmap BUILDUNPRESSED;
     public Bitmap BUILDPRESSED;
 
-    public AssetManager(Context context){
+
+    //Enemies
+    public Bitmap GHOST;
+
+    //Towers
+
+
+
+    public AssetManager(Context context, int tileWidth){
         handler = new Handler();
+        this.tileWidth = tileWidth;
 
         /**Assets**/
+        //Tap to start tooltip
+        TAPTOSTART = BitmapFactory.decodeResource(context.getResources(), R.drawable.taptostart);
+        TAPTOSTART = Bitmap.createScaledBitmap(TAPTOSTART, 900, 150, false);
+
         //Build Button
         BUILD = BitmapFactory.decodeResource(context.getResources(), R.drawable.build);
         BUILD = Bitmap.createScaledBitmap(BUILD, 250, 80, false);
@@ -31,6 +50,9 @@ public class AssetManager {
         BUILDUNPRESSED = Bitmap.createScaledBitmap(BUILD, 250, 80, false);
         BUILDPRESSED = BitmapFactory.decodeResource(context.getResources(), R.drawable.buildpressed);
         BUILDPRESSED = Bitmap.createScaledBitmap(BUILDPRESSED, 249, 79, false);
+        //Ghost
+        GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
+        GHOST = Bitmap.createScaledBitmap(GHOST, tileWidth*2, tileWidth*2, false);  //todo eventually shrink this
     }
 
     public void buildPressed(){
@@ -42,5 +64,6 @@ public class AssetManager {
         };
         handler.postDelayed(runnable, 60); //How long the button glows pressed.
     }
+
 
 }

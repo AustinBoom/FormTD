@@ -1,4 +1,5 @@
 package com.example.formtd;
+import com.example.formtd.enemies.GhostEnemy;
 import com.example.formtd.towers.*;
 
 import android.content.Context;
@@ -19,23 +20,28 @@ public class DefenceView extends View implements View.OnTouchListener {
     Context context;
 
     //World
+    public static Grid[][] grid;                    //The grid which is the world!
     int deviceWidth;
     int deviceHeight;
     AssetManager asset;
-    GridManager gridManager;                //Creates/updates grid
-    HighlightManager highlightManager;      //Manages placement via touch.
+    GridManager gridManager;                        //Creates/updates grid
+    HighlightManager highlightManager;              //Manages placement via touch.
     PlacementManager placementManager;              //Manages existing towers and spot availability.
-    Grid[][] grid;                         //The grid which is used among different managers.
     ArrayList<Tower> towers;
     Paint paint;
     int y = 100;
+
+    //Mechanics
+    public boolean begin = false;
+    int waveTimer = 60000;       //Time between waves (60000ms = 60 seconds)
+    ArrayList<Wave> wave;       //Holds every wave that exists
+    public static int currentWave = 0;
 
 
     public DefenceView(Context context) {
         super(context);
         this.context = context;
         setOnTouchListener(this);
-        asset = new AssetManager(context);
         towers = new ArrayList<>();
         paint = new Paint();
     }
@@ -44,11 +50,10 @@ public class DefenceView extends View implements View.OnTouchListener {
         super(context, attributeSet);
         this.context = context;
         setOnTouchListener(this);
-        asset = new AssetManager(context);
         towers = new ArrayList<>();
         paint = new Paint();
-
     }
+
 
 
     //CRUCIAL measurement, this method initializes a GridManager
@@ -58,8 +63,11 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         gridManager = new GridManager(deviceWidth, deviceHeight);
         grid = gridManager.getGrid();
+        asset = new AssetManager(context, gridManager.getTileWidth());
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
+
+        initWaves();        //Set up waves now that dimensions are in place.
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
@@ -71,7 +79,10 @@ public class DefenceView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            //Log.i("\t", "x: " + motionEvent.getX() + " y: " + motionEvent.getY());
+            if(!begin){
+                begin = true;
+                //TODO start the wave timer!
+            }
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
             if(ifTouchIsInBuildButton(motionEvent)){
@@ -83,8 +94,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             grid = placementManager.updateGrid();
         }
 
-
-
+        invalidate();       //update drawings.
         return true;       //false: don't listen for subsequent events (change to true for something like a double tap)
     }
 
@@ -95,13 +105,13 @@ public class DefenceView extends View implements View.OnTouchListener {
     public void onDraw(Canvas canvas){
         //Just to test drawview
         gridManager.drawGrid(canvas);
-        drawUI(canvas);
         drawTowers(canvas);
-        drawTestBall(canvas);
+        //drawTestBall(canvas);
         drawHighLight(canvas);
+        drawUI(canvas);
 
 
-        //invalidate();       //CRITICAL FOR ANIMATION. This makes drawview continulously update
+        //invalidate();       //PUT SOMEWHERE ELSE. This makes drawview update
     }
 
 
@@ -126,6 +136,11 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private void drawUI(Canvas canvas){
+        //Begin text
+        if(!begin) {
+            canvas.drawBitmap(asset.TAPTOSTART, deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2), deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2), null);
+        }
+
         //Top bar
         paint.setARGB(255, 50, 70, 90);
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
@@ -144,7 +159,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     private void drawTestBall(Canvas canvas){
         paint.setARGB(255, 255, 255, 0);
-        canvas.drawCircle(100, y, 50, paint);
+        canvas.drawBitmap(asset.GHOST, 100, y, null);
 
 
         final Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
@@ -155,8 +170,16 @@ public class DefenceView extends View implements View.OnTouchListener {
                 y += 1;
             }
         };
-        handler.postDelayed(runnable, 0); //Start animation
+        handler.postDelayed(runnable, 50); //Start animation
 
+    }
+
+    private void initWaves(){
+         wave = new ArrayList<Wave>();
+
+         //Add waves. These are how the levels are designed.
+         wave.add(new Wave(new GhostEnemy(asset), 3));
+         wave.add(new Wave(new GhostEnemy(asset), 6));
     }
 
 
