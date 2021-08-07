@@ -26,8 +26,9 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     //World
     public static Grid[][] grid;                    //The grid which is the world!
-    int deviceWidth;
-    int deviceHeight;
+    static int deviceWidth;
+    static int deviceHeight;
+    static int centerXGrid;
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
@@ -72,6 +73,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         deviceHeight = MeasureSpec.getSize(heightMeasure);
 
         gridManager = new GridManager(deviceWidth, deviceHeight);
+        centerXGrid = gridManager.getXCenterGridCoordinate();
         grid = gridManager.getGrid();
         asset = new AssetManager(context, gridManager.getTileWidth());
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
@@ -181,11 +183,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private boolean ifTouchIsInBuildButton(MotionEvent motionEvent){
-        if(deviceWidth - gridManager.getxMapStart() - (asset.BUILD.getWidth()) < motionEvent.getX() && motionEvent.getX() <  deviceWidth - gridManager.getxMapStart()
-                && grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2) + asset.BUILD.getHeight()){
-            return true;
-        }
-        return false;
+        return deviceWidth - gridManager.getxMapStart() - (asset.BUILD.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxMapStart()
+                && grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) + asset.BUILD.getHeight();
     }
 
     private void drawTestBall(Canvas canvas){
@@ -195,7 +194,6 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         final Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
         final Runnable runnable = new Runnable() {
-
             public void run() {
                 invalidate();
                 y += 1;
@@ -206,45 +204,62 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private void initWaves(){
-         wave = new ArrayList<Wave>();
+        wave = new ArrayList<>();
 
-         //Add waves. These are how the levels are designed.
-         wave.add(new Wave(new GhostEnemy(asset), 3));
-         wave.add(new Wave(new GhostEnemy(asset), 6));
+        //Add waves. These are how the levels are designed.
+        wave.add(new Wave(new GhostEnemy(asset), 2));
+        wave.add(new Wave(new GhostEnemy(asset), 4));
+        wave.add(new Wave(new GhostEnemy(asset), 6));
+
     }
 
     //Updates the current wave when the time has come. If waves run out, game is over.
     private void startWaves(){
-        startWaveTimer();
         final Timer timer = new Timer();
         TimerTask timerTask =  new TimerTask(){
             @Override
             public void run(){
                 if(currentWave < wave.size() && !gameOver) {
                     wave.get(currentWave).startWave();
+                    wave.get(currentWave).active = true;
                     currentWave++;
                 }
                 else{
-                    timer.cancel();
                     //TODO put end of game stuff here
                     gameOver = true;
+                    timer.cancel();
                 }
             }
         };
         timer.scheduleAtFixedRate(timerTask, waveTimer, waveTimer);  //Start wave
+        startWaveTimer();                                           //Start wave timer
+    }
+
+
+
+    private void drawCurrentWave(Canvas canvas){
+        for (Wave wave: wave) {     //for each wave in wave,
+            if(wave.active){
+                wave.drawWave(canvas);
+                invalidate();
+            }
+        }
+
     }
 
     private void startWaveTimer(){
+        //Todo: fix the extra timer countdown at end of wave.
         countdown = waveTimer/1000;
         final Timer timerCountdown = new Timer();
         TimerTask timerTaskCnt =  new TimerTask(){
             @Override
             public void run(){
-                if(countdown > 0) {
+                if(countdown > 1 && !gameOver) {
                     countdown--;
                     invalidate();
                 }
                 else if(gameOver){
+                    countdown = 0;
                     timerCountdown.cancel();
                 }
                 else{
@@ -253,14 +268,6 @@ public class DefenceView extends View implements View.OnTouchListener {
             }
         };
         timerCountdown.scheduleAtFixedRate(timerTaskCnt, 1000, 1000);  //Every second.
-    }
-
-    private void drawCurrentWave(Canvas canvas){
-        if(currentWave < wave.size()) {
-            wave.get(currentWave).drawWave(canvas);
-            invalidate();
-        }
-
     }
 
 }

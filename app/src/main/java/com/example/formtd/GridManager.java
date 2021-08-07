@@ -117,4 +117,8 @@ public class GridManager {
         return yMapStart;
     }
 
+    public int getXCenterGridCoordinate(){
+        return grid[0][grid[0].length/2].x;
+    }
+
 }
