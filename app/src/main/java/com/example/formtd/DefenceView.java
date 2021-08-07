@@ -78,6 +78,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         asset = new AssetManager(context, gridManager.getTileWidth());
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
+        //TODO INIT BREADTH FIRST here
+
 
         initWaves();        //Set up waves now that dimensions are in place.
 
@@ -101,6 +103,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 asset.buildPressed();
                 if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
                     towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
+                    //TODO UPDATE BREADTH FIRST here
                 }
             }
             grid = placementManager.updateGrid();
