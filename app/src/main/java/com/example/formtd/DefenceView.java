@@ -7,12 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.os.HandlerCompat;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class DefenceView extends View implements View.OnTouchListener {
@@ -32,9 +37,14 @@ public class DefenceView extends View implements View.OnTouchListener {
     int y = 100;
 
     //Mechanics
-    public boolean begin = false;
-    int waveTimer = 60000;       //Time between waves (60000ms = 60 seconds)
-    ArrayList<Wave> wave;       //Holds every wave that exists
+    public static boolean gameOver = false;
+    TextPaint textPaint = new TextPaint();
+    final int textSize = 32;
+    StaticLayout staticLayout;      //For text
+    public boolean begin = false;   //When game has begun
+    int waveTimer = 3000;           //Time between waves (60000ms = 60 seconds)
+    int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
+    ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;
 
 
@@ -81,7 +91,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             if(!begin){
                 begin = true;
-                //TODO start the wave timer!
+                startWaves();
             }
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
@@ -109,6 +119,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         //drawTestBall(canvas);
         drawHighLight(canvas);
         drawUI(canvas);
+        drawInfoBarStuff(canvas);
+        drawCurrentWave(canvas);
 
 
         //invalidate();       //PUT SOMEWHERE ELSE. This makes drawview update
@@ -138,15 +150,34 @@ public class DefenceView extends View implements View.OnTouchListener {
     private void drawUI(Canvas canvas){
         //Begin text
         if(!begin) {
-            canvas.drawBitmap(asset.TAPTOSTART, deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2), deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2), null);
+            //First rect is shadow, second is actual tap to start
+            paint.setARGB(45, 5, 5, 5);
+            canvas.drawRect(deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) - 12, deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, asset.TAPTOSTART.getWidth() + deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) - 12, asset.TAPTOSTART.getHeight() + deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, paint);
+            paint.setARGB(200, 255, 255, 255);
+            canvas.drawBitmap(asset.TAPTOSTART, deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2), deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2), paint);
         }
 
-        //Top bar
+        //Info bar
         paint.setARGB(255, 50, 70, 90);
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
 
+
+
+
         //Build Button
         canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxMapStart() - (asset.BUILD.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+    }
+
+    private void drawInfoBarStuff(Canvas canvas){
+        //Set the text of the wave timer
+        textPaint.setARGB(255, 200, 200, 200);
+        textPaint.setTextSize(textSize);
+        staticLayout = new StaticLayout("Wave in: " + countdown, textPaint, 200, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( gridManager.getxMapStart(), deviceHeight/80 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        invalidate();
     }
 
     private boolean ifTouchIsInBuildButton(MotionEvent motionEvent){
@@ -182,6 +213,55 @@ public class DefenceView extends View implements View.OnTouchListener {
          wave.add(new Wave(new GhostEnemy(asset), 6));
     }
 
+    //Updates the current wave when the time has come. If waves run out, game is over.
+    private void startWaves(){
+        startWaveTimer();
+        final Timer timer = new Timer();
+        TimerTask timerTask =  new TimerTask(){
+            @Override
+            public void run(){
+                if(currentWave < wave.size() && !gameOver) {
+                    wave.get(currentWave).startWave();
+                    currentWave++;
+                }
+                else{
+                    timer.cancel();
+                    //TODO put end of game stuff here
+                    gameOver = true;
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask, waveTimer, waveTimer);  //Start wave
+    }
+
+    private void startWaveTimer(){
+        countdown = waveTimer/1000;
+        final Timer timerCountdown = new Timer();
+        TimerTask timerTaskCnt =  new TimerTask(){
+            @Override
+            public void run(){
+                if(countdown > 0) {
+                    countdown--;
+                    invalidate();
+                }
+                else if(gameOver){
+                    timerCountdown.cancel();
+                }
+                else{
+                    countdown = waveTimer/1000;  //Reset timer for next round
+                }
+            }
+        };
+        timerCountdown.scheduleAtFixedRate(timerTaskCnt, 1000, 1000);  //Every second.
+    }
+
+    private void drawCurrentWave(Canvas canvas){
+        if(currentWave < wave.size()) {
+            wave.get(currentWave).drawWave(canvas);
+            invalidate();
+        }
+
+    }
 
 }
 

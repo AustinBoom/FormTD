@@ -11,11 +11,11 @@ public abstract class Enemy {
     public int animDelay = 0;   //For extra slow movement or "jumping"
     public int health = 10;
     public int goldReward = 1;
-    Bitmap defaultArt;
+    public Bitmap art;
     //TODO put a bitmap of a default enemy here
     public Enemy(AssetManager asset){
         this.asset = asset;
-        defaultArt = asset.GHOST;
+        art = asset.GHOST;
     }
 
 }
