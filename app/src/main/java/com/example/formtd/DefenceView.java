@@ -232,9 +232,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave = new ArrayList<>();
 
         //Add waves. These are how the levels are designed.
-        wave.add(new Wave(new GhostEnemy(asset), 2));
-        wave.add(new Wave(new GhostEnemy(asset), 4));
-        wave.add(new Wave(new GhostEnemy(asset), 6));
+        wave.add(new Wave(asset, "ghost", 2));
+        wave.add(new Wave(asset, "ghost",4));
+        wave.add(new Wave(asset, "ghost", 6));
 
     }
 
@@ -271,7 +271,6 @@ public class DefenceView extends View implements View.OnTouchListener {
                 invalidate();
             }
         }
-
     }
 
     private void startWaveTimer(){
