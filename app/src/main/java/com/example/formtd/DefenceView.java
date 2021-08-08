@@ -52,7 +52,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     StaticLayout staticLayout;      //For text
     public boolean begin = false;   //When game has begun
-    int waveTimer = 3000;           //Time between waves (60000ms = 60 seconds)
+    int waveTimer = 5000;           //Time between waves (60000ms = 60 seconds)
     int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
     ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;

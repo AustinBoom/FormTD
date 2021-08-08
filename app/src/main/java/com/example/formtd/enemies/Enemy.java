@@ -14,6 +14,7 @@ public abstract class Enemy {
     public int goldReward = 1;
     public boolean alive = true;
     public Bitmap art;
+    public int currentWayPoint = 0;
     public int x = DefenceView.centerXGrid;
     public int y = 0;
     //TODO put a bitmap of a default enemy here

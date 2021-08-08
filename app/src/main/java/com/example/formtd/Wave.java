@@ -24,8 +24,8 @@ public class Wave {
     public ArrayList<Point> enemyWayPoints;
     private int enemyAmount;
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
-    private int enemySpacing = 500;  //This is the time difference in the handler/timer
-    private int currentWaypoint;
+    private int enemySpacing = 100;  //This is the time difference in the handler/timer
+    //private int currentWaypoint;
 
     //Takes a new Enemy() and amount of enemies in the wave.
     public Wave(AssetManager asset, String enemyType, int enemyAmount){
@@ -40,10 +40,10 @@ public class Wave {
         this.enemy = new Enemy[enemyAmount];
         for (int i = 0; i < this.enemyAmount; i++) {
             this.enemy[i] = createEnemy(enemyType);
-            //this.enemy[i].y -= (i*50);
+            this.enemy[i].y -= (i*enemySpacing);
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
-        this.currentWaypoint = 0;   //Current spot in enemyPath array.
+//        this.currentWaypoint = 0;   //Current spot in enemyPath array.
 
     }
 
@@ -82,21 +82,20 @@ public class Wave {
         waveRunnable = new Runnable() {
             public void run() {
                 for (Enemy enemy: enemy) {
-
                     if (enemy.y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
                         DefenceView.lives -= 1;
                         enemy.alive = false;
                         checkEndWave();
-                    } else if (currentWaypoint < enemyWayPoints.size()) {   //Make sure not to go over arraylast.
-                        if (enemy.y == enemyWayPoints.get(currentWaypoint).y && enemy.x == enemyWayPoints.get(currentWaypoint).x) { //If enemy has reached waypoint:
-                            currentWaypoint++;     //Increment to next waypoint
-                        } else if (enemy.x < enemyWayPoints.get(currentWaypoint).x) {
+                    } else if (enemy.currentWayPoint< enemyWayPoints.size()) {   //Make sure not to go over arraylast.
+                        if (enemy.y == enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
+                            enemy.currentWayPoint++;     //Increment to next waypoint
+                        } else if (enemy.x < enemyWayPoints.get(enemy.currentWayPoint).x) {
                             enemy.x++;
-                        } else if (enemy.x > enemyWayPoints.get(currentWaypoint).x) {
+                        } else if (enemy.x > enemyWayPoints.get(enemy.currentWayPoint).x) {
                             enemy.x--;
-                        } else if (enemy.y < enemyWayPoints.get(currentWaypoint).y) {
+                        } else if (enemy.y < enemyWayPoints.get(enemy.currentWayPoint).y) {
                             enemy.y++;
-                        } else if (enemy.y > enemyWayPoints.get(currentWaypoint).y) {
+                        } else if (enemy.y > enemyWayPoints.get(enemy.currentWayPoint).y) {
                             enemy.y--;
                         }
                     } else {   //else if health <= 0...
