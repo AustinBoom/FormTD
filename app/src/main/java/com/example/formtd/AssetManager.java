@@ -26,12 +26,10 @@ public class AssetManager {
     public Bitmap BUILDUNPRESSED;
     public Bitmap BUILDPRESSED;
 
-
     //Enemies
     public Bitmap GHOST;
 
     //Towers
-
 
 
     public AssetManager(Context context, int tileWidth){
@@ -52,7 +50,7 @@ public class AssetManager {
         BUILDPRESSED = Bitmap.createScaledBitmap(BUILDPRESSED, 249, 79, false);
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
-        GHOST = Bitmap.createScaledBitmap(GHOST, tileWidth*2, tileWidth*2, false);  //todo eventually shrink this
+        GHOST = Bitmap.createScaledBitmap(GHOST, tileWidth * 2, tileWidth * 2, false);  //todo eventually shrink this
     }
 
     public void buildPressed(){

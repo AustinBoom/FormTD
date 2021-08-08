@@ -1,3 +1,8 @@
+/**
+ * @author Austin Huyboom.
+ *
+ */
+
 package com.example.formtd;
 import com.example.formtd.enemies.GhostEnemy;
 import com.example.formtd.towers.*;
@@ -26,19 +31,22 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     //World
     public static Grid[][] grid;                    //The grid which is the world!
-    static int deviceWidth;
-    static int deviceHeight;
-    static int centerXGrid;
+    public static int deviceWidth;
+    public static int deviceHeight;
+    public static int centerXGrid;
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
     PlacementManager placementManager;              //Manages existing towers and spot availability.
     ArrayList<Tower> towers;
+    public static BreadthSearch breadthSearch;      //Figures out the path to take!
+    public static boolean pathNeedsUpdating = false;    //Whenever a tower is placed, set this to true and Wave class will know about it.
     Paint paint;
-    int y = 100;
+    int y = 100;        //todo only for test ball so this can be removed later.
 
     //Mechanics
     public static boolean gameOver = false;
+    public static boolean lastWave = false;
     TextPaint textPaint = new TextPaint();
     final int textSize = 32;
     StaticLayout staticLayout;      //For text
@@ -47,6 +55,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
     ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;
+    public static int lives = 50;
 
 
     public DefenceView(Context context) {
@@ -78,7 +87,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         asset = new AssetManager(context, gridManager.getTileWidth());
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
-        //TODO INIT BREADTH FIRST here
+        breadthSearch = new BreadthSearch();
 
 
         initWaves();        //Set up waves now that dimensions are in place.
@@ -103,7 +112,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 asset.buildPressed();
                 if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
                     towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
-                    //TODO UPDATE BREADTH FIRST here
+                    pathNeedsUpdating = true;
                 }
             }
             grid = placementManager.updateGrid();
@@ -166,9 +175,6 @@ public class DefenceView extends View implements View.OnTouchListener {
         paint.setARGB(255, 50, 70, 90);
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
 
-
-
-
         //Build Button
         canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxMapStart() - (asset.BUILD.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
     }
@@ -223,6 +229,8 @@ public class DefenceView extends View implements View.OnTouchListener {
             @Override
             public void run(){
                 if(currentWave < wave.size() && !gameOver) {
+                    if(currentWave == wave.size()-1)
+                        lastWave = true;
                     wave.get(currentWave).startWave();
                     wave.get(currentWave).active = true;
                     currentWave++;
@@ -257,11 +265,11 @@ public class DefenceView extends View implements View.OnTouchListener {
         TimerTask timerTaskCnt =  new TimerTask(){
             @Override
             public void run(){
-                if(countdown > 1 && !gameOver) {
+                if(countdown > 1 && !gameOver && !lastWave) {
                     countdown--;
                     invalidate();
                 }
-                else if(gameOver){
+                else if(gameOver || lastWave){
                     countdown = 0;
                     timerCountdown.cancel();
                 }

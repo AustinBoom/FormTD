@@ -8,7 +8,7 @@ import com.example.formtd.AssetManager;
 public abstract class Enemy {
     AssetManager asset;
     public int movementSpeed = 1;
-    public int animDelay = 50;   //For extra slow movement or "jumping"
+    public int animDelay = 20;   //For extra slow movement or "jumping"
     public int health = 10;
     public int goldReward = 1;
     public Bitmap art;

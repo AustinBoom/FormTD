@@ -5,20 +5,21 @@ import android.graphics.Point;
 import java.util.ArrayList;
 
 public class BreadthSearch {
-    Grid[][] grid;
-    ArrayList<Point> enemyPath;
+    private ArrayList<Point> enemyPath;
     //pass all needed params in constructor
-    public BreadthSearch(Grid[][] grid){
-        this.grid = grid;
+    public BreadthSearch(){
         enemyPath = new ArrayList<>();
     }
 
     //Will calculate and return the path
     public ArrayList<Point> getUpToDatePath(){
+        //Use DefenceView.grid to access grid info
         //TODO make test path, then pass it to the wave to follow it.
-        enemyPath.add(new Point(grid[3][2].x, grid[3][2].y));
-        enemyPath.add(new Point(grid[5][6].x, grid[5][6].y));
-        return null;
+        enemyPath = new ArrayList<>();
+        enemyPath.add(new Point(DefenceView.grid[3][2].x, DefenceView.grid[3][2].y));
+        enemyPath.add(new Point(DefenceView.grid[6][10].x, DefenceView.grid[6][10].y));
+        enemyPath.add(new Point(DefenceView.grid[8][4].x, DefenceView.grid[8][4].y));
+        return enemyPath;
     }
 
 }
