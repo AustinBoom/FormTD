@@ -34,6 +34,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int deviceWidth;
     public static int deviceHeight;
     public static int centerXGrid;
+    public static int tileWidth;
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
@@ -56,6 +57,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;
     public static int lives = 50;
+    public static int gold = 10000;
 
 
     public DefenceView(Context context) {
@@ -83,6 +85,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         gridManager = new GridManager(deviceWidth, deviceHeight);
         centerXGrid = gridManager.getXCenterGridCoordinate();
+        tileWidth = gridManager.getTileWidth();
         grid = gridManager.getGrid();
         asset = new AssetManager(context, gridManager.getTileWidth());
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
@@ -132,9 +135,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         drawTowers(canvas);
         //drawTestBall(canvas);
         drawHighLight(canvas);
+        drawCurrentWave(canvas);
         drawUI(canvas);
         drawInfoBarStuff(canvas);
-        drawCurrentWave(canvas);
 
 
         //invalidate();       //PUT SOMEWHERE ELSE. This makes drawview update
@@ -165,8 +168,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Begin text
         if(!begin) {
             //First rect is shadow, second is actual tap to start
-            paint.setARGB(45, 5, 5, 5);
-            canvas.drawRect(deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) - 12, deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, asset.TAPTOSTART.getWidth() + deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) - 12, asset.TAPTOSTART.getHeight() + deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, paint);
+            paint.setARGB(40, 5, 5, 5);
+            canvas.drawRect(deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) + 12, deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, asset.TAPTOSTART.getWidth() + deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) + 12, asset.TAPTOSTART.getHeight() + deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, paint);
             paint.setARGB(200, 255, 255, 255);
             canvas.drawBitmap(asset.TAPTOSTART, deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2), deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2), paint);
         }
@@ -188,7 +191,20 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.translate( gridManager.getxMapStart(), deviceHeight/80 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
-        invalidate();
+        //Set the text of the life meter
+        staticLayout = new StaticLayout("Lives: " + lives, textPaint, 150, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( deviceWidth/2 - staticLayout.getWidth()/2, deviceHeight/80 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        //Set the text of the current gold
+        staticLayout = new StaticLayout("Gold: " + gold, textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( deviceWidth*3/4, deviceHeight/80 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+
+        //invalidate();
     }
 
     private boolean ifTouchIsInBuildButton(MotionEvent motionEvent){
@@ -259,7 +275,6 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private void startWaveTimer(){
-        //Todo: fix the extra timer countdown at end of wave.
         countdown = waveTimer/1000;
         final Timer timerCountdown = new Timer();
         TimerTask timerTaskCnt =  new TimerTask(){
@@ -267,7 +282,6 @@ public class DefenceView extends View implements View.OnTouchListener {
             public void run(){
                 if(countdown > 1 && !gameOver && !lastWave) {
                     countdown--;
-                    invalidate();
                 }
                 else if(gameOver || lastWave){
                     countdown = 0;
@@ -276,6 +290,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 else{
                     countdown = waveTimer/1000;  //Reset timer for next round
                 }
+                invalidate();
             }
         };
         timerCountdown.scheduleAtFixedRate(timerTaskCnt, 1000, 1000);  //Every second.

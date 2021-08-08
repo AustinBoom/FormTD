@@ -3,6 +3,7 @@ package com.example.formtd.enemies;
 import android.graphics.Bitmap;
 
 import com.example.formtd.AssetManager;
+import com.example.formtd.DefenceView;
 
 public class GhostEnemy extends Enemy{
     public int movementSpeed = 1;
