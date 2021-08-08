@@ -52,7 +52,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     StaticLayout staticLayout;      //For text
     public boolean begin = false;   //When game has begun
-    int waveTimer = 5000;           //Time between waves (60000ms = 60 seconds)
+    int waveTimer = 5000;           //Time between waves (ex. 60000ms = 60 seconds)
     int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
     ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;
@@ -232,9 +232,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave = new ArrayList<>();
 
         //Add waves. These are how the levels are designed.
-        wave.add(new Wave(asset, "ghost", 2));
-        wave.add(new Wave(asset, "ghost",4));
-        wave.add(new Wave(asset, "ghost", 6));
+        wave.add(new Wave(asset, "ghost", 1));
+        wave.add(new Wave(asset, "ghost",2));
+        wave.add(new Wave(asset, "ghost", 8));
 
     }
 
