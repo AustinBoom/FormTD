@@ -13,6 +13,10 @@ public class BreadthSearch {
     private ArrayList<Point> enemyWayPoints;
     private Point endPoint;
     private Point[] centerPoints;
+    private Queue<Point> frontier;
+    private HashMap<Point, Point> cameFrom;
+    private Point current;
+
     //pass all needed params in constructor
     public BreadthSearch()
     {
@@ -29,13 +33,13 @@ public class BreadthSearch {
     }
 
 
-    private Queue<Point> frontier = new LinkedList<>();
-    private HashMap<Point, Point> cameFrom = new HashMap<>();
-    private Point current;
     //Will calculate and return the path
     public ArrayList<Point> getUpToDatePath(Point startPos){  //todo get enemies current position
         //Initialize start conditions
         enemyWayPoints = new ArrayList<>();
+        frontier = new LinkedList<>();
+        cameFrom = new HashMap<>();
+
         frontier.add(startPos);
         cameFrom.put(startPos, null);
 
@@ -49,7 +53,12 @@ public class BreadthSearch {
             }
 
             for (Point next : getNeighbors(current)) {
+                if(!cameFrom.containsKey(next)){    //If not already visited
+                    frontier.add(next);
+                    cameFrom.put(next, current);
+                    System.out.println("neighbor!");
 
+                }
             }
 //            for next in graph.neighbors(current):
 //            if next not in came_from:
