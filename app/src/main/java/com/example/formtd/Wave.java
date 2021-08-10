@@ -3,9 +3,9 @@ package com.example.formtd;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 
@@ -38,7 +38,7 @@ public class Wave {
         for (int i = 0; i < this.enemyAmount; i++) {
             this.enemy[i] = createEnemy(enemyType);
             this.enemy[i].y -= (i*enemySpacing);
-            this.enemy[i].enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath();
+            this.enemy[i].enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath(new Point(enemy[i].x, enemy[i].y));
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
 
@@ -63,7 +63,7 @@ public class Wave {
         if(pathNeedsUpdating){
             for (Enemy enemy: enemy) {
                 if(enemy.alive)
-                    enemy.enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath();
+                    enemy.enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
             }
             pathNeedsUpdating = false;
         }

@@ -3,8 +3,6 @@ package com.example.formtd;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import java.util.Random;
-
 //Manages creation and data of the grid.
 public class GridManager {
     private int deviceWidth;
@@ -14,8 +12,8 @@ public class GridManager {
     private int margin = 50;                    //Since this is a denominator, the smaller the bigger the margin gets.
     private int tileWidth;                      //This width applies to both x and y.
     private Grid[][] grid;
-    private int xMapStart;
-    private int yMapStart;
+    private int xGridStart;
+    private int yGridStart;
     Paint paint;
 
 
@@ -24,8 +22,8 @@ public class GridManager {
         this.deviceWidth = width;
         this.deviceHeight = height;
         this.tileWidth = 0;
-        this.xMapStart = 0;
-        this.yMapStart = 0;
+        this.xGridStart = 0;
+        this.yGridStart = 0;
         paint = new Paint();
         createGrid();
     }
@@ -37,10 +35,10 @@ public class GridManager {
         this.tileWidth = xMapWidth/xGridAmount;
         int mapOffset = (xMapWidth - (tileWidth * xGridAmount))/2;      //Make extra space even on each side of screen
 
-        this.xMapStart = deviceWidth/(margin *2) + mapOffset;     //Where the map starts (left margin)
-        this.yMapStart = deviceHeight/40;
-        int xPos = xMapStart;
-        int yPos = yMapStart;
+        this.xGridStart = deviceWidth/(margin *2) + mapOffset;     //Where the map starts (left margin)
+        this.yGridStart = deviceHeight/40;
+        int xPos = xGridStart;
+        int yPos = yGridStart;
 
         //Now fill the grid array
         grid = new Grid[yGridAmount][xGridAmount];
@@ -49,7 +47,7 @@ public class GridManager {
                 grid[y][x] = new Grid(xPos, yPos);
                 xPos += tileWidth;
             }
-            xPos = xMapStart;   //Reset x pos since it will repeat on each new line
+            xPos = xGridStart;   //Reset x pos since it will repeat on each new line
             yPos += tileWidth;
         }
 
@@ -109,12 +107,12 @@ public class GridManager {
         return tileWidth;
     }
 
-    public int getxMapStart() {
-        return xMapStart;
+    public int getxGridStart() {
+        return xGridStart;
     }
 
-    public int getyMapStart() {
-        return yMapStart;
+    public int getyGridStart() {
+        return yGridStart;
     }
 
     public int getXCenterGridCoordinate(){

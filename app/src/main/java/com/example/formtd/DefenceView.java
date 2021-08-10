@@ -4,7 +4,6 @@
  */
 
 package com.example.formtd;
-import com.example.formtd.enemies.GhostEnemy;
 import com.example.formtd.towers.*;
 
 import android.content.Context;
@@ -35,6 +34,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int deviceHeight;
     public static int centerXGrid;
     public static int tileWidth;
+    public static int xGridStart;
+    public static int yGridStart;
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
@@ -84,11 +85,13 @@ public class DefenceView extends View implements View.OnTouchListener {
         deviceHeight = MeasureSpec.getSize(heightMeasure);
 
         gridManager = new GridManager(deviceWidth, deviceHeight);
+        grid = gridManager.getGrid();
         centerXGrid = gridManager.getXCenterGridCoordinate();
         tileWidth = gridManager.getTileWidth();
-        grid = gridManager.getGrid();
+        xGridStart = gridManager.getxGridStart();
+        yGridStart = gridManager.getyGridStart();
         asset = new AssetManager(context, gridManager.getTileWidth());
-        highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxMapStart(), gridManager.getyMapStart());
+        highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxGridStart(), gridManager.getyGridStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
         breadthSearch = new BreadthSearch();
 
@@ -180,7 +183,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
 
         //Build Button
-        canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxMapStart() - (asset.BUILD.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+        canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxGridStart() - (asset.BUILD.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
     }
 
     private void drawInfoBarStuff(Canvas canvas){
@@ -189,7 +192,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         textPaint.setTextSize(textSize);
         staticLayout = new StaticLayout("Wave in: " + countdown, textPaint, 200, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
-        canvas.translate( gridManager.getxMapStart(), deviceHeight/80 - textSize/2);
+        canvas.translate( gridManager.getxGridStart(), deviceHeight/80 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
         //Set the text of the life meter
@@ -209,7 +212,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private boolean ifTouchIsInBuildButton(MotionEvent motionEvent){
-        return deviceWidth - gridManager.getxMapStart() - (asset.BUILD.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxMapStart()
+        return deviceWidth - gridManager.getxGridStart() - (asset.BUILD.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxGridStart()
                 && grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) + asset.BUILD.getHeight();
     }
 
