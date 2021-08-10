@@ -115,7 +115,8 @@ public class DefenceView extends View implements View.OnTouchListener {
                 asset.buildPressed();
                 if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
                     towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
-                    pathNeedsUpdating = true;
+                    for (int i = 0; i < wave.size(); i++)
+                        wave.get(i).pathNeedsUpdating = true;
                 }
             }
             grid = placementManager.updateGrid();

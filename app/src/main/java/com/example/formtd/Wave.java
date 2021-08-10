@@ -3,16 +3,15 @@ package com.example.formtd;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.GhostEnemy;
 
-import java.util.ArrayList;
 
 //Controls the spawn waves. Note: uses static grid from DefenceView.
 public class Wave {
@@ -21,18 +20,17 @@ public class Wave {
     private final Handler waveHandler;
     private Runnable waveRunnable;
     public Enemy[] enemy;
-    public ArrayList<Point> enemyWayPoints;
     private int enemyAmount;
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
     private int enemySpacing = 80;  //This is the time difference in the handler/timer
+    public boolean pathNeedsUpdating = false;   //Set to true upon tower being built. That then will trigger a path update.
 
     //Takes a new Enemy() and amount of enemies in the wave.
     public Wave(AssetManager asset, String enemyType, int enemyAmount){
         //This paint is for the shadow
         paint = new Paint();
-        paint.setARGB(15, 10, 10, 10);
+        paint.setARGB(17, 10, 10, 10);
         waveHandler = HandlerCompat.createAsync(Looper.getMainLooper());
-        enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath();
         this.asset = asset;
         //Enemy array
         this.enemyAmount = enemyAmount;
@@ -40,9 +38,9 @@ public class Wave {
         for (int i = 0; i < this.enemyAmount; i++) {
             this.enemy[i] = createEnemy(enemyType);
             this.enemy[i].y -= (i*enemySpacing);
+            this.enemy[i].enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath();
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
-//        this.currentWaypoint = 0;   //Current spot in enemyPath array.
 
     }
 
@@ -51,35 +49,33 @@ public class Wave {
     }
 
     public void checkEndWave(){
-        //TODO if every enemy is past the end, then make this wave inactive, otherwise just return true.
         for (Enemy enemy : enemy) {
-            if(enemy.alive){
+            if(enemy.alive)
                 this.active = true;
-            }
-            else{
-                System.out.println("wave ended!!!!!!!!!!!!!");
+            else
                 this.active = false;
-            }
         }
     }
 
 
     public void drawWave(Canvas canvas){
-        //If a tower is placed, update to the new path.
-        if(DefenceView.pathNeedsUpdating){
-            enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath();
-            DefenceView.pathNeedsUpdating = false;
+        //If a tower is placed, update to the new path for each enemy.
+        if(pathNeedsUpdating){
+            for (Enemy enemy: enemy) {
+                if(enemy.alive)
+                    enemy.enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath();
+            }
+            pathNeedsUpdating = false;
         }
+        //Draw the actual enemies
         for (Enemy enemy: enemy) {
             if(enemy.alive) {
-                canvas.drawCircle(enemy.x + DefenceView.tileWidth / 2, enemy.y + DefenceView.tileWidth / 2, DefenceView.tileWidth / 3, paint);
-                canvas.drawBitmap(enemy.art, enemy.x - enemy.art.getWidth() / 6, enemy.y - enemy.art.getHeight() / 2, null);
+                canvas.drawCircle(enemy.x + DefenceView.tileWidth / 2, enemy.y + DefenceView.tileWidth / 2, DefenceView.tileWidth / 3, paint);  //shadow
+                canvas.drawBitmap(enemy.art, enemy.x - enemy.art.getWidth() / 6, enemy.y - enemy.art.getHeight() / 2, null);                   //unit
             }
         }
 
 
-
-        //Eventually have a loop that draws each enemy
         //Handler that constantly updates enemy positions.
         waveRunnable = new Runnable() {
             public void run() {
@@ -90,16 +86,17 @@ public class Wave {
                             enemy.alive = false;
                             checkEndWave();
                         }
-                    } else if (enemy.currentWayPoint< enemyWayPoints.size()) {   //Make sure not to go over arraylast.
-                        if (enemy.y == enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
+                        //todo: change every enemyWaypoints to enemy.enemyWaitPoints
+                    } else if (enemy.currentWayPoint< enemy.enemyWayPoints.size()) {   //Make sure not to go over arraylast.
+                        if (enemy.y == enemy.enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemy.enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
                             enemy.currentWayPoint++;     //Increment to next waypoint
-                        } else if (enemy.x < enemyWayPoints.get(enemy.currentWayPoint).x) {
+                        } else if (enemy.x < enemy.enemyWayPoints.get(enemy.currentWayPoint).x) {
                             enemy.x++;
-                        } else if (enemy.x > enemyWayPoints.get(enemy.currentWayPoint).x) {
+                        } else if (enemy.x > enemy.enemyWayPoints.get(enemy.currentWayPoint).x) {
                             enemy.x--;
-                        } else if (enemy.y < enemyWayPoints.get(enemy.currentWayPoint).y) {
+                        } else if (enemy.y < enemy.enemyWayPoints.get(enemy.currentWayPoint).y) {
                             enemy.y++;
-                        } else if (enemy.y > enemyWayPoints.get(enemy.currentWayPoint).y) {
+                        } else if (enemy.y > enemy.enemyWayPoints.get(enemy.currentWayPoint).y) {
                             enemy.y--;
                         }
                     } else {   //else if health <= 0...

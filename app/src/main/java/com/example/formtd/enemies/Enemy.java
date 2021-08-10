@@ -1,9 +1,12 @@
 package com.example.formtd.enemies;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
 
 import com.example.formtd.AssetManager;
 import com.example.formtd.DefenceView;
+
+import java.util.ArrayList;
 
 //Abstract enemy class, holds basic enemy functions, specific enemy will be created upon child instantiation.
 public abstract class Enemy {
@@ -17,6 +20,7 @@ public abstract class Enemy {
     public int currentWayPoint = 0;
     public int x = DefenceView.centerXGrid;
     public int y = 0;
+    public ArrayList<Point> enemyWayPoints;
     //TODO put a bitmap of a default enemy here
     public Enemy(AssetManager asset){
         this.asset = asset;
