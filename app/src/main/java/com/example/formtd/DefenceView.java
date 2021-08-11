@@ -121,6 +121,17 @@ public class DefenceView extends View implements View.OnTouchListener {
                         wave.get(i).pathNeedsUpdating = true;
                 }
             }
+
+            if(ifTouchIsInRemoveButton(motionEvent)){
+                //Check each tower if it's the one that's highlighted
+                for (int i = 0; i < towers.size(); i++) {
+                    if(towers.get(i).selectTower(highlightManager.getHighlightPlacement())){
+                        placementManager.removeTower(highlightManager.getHighlightPlacement()); //Remove tower from grid
+                        towers.remove(i);   //Remove tower from towers arraylist
+                    }
+                }
+            }
+
             grid = placementManager.updateGrid();
         }
 
@@ -182,7 +193,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
 
         //Build Button
-        canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxGridStart() - (asset.BUILD.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+        canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxGridStart()*2 - (asset.BUILD.getWidth()) - (asset.REMOVE.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+        canvas.drawBitmap(asset.REMOVE, deviceWidth - gridManager.getxGridStart() - (asset.REMOVE.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+
     }
 
     private void drawInfoBarStuff(Canvas canvas){
@@ -231,24 +244,13 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private boolean ifTouchIsInBuildButton(MotionEvent motionEvent){
-        return deviceWidth - gridManager.getxGridStart() - (asset.BUILD.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxGridStart()
+        return deviceWidth - gridManager.getxGridStart()*2 - (asset.BUILD.getWidth()) - (asset.REMOVE.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxGridStart()*2 - (asset.REMOVE.getWidth())
                 && grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) + asset.BUILD.getHeight();
     }
 
-    private void drawTestBall(Canvas canvas){
-        paint.setARGB(255, 255, 255, 0);
-        canvas.drawBitmap(asset.GHOST, 100, y, null);
-
-
-        final Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                invalidate();
-                y += 1;
-            }
-        };
-        handler.postDelayed(runnable, 50); //Start animation
-
+    private boolean ifTouchIsInRemoveButton(MotionEvent motionEvent){
+        return deviceWidth - gridManager.getxGridStart() - (asset.REMOVE.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxGridStart()
+                && grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) + asset.BUILD.getHeight();
     }
 
     private void initWaves(){

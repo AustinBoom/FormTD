@@ -82,12 +82,13 @@ public class BreadthSearch {
                 enemyWayPoints.add(current);
                 current = cameFrom.get(current);
             }
-            //enemyWayPoints.add(startPos); //NOTE: if path gets messed up, add this back.
             Collections.reverse(enemyWayPoints);
         }
 
 
+
         //todo reapply this algorithm again from center to end
+        //Use addall to add to enemyWayPoints
         //enemyWayPoints.add(endPoint);
         if(enemyWayPoints.isEmpty()){
             System.out.println("IT GOT EMPTY?");

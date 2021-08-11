@@ -22,11 +22,12 @@ public class AssetManager {
 
     //UI and other
     public Bitmap TAPTOSTART;
-    public Bitmap TAPTOSTARTONE;
-    public Bitmap TAPTOSTARTTWO;
     public Bitmap BUILD;
     public Bitmap BUILDUNPRESSED;
     public Bitmap BUILDPRESSED;
+    public Bitmap REMOVE;
+    public Bitmap REMOVEOFF;
+    public Bitmap REMOVEON;
 
     //Enemies
     public Bitmap GHOST;
@@ -52,6 +53,15 @@ public class AssetManager {
         BUILDUNPRESSED = Bitmap.createScaledBitmap(BUILD, 250, 80, false);
         BUILDPRESSED = BitmapFactory.decodeResource(context.getResources(), R.drawable.buildpressed);
         BUILDPRESSED = Bitmap.createScaledBitmap(BUILDPRESSED, 249, 79, false);
+
+        //Remove button
+        REMOVE = BitmapFactory.decodeResource(context.getResources(), R.drawable.removeoff);
+        REMOVE = Bitmap.createScaledBitmap(REMOVE, 80, 80, false);
+        REMOVEOFF = BitmapFactory.decodeResource(context.getResources(), R.drawable.removeoff);
+        REMOVEOFF = Bitmap.createScaledBitmap(REMOVEOFF, 80, 80, false);
+        REMOVEON = BitmapFactory.decodeResource(context.getResources(), R.drawable.removeon);
+        REMOVEON = Bitmap.createScaledBitmap(REMOVEON, 80, 80, false);
+
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
         GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
@@ -65,6 +75,14 @@ public class AssetManager {
             }
         };
         handler.postDelayed(runnable, 60); //How long the button glows pressed.
+    }
+
+    public void removeON(){
+        REMOVE = REMOVEON;
+    }
+
+    public void removeOFF(){
+        REMOVE = REMOVEOFF;
     }
 
 

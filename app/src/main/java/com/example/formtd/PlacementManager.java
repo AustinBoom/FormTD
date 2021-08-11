@@ -124,6 +124,7 @@ public class PlacementManager {
         }
     }
 
+
     //todo needs to be tested.
     public void removeTower(RectanglePoints rectanglePoints){
         int left = rectanglePoints.left;

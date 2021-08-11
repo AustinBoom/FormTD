@@ -24,7 +24,19 @@ public abstract class Tower {
         this.top = rect.top;
         this.right = rect.right;
         this.bottom = rect.bottom;
+    }
 
+    //If points all match up, this is the tower selected
+    public boolean selectTower(RectanglePoints rectanglePoints){
+        int rectleft = rectanglePoints.left;
+        int recttop = rectanglePoints.top;
+        int rectright = rectanglePoints.right;
+        int rectbottom = rectanglePoints.bottom;
+
+        if(left == rectleft && top == recttop && right == rectright && bottom == rectbottom){
+            return true;
+        }
+        return false;
     }
 
     public void drawTower(Canvas canvas){
