@@ -38,7 +38,7 @@ public class Wave {
         for (int i = 0; i < this.enemyAmount; i++) {
             this.enemy[i] = createEnemy(enemyType);
             this.enemy[i].y -= (i*enemySpacing);
-            this.enemy[i].enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath(new Point(enemy[i].x, enemy[i].y));
+            this.enemy[i].enemyWayPoints = enemy[i].breadthSearch.getUpToDatePath(new Point(enemy[i].x, enemy[i].y));
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
 
@@ -63,7 +63,7 @@ public class Wave {
         if(pathNeedsUpdating){
             for (Enemy enemy: enemy) {
                 if(enemy.alive)
-                    enemy.enemyWayPoints = DefenceView.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
+                    enemy.enemyWayPoints = enemy.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
             }
             pathNeedsUpdating = false;
         }
@@ -74,7 +74,6 @@ public class Wave {
                 canvas.drawBitmap(enemy.art, enemy.x - enemy.art.getWidth() / 6, enemy.y - enemy.art.getHeight() / 2, null);                   //unit
             }
         }
-
 
         //Handler that constantly updates enemy positions.
         waveRunnable = new Runnable() {

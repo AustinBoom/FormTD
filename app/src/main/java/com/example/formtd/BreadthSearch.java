@@ -3,6 +3,7 @@ package com.example.formtd;
 import android.graphics.Point;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -16,6 +17,7 @@ public class BreadthSearch {
     private Queue<Point> frontier;
     private HashMap<Point, Point> cameFrom;
     private Point current;
+    private Point goal;
 
     //pass all needed params in constructor
     public BreadthSearch()
@@ -28,17 +30,21 @@ public class BreadthSearch {
                 new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x + DefenceView.tileWidth, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y + DefenceView.tileWidth)
         };
         endPoint = new Point(DefenceView.grid[27][10].x, DefenceView.grid[27][10].y);
-
-        enemyWayPoints = new ArrayList<>();
     }
 
 
     //Will calculate and return the path
     public ArrayList<Point> getUpToDatePath(Point startPos){  //todo get enemies current position
+        //todo: if enemy is BEFORE the spawn, then just return the beginning coordinates, and don't update until in the grid.
+        //Beginning coordinates:
+        //    public int x = DefenceView.centerXGrid;
+        //    public int y = DefenceView.yGridStart;
+
         //Initialize start conditions
         enemyWayPoints = new ArrayList<>();
         frontier = new LinkedList<>();
         cameFrom = new HashMap<>();
+        goal = null;
 
         frontier.add(startPos);
         cameFrom.put(startPos, null);
@@ -47,26 +53,34 @@ public class BreadthSearch {
         while(!frontier.isEmpty()){
             current = frontier.remove();    //maybe use poll if I just want to get a null
 
-            //If current queue equals any of the center points.
-            if (current == centerPoints[0] || current == centerPoints[1] || current == centerPoints[2] || current == centerPoints[3]){
+            //If current queue equals any of the center points, exit loop.
+            //System.out.println(current.x + " " + centerPoints[0].x + " " + current.y + " "  + centerPoints[0].y);
+            if ((current.x == centerPoints[0].x && current.y == centerPoints[0].y) || (current.x == centerPoints[1].x && current.y == centerPoints[1].y) || (current.x == centerPoints[2].x && current.y == centerPoints[2].y) || (current.x == centerPoints[3].x && current.y == centerPoints[3].y)){
+                goal = current;
                 break;
             }
 
+            //Check each neighbor for availability and add to queue and hashmap.
             for (Point next : getNeighbors(current)) {
                 if(!cameFrom.containsKey(next)){    //If not already visited
                     frontier.add(next);
                     cameFrom.put(next, current);
-                    System.out.println("neighbor!");
-
                 }
             }
-//            for next in graph.neighbors(current):
-//            if next not in came_from:
-//            frontier.put(next)
-//            came_from[next] = current
-
         }
 
+        //Trace back each step in the path to get the points. todo If goal is null then THE PATH IS BLOCKED.
+        if(goal == null){
+            //Todo make a global variable in defence view, which then adds a warning on top that path is blocked.
+            System.out.println("Path blocked.");
+        }
+        current = goal;
+        while (current != startPos){
+            enemyWayPoints.add(current);
+            current = cameFrom.get(current);
+        }
+        enemyWayPoints.add(startPos);
+        Collections.reverse(enemyWayPoints);
 
 
         //todo Add end point below.
@@ -85,23 +99,27 @@ public class BreadthSearch {
                 if(DefenceView.grid[y][x].x == current.x && DefenceView.grid[y][x].y == current.y){
                     //Get North neighbor
                     if(y-1 >= 0){
-                        if(DefenceView.grid[y-1][x].available)
-                            neighbors.add(new Point(DefenceView.grid[y-1][x].x, DefenceView.grid[y-1][x].y));
+                        if(DefenceView.grid[y-1][x].walkable) {
+                            neighbors.add(new Point(DefenceView.grid[y - 1][x].x, DefenceView.grid[y - 1][x].y));
+                        }
                     }
                     //Get East neighbor
                     if(x+1 < DefenceView.grid[0].length){
-                        if(DefenceView.grid[y][x+1].available)
-                            neighbors.add(new Point(DefenceView.grid[y][x+1].x, DefenceView.grid[y][x+1].y));
+                        if(DefenceView.grid[y][x+1].walkable) {
+                            neighbors.add(new Point(DefenceView.grid[y][x + 1].x, DefenceView.grid[y][x + 1].y));
+                        }
                     }
                     //Get South neighbor
                     if(y+1 < DefenceView.grid.length){
-                        if(DefenceView.grid[y+1][x].available)
-                            neighbors.add(new Point(DefenceView.grid[y+1][x].x, DefenceView.grid[y+1][x].y));
+                        if(DefenceView.grid[y+1][x].walkable) {
+                            neighbors.add(new Point(DefenceView.grid[y + 1][x].x, DefenceView.grid[y + 1][x].y));
+                        }
                     }
                     //Get West neighbor
                     if(x-1 >= 0){
-                        if(DefenceView.grid[y][x-1].available)
-                            neighbors.add(new Point(DefenceView.grid[y][x-1].x, DefenceView.grid[y][x-1].y));
+                        if(DefenceView.grid[y][x-1].walkable) {
+                            neighbors.add(new Point(DefenceView.grid[y][x - 1].x, DefenceView.grid[y][x - 1].y));
+                        }
                     }
                 }
             }
