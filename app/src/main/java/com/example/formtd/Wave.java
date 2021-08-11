@@ -48,27 +48,27 @@ public class Wave {
         this.active = true;
     }
 
-    public void checkEndWave(){
+    public boolean endWave(){
         for (Enemy enemy : enemy) {
             if(enemy.alive)
-                this.active = true;
-            else
-                this.active = false;
+                return false;
         }
+        return true;
     }
 
 
     public void drawWave(Canvas canvas){
-        //If a tower is placed, update to the new path for each enemy.
-        if(pathNeedsUpdating){
+        //Constantly update enemy path unless enemy hasn't entered the world yet.
             for (Enemy enemy: enemy) {
                 if(enemy.alive) {
                     enemy.enemyWayPoints = enemy.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
-                    enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
+                    //If enemy hasn't spawned yet, then let enemy reach spawn spot first
+                    if(!(enemy.y < DefenceView.yGridStart)) {
+                        enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
+                    }
                 }
             }
-            pathNeedsUpdating = false;
-        }
+
         //Draw the actual enemies
         for (Enemy enemy: enemy) {
             if(enemy.alive) {
@@ -86,7 +86,9 @@ public class Wave {
                         if(enemy.alive) {
                             DefenceView.lives -= 1;
                             enemy.alive = false;
-                            checkEndWave();
+                            if(endWave()){
+                                active = false;
+                            }
                         }
                     } else if (enemy.currentWayPoint < enemy.enemyWayPoints.size()) {   //Make sure not to go over arraylast.
                         if (enemy.y == enemy.enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemy.enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:

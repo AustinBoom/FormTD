@@ -10,6 +10,7 @@ import java.util.Queue;
 
 public class BreadthSearch {
     private ArrayList<Point> enemyWayPoints;
+    private ArrayList<Point> centerToEndWayPoints;
     private Point endPoint;
     private Point[] centerPoints;
     private Queue<Point> frontier;
@@ -33,7 +34,6 @@ public class BreadthSearch {
 
     //Will calculate and return the path
     public ArrayList<Point> getUpToDatePath(Point startPos){  //todo get enemies current position
-
         //Initialize start conditions
         enemyWayPoints = new ArrayList<>();
         frontier = new LinkedList<>();
@@ -54,7 +54,6 @@ public class BreadthSearch {
             current = frontier.remove();    //maybe use poll if I just want to get a null
 
             //If current queue equals any of the center points, exit loop.
-            //System.out.println(current.x + " " + centerPoints[0].x + " " + current.y + " "  + centerPoints[0].y);
             if ((current.x == centerPoints[0].x && current.y == centerPoints[0].y) || (current.x == centerPoints[1].x && current.y == centerPoints[1].y) || (current.x == centerPoints[2].x && current.y == centerPoints[2].y) || (current.x == centerPoints[3].x && current.y == centerPoints[3].y)){
                 goal = current;
                 break;
@@ -69,7 +68,7 @@ public class BreadthSearch {
             }
         }
 
-        //Check if blocking
+        //Check if blocking, if so go straight to center.
         if(goal == null){
             DefenceView.blocking = true;
             enemyWayPoints.add(new Point(centerPoints[0].x + DefenceView.tileWidth/2, centerPoints[0].y + DefenceView.tileWidth/2));
@@ -85,12 +84,9 @@ public class BreadthSearch {
         }
 
 
-
-        //todo reapply this algorithm again from center to end
-        //Use addall to add to enemyWayPoints
         //enemyWayPoints.add(endPoint);
         if(enemyWayPoints.isEmpty()){
-            System.out.println("IT GOT EMPTY?");
+            System.out.println("WAYPOINTS IS EMPTY. See BreadthSearch.getUpToDatePath");
         }
         return enemyWayPoints;
     }
@@ -135,6 +131,9 @@ public class BreadthSearch {
         return neighbors;
     }
 
+
+
+}
     //Some test points.
 //        if (true) {
 //        enemyWayPoints = new ArrayList<>();
@@ -144,4 +143,3 @@ public class BreadthSearch {
 //        return enemyWayPoints;
 //       }
 
-}
