@@ -33,6 +33,7 @@ public class BreadthSearch {
 
     //Will calculate and return the path
     public ArrayList<Point> getUpToDatePath(Point startPos){  //todo get enemies current position
+
         //Initialize start conditions
         enemyWayPoints = new ArrayList<>();
         frontier = new LinkedList<>();
@@ -42,9 +43,11 @@ public class BreadthSearch {
         frontier.add(startPos);
         cameFrom.put(startPos, null);
 
-        //If enemy is BEFORE the spawn, return the start coordinates rather than update.
+        //If enemy is BEFORE the spawn, start the path to the start, then to a centerpoint.
         if(startPos.y < DefenceView.yGridStart){
+            System.out.println(startPos + " " + DefenceView.yGridStart);
             enemyWayPoints.add(startPos);
+            enemyWayPoints.add(centerPoints[1]);
             return enemyWayPoints;
         }
         //Loop through each possible available cell
@@ -67,19 +70,19 @@ public class BreadthSearch {
             }
         }
 
-        //Trace back each step in the path to get the points. todo If goal is null then THE PATH IS BLOCKED.
+        //Check if blocking
         if(goal == null){
-            //Todo make a global variable in defence view, which then adds a warning on top that path is blocked.
-            System.out.println("Path blocked.");
+            DefenceView.blocking = true;
             enemyWayPoints.add(new Point(centerPoints[0].x + DefenceView.tileWidth/2, centerPoints[0].y + DefenceView.tileWidth/2));
         }
-        else {
+        else {          //Trace back each step in the path to get the points.
+            DefenceView.blocking = false;
             current = goal;
             while (current != startPos) {
                 enemyWayPoints.add(current);
                 current = cameFrom.get(current);
             }
-            //enemyWayPoints.add(startPos); //todo if path gets messed up, add this back.
+            //enemyWayPoints.add(startPos); //NOTE: if path gets messed up, add this back.
             Collections.reverse(enemyWayPoints);
         }
 
@@ -133,8 +136,12 @@ public class BreadthSearch {
     }
 
     //Some test points.
+//        if (true) {
+//        enemyWayPoints = new ArrayList<>();
 //        enemyWayPoints.add(new Point(DefenceView.grid[3][10].x, DefenceView.grid[3][10].y));
 //        enemyWayPoints.add(new Point(DefenceView.grid[6][12].x, DefenceView.grid[6][12].y));
 //        enemyWayPoints.add(new Point(DefenceView.grid[14][4].x, DefenceView.grid[14][4].y));
+//        return enemyWayPoints;
+//       }
 
 }

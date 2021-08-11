@@ -52,12 +52,13 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     StaticLayout staticLayout;      //For text
     public boolean begin = false;   //When game has begun
-    int waveTimer = 3000;           //Time between waves (ex. 60000ms = 60 seconds)
+    int waveTimer = 4000;           //Time between waves (ex. 60000ms = 60 seconds)
     int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
     ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;
     public static int lives = 50;
     public static int gold = 10000;
+    public static boolean blocking = false;
 
 
     public DefenceView(Context context) {
@@ -193,18 +194,38 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.translate( gridManager.getxGridStart(), deviceHeight/80 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
+
+        //Set the text of the current wave
+        staticLayout = new StaticLayout("Wave: " + currentWave, textPaint, 150, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( deviceWidth*7/20 - staticLayout.getWidth()/2, deviceHeight/80 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+
         //Set the text of the life meter
         staticLayout = new StaticLayout("Lives: " + lives, textPaint, 150, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
-        canvas.translate( deviceWidth/2 - staticLayout.getWidth()/2, deviceHeight/80 - textSize/2);
+        canvas.translate( deviceWidth*3/5 - staticLayout.getWidth()/2, deviceHeight/80 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
+
         //Set the text of the current gold
         staticLayout = new StaticLayout("Gold: " + gold, textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( deviceWidth*3/4, deviceHeight/80 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
+
+        if(blocking) {
+            //Set the blocking text
+            textPaint.setARGB(120, 255, 10, 10);
+            textPaint.setTextSize(textSize + 10);
+            staticLayout = new StaticLayout("PATH BLOCKED!", textPaint, 340, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+            canvas.save();
+            canvas.translate(deviceWidth / 2 - staticLayout.getWidth() / 2, yGridStart * 2);
+            staticLayout.draw(canvas);
+            canvas.restore();
+        }
 
         //invalidate();
     }
@@ -235,8 +256,8 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         //Add waves. These are how the levels are designed.
         wave.add(new Wave(asset, "ghost", 1));
-       // wave.add(new Wave(asset, "ghost",2));
-        //wave.add(new Wave(asset, "ghost", 8));
+        wave.add(new Wave(asset, "ghost",2));
+        wave.add(new Wave(asset, "ghost", 8));
 
     }
 

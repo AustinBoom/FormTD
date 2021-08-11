@@ -81,7 +81,6 @@ public class Wave {
         //Handler that constantly updates enemy positions.
         waveRunnable = new Runnable() {
             public void run() {
-                System.out.println("still running!");
                 for (Enemy enemy: enemy) {
                     if (enemy.y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
                         if(enemy.alive) {
