@@ -4,9 +4,7 @@ import android.graphics.Point;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -73,18 +71,24 @@ public class BreadthSearch {
         if(goal == null){
             //Todo make a global variable in defence view, which then adds a warning on top that path is blocked.
             System.out.println("Path blocked.");
+            enemyWayPoints.add(new Point(centerPoints[0].x + DefenceView.tileWidth/2, centerPoints[0].y + DefenceView.tileWidth/2));
         }
-        current = goal;
-        while (current != startPos){
-            enemyWayPoints.add(current);
-            current = cameFrom.get(current);
+        else {
+            current = goal;
+            while (current != startPos) {
+                enemyWayPoints.add(current);
+                current = cameFrom.get(current);
+            }
+            enemyWayPoints.add(startPos);
+            Collections.reverse(enemyWayPoints);
         }
-        enemyWayPoints.add(startPos);
-        Collections.reverse(enemyWayPoints);
 
 
-        //todo Add end point below.
+        //todo reapply this algorithm again from center to end
         //enemyWayPoints.add(endPoint);
+        if(enemyWayPoints.isEmpty()){
+            System.out.println("IT GOT EMPTY?");
+        }
         return enemyWayPoints;
     }
 

@@ -54,7 +54,7 @@ public class AssetManager {
         BUILDPRESSED = Bitmap.createScaledBitmap(BUILDPRESSED, 249, 79, false);
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
-        GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);  //todo eventually shrink this
+        GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
     }
 
     public void buildPressed(){

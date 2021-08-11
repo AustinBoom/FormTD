@@ -5,10 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Handler;
-import android.os.Looper;
-
-import androidx.core.os.HandlerCompat;
-
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.GhostEnemy;
 
@@ -30,7 +26,7 @@ public class Wave {
         //This paint is for the shadow
         paint = new Paint();
         paint.setARGB(17, 10, 10, 10);
-        waveHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+        waveHandler = new Handler();
         this.asset = asset;
         //Enemy array
         this.enemyAmount = enemyAmount;
@@ -62,22 +58,26 @@ public class Wave {
         //If a tower is placed, update to the new path for each enemy.
         if(pathNeedsUpdating){
             for (Enemy enemy: enemy) {
-                if(enemy.alive)
+                if(enemy.alive) {
                     enemy.enemyWayPoints = enemy.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
+                    enemy.currentWayPoint = 0;
+                }
             }
             pathNeedsUpdating = false;
         }
         //Draw the actual enemies
         for (Enemy enemy: enemy) {
             if(enemy.alive) {
-                canvas.drawCircle(enemy.x + DefenceView.tileWidth / 2, enemy.y + DefenceView.tileWidth / 2, DefenceView.tileWidth / 3, paint);  //shadow
-                canvas.drawBitmap(enemy.art, enemy.x - enemy.art.getWidth() / 6, enemy.y - enemy.art.getHeight() / 2, null);                   //unit
+                canvas.drawCircle(enemy.x + DefenceView.tileWidth / 2, enemy.y + DefenceView.tileWidth*2/5, DefenceView.tileWidth / 3, paint);  //shadow
+                canvas.drawBitmap(enemy.art, enemy.x - enemy.art.getWidth() / 6, enemy.y - enemy.art.getHeight()*3/5, null);                   //unit
             }
         }
+
 
         //Handler that constantly updates enemy positions.
         waveRunnable = new Runnable() {
             public void run() {
+                System.out.println("still running!");
                 for (Enemy enemy: enemy) {
                     if (enemy.y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
                         if(enemy.alive) {
@@ -86,7 +86,7 @@ public class Wave {
                             checkEndWave();
                         }
                         //todo: change every enemyWaypoints to enemy.enemyWaitPoints
-                    } else if (enemy.currentWayPoint< enemy.enemyWayPoints.size()) {   //Make sure not to go over arraylast.
+                    } else if (enemy.currentWayPoint < enemy.enemyWayPoints.size()) {   //Make sure not to go over arraylast.
                         if (enemy.y == enemy.enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemy.enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
                             enemy.currentWayPoint++;     //Increment to next waypoint
                         } else if (enemy.x < enemy.enemyWayPoints.get(enemy.currentWayPoint).x) {
@@ -105,6 +105,20 @@ public class Wave {
             }
         };
         waveHandler.postDelayed(waveRunnable, enemy[0].animDelay); //Start animation
+    }
+
+
+    public boolean ifEnemyBlocking(RectanglePoints rectanglePoints){
+        int eX;
+        int eY;
+        for (Enemy enemy: enemy) {
+            eX = enemy.x - ((enemy.x - DefenceView.xGridStart) % DefenceView.tileWidth);
+            eY = enemy.y - ((enemy.y - DefenceView.yGridStart) % DefenceView.tileWidth);
+            if(rectanglePoints.left <= eX && eX <= rectanglePoints.right && rectanglePoints.top <= eY && eY <= rectanglePoints.bottom){
+                return true;
+            }
+        }
+        return false;
     }
 
 
