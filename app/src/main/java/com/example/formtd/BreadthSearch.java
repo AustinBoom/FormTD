@@ -33,11 +33,6 @@ public class BreadthSearch {
 
     //Will calculate and return the path
     public ArrayList<Point> getUpToDatePath(Point startPos){  //todo get enemies current position
-        //todo: if enemy is BEFORE the spawn, then just return the beginning coordinates, and don't update until in the grid.
-        //Beginning coordinates:
-        //    public int x = DefenceView.centerXGrid;
-        //    public int y = DefenceView.yGridStart;
-
         //Initialize start conditions
         enemyWayPoints = new ArrayList<>();
         frontier = new LinkedList<>();
@@ -47,6 +42,11 @@ public class BreadthSearch {
         frontier.add(startPos);
         cameFrom.put(startPos, null);
 
+        //If enemy is BEFORE the spawn, return the start coordinates rather than update.
+        if(startPos.y < DefenceView.yGridStart){
+            enemyWayPoints.add(startPos);
+            return enemyWayPoints;
+        }
         //Loop through each possible available cell
         while(!frontier.isEmpty()){
             current = frontier.remove();    //maybe use poll if I just want to get a null
@@ -79,7 +79,7 @@ public class BreadthSearch {
                 enemyWayPoints.add(current);
                 current = cameFrom.get(current);
             }
-            enemyWayPoints.add(startPos);
+            //enemyWayPoints.add(startPos); //todo if path gets messed up, add this back.
             Collections.reverse(enemyWayPoints);
         }
 

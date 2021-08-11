@@ -5,6 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.os.HandlerCompat;
+
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.GhostEnemy;
 
@@ -26,7 +30,7 @@ public class Wave {
         //This paint is for the shadow
         paint = new Paint();
         paint.setARGB(17, 10, 10, 10);
-        waveHandler = new Handler();
+        waveHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.asset = asset;
         //Enemy array
         this.enemyAmount = enemyAmount;
@@ -60,7 +64,7 @@ public class Wave {
             for (Enemy enemy: enemy) {
                 if(enemy.alive) {
                     enemy.enemyWayPoints = enemy.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
-                    enemy.currentWayPoint = 0;
+                    enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
                 }
             }
             pathNeedsUpdating = false;

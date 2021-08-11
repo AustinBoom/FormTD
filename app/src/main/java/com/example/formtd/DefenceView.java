@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -17,6 +18,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.core.os.HandlerCompat;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +54,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     public boolean begin = false;   //When game has begun
     int waveTimer = 3000;           //Time between waves (ex. 60000ms = 60 seconds)
     int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
-    public static ArrayList<Wave> wave;            //Holds every wave that exists
+    ArrayList<Wave> wave;            //Holds every wave that exists
     public static int currentWave = 0;
     public static int lives = 50;
     public static int gold = 10000;
@@ -111,23 +113,11 @@ public class DefenceView extends View implements View.OnTouchListener {
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
             if(ifTouchIsInBuildButton(motionEvent)){
-                asset.buildPressed();   //Button press animation
-                //If spot is available
+                asset.buildPressed();
                 if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
-                    //Make sure enemy isn't blocking
-                    boolean enemyBlocking = false;
-                    for (Wave wave:wave) {
-                        if(wave.ifEnemyBlocking(highlightManager.getHighlightPlacement())){
-                            enemyBlocking = true;
-                        }
-                    }
-                    //If enemy is not blocking then add tower and update enemy path
-                    if(!enemyBlocking) {
-                        towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
-                        for (int i = 0; i < wave.size(); i++)
-                            wave.get(i).pathNeedsUpdating = true;
-                    }
-
+                    towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
+                    for (int i = 0; i < wave.size(); i++)
+                        wave.get(i).pathNeedsUpdating = true;
                 }
             }
             grid = placementManager.updateGrid();
@@ -161,20 +151,10 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Get the highlighted points. If null then there is no highlight to draw; simply do nothing.
         RectanglePoints rectanglePoints = highlightManager.getHighlightPlacement();
         if(rectanglePoints != null){
-            //Make sure enemy isn't blocking
-            boolean enemyBlocking = false;
-            for (Wave wave:wave) {
-                if(wave.ifEnemyBlocking(highlightManager.getHighlightPlacement())){
-                    enemyBlocking = true;
-                }
-            }
-            //If spot is available and no enemy blocking then make green highlight
-            if(placementManager.checkSpotAvailability(rectanglePoints.left, rectanglePoints.top) && !enemyBlocking) {
+            if(placementManager.checkSpotAvailability(rectanglePoints.left, rectanglePoints.top))
                 paint.setARGB(85, 50, 255, 50);
-            }
-            else {  //red highlight
+            else
                 paint.setARGB(120, 255, 50, 50);
-            }
 
             canvas.drawRect(rectanglePoints.left, rectanglePoints.top, rectanglePoints.right, rectanglePoints.bottom, paint);
         }
@@ -239,7 +219,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawBitmap(asset.GHOST, 100, y, null);
 
 
-        final Handler handler = new Handler();
+        final Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
         final Runnable runnable = new Runnable() {
             public void run() {
                 invalidate();
