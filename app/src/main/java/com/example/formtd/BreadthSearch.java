@@ -45,7 +45,6 @@ public class BreadthSearch {
 
         //If enemy is BEFORE the spawn, start the path to the start, then to a centerpoint.
         if(startPos.y < DefenceView.yGridStart){
-            System.out.println(startPos + " " + DefenceView.yGridStart);
             enemyWayPoints.add(startPos);
             enemyWayPoints.add(centerPoints[1]);
             return enemyWayPoints;

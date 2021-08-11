@@ -117,8 +117,9 @@ public class DefenceView extends View implements View.OnTouchListener {
                 asset.buildPressed();
                 if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
                     towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
-                    for (int i = 0; i < wave.size(); i++)
+                    for (int i = 0; i < wave.size(); i++) {
                         wave.get(i).pathNeedsUpdating = true;
+                    }
                 }
             }
 
@@ -128,11 +129,14 @@ public class DefenceView extends View implements View.OnTouchListener {
                     if(towers.get(i).selectTower(highlightManager.getHighlightPlacement())){
                         placementManager.removeTower(highlightManager.getHighlightPlacement()); //Remove tower from grid
                         towers.remove(i);   //Remove tower from towers arraylist
+                        asset.removeOFF();
+                        for (int j = 0; j < wave.size(); j++) {
+                            wave.get(j).pathNeedsUpdating = true;
+                        }
                     }
                 }
             }
 
-            grid = placementManager.updateGrid();
         }
 
         invalidate();       //update drawings.
@@ -187,6 +191,16 @@ public class DefenceView extends View implements View.OnTouchListener {
             paint.setARGB(200, 255, 255, 255);
             canvas.drawBitmap(asset.TAPTOSTART, deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2), deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2), paint);
         }
+        //Remove button highlight on
+        for (int i = 0; i < towers.size(); i++) {
+            if(towers.get(i).selectTower(highlightManager.getHighlightPlacement())){
+                asset.removeON();
+                break;
+            }
+            else{
+                asset.removeOFF();
+            }
+        }
 
         //Info bar
         paint.setARGB(255, 50, 70, 90);
@@ -194,6 +208,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         //Build Button
         canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxGridStart()*2 - (asset.BUILD.getWidth()) - (asset.REMOVE.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+        //Remove button
         canvas.drawBitmap(asset.REMOVE, deviceWidth - gridManager.getxGridStart() - (asset.REMOVE.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
 
     }

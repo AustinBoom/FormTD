@@ -2,11 +2,9 @@ package com.example.formtd;
 
 //Manages existing towers and spot availability.
 public class PlacementManager {
-    Grid[][] grid;
     private int tileWidth;
 
     public PlacementManager(Grid[][] grid, int tileWidth) {
-        this.grid = grid;
         this.tileWidth = tileWidth;
         //Initialize each spot
         for (int y = 0; y < grid.length; y++) {
@@ -38,9 +36,6 @@ public class PlacementManager {
 //        }
     }
 
-    public Grid[][] updateGrid(){
-        return grid;
-    }
 
     public boolean checkSpotAvailability(int left, int top){
         //Get index by going to coordinate
@@ -51,16 +46,16 @@ public class PlacementManager {
         int right = left + tileWidth;
         int bottom = top + tileWidth;
 
-        for (int y = 0; y < grid.length; y++) {
-            for (int x = 0; x < grid[0].length; x++) {
-                if(grid[y][x].x == left && grid[y][x].y == top)
-                    lefttop = grid[y][x].buildable;
-                if(grid[y][x].x == left && grid[y][x].y == bottom)
-                    leftbottom = grid[y][x].buildable;
-                if(grid[y][x].x == right && grid[y][x].y == top)
-                    righttop = grid[y][x].buildable;
-                if(grid[y][x].x == right && grid[y][x].y == bottom)
-                    rightbottom = grid[y][x].buildable;
+        for (int y = 0; y < DefenceView.grid.length; y++) {
+            for (int x = 0; x < DefenceView.grid[0].length; x++) {
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == top)
+                    lefttop = DefenceView.grid[y][x].buildable;
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == bottom)
+                    leftbottom = DefenceView.grid[y][x].buildable;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == top)
+                    righttop = DefenceView.grid[y][x].buildable;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == bottom)
+                    rightbottom = DefenceView.grid[y][x].buildable;
             }
         }
 
@@ -79,16 +74,16 @@ public class PlacementManager {
         int right = left + tileWidth;
         int bottom = top + tileWidth;
 
-        for (int y = 0; y < grid.length; y++) {
-            for (int x = 0; x < grid[0].length; x++) {
-                if(grid[y][x].x == left && grid[y][x].y == top)
-                    lefttop = grid[y][x].buildable;
-                if(grid[y][x].x == left && grid[y][x].y == bottom)
-                    leftbottom = grid[y][x].buildable;
-                if(grid[y][x].x == right && grid[y][x].y == top)
-                    righttop = grid[y][x].buildable;
-                if(grid[y][x].x == right && grid[y][x].y == bottom)
-                    rightbottom = grid[y][x].buildable;
+        for (int y = 0; y < DefenceView.grid.length; y++) {
+            for (int x = 0; x < DefenceView.grid[0].length; x++) {
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == top)
+                    lefttop = DefenceView.grid[y][x].buildable;
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == bottom)
+                    leftbottom = DefenceView.grid[y][x].buildable;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == top)
+                    righttop = DefenceView.grid[y][x].buildable;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == bottom)
+                    rightbottom = DefenceView.grid[y][x].buildable;
             }
         }
 
@@ -101,23 +96,23 @@ public class PlacementManager {
         int right = left + tileWidth;
         int bottom = top + tileWidth;
 
-        for (int y = 0; y < grid.length; y++) {
-            for (int x = 0; x < grid[0].length; x++) {
-                if(grid[y][x].x == left && grid[y][x].y == top) {
-                    grid[y][x].buildable = false;
-                    grid[y][x].walkable = false;
+        for (int y = 0; y < DefenceView.grid.length; y++) {
+            for (int x = 0; x < DefenceView.grid[0].length; x++) {
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == top) {
+                    DefenceView.grid[y][x].buildable = false;
+                    DefenceView.grid[y][x].walkable = false;
                 }
-                if(grid[y][x].x == left && grid[y][x].y == bottom) {
-                    grid[y][x].buildable = false;
-                    grid[y][x].walkable = false;
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == bottom) {
+                    DefenceView.grid[y][x].buildable = false;
+                    DefenceView.grid[y][x].walkable = false;
                 }
-                if(grid[y][x].x == right && grid[y][x].y == top) {
-                    grid[y][x].buildable = false;
-                    grid[y][x].walkable = false;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == top) {
+                    DefenceView.grid[y][x].buildable = false;
+                    DefenceView.grid[y][x].walkable = false;
                 }
-                if(grid[y][x].x == right && grid[y][x].y == bottom) {
-                    grid[y][x].buildable = false;
-                    grid[y][x].walkable = false;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == bottom) {
+                    DefenceView.grid[y][x].buildable = false;
+                    DefenceView.grid[y][x].walkable = false;
                 }
 
             }
@@ -132,23 +127,23 @@ public class PlacementManager {
         int right = left + tileWidth;
         int bottom = top + tileWidth;
 
-        for (int y = 0; y < grid.length; y++) {
-            for (int x = 0; x < grid[0].length; x++) {
-                if(grid[y][x].x == left && grid[y][x].y == top) {
-                    grid[y][x].buildable = true;
-                    grid[y][x].walkable = true;
+        for (int y = 0; y < DefenceView.grid.length; y++) {
+            for (int x = 0; x < DefenceView.grid[0].length; x++) {
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == top) {
+                    DefenceView.grid[y][x].buildable = true;
+                    DefenceView.grid[y][x].walkable = true;
                 }
-                if(grid[y][x].x == left && grid[y][x].y == bottom) {
-                    grid[y][x].buildable = true;
-                    grid[y][x].walkable = true;
+                if(DefenceView.grid[y][x].x == left && DefenceView.grid[y][x].y == bottom) {
+                    DefenceView.grid[y][x].buildable = true;
+                    DefenceView.grid[y][x].walkable = true;
                 }
-                if(grid[y][x].x == right && grid[y][x].y == top) {
-                    grid[y][x].buildable = true;
-                    grid[y][x].walkable = true;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == top) {
+                    DefenceView.grid[y][x].buildable = true;
+                    DefenceView.grid[y][x].walkable = true;
                 }
-                if(grid[y][x].x == right && grid[y][x].y == bottom) {
-                    grid[y][x].buildable = true;
-                    grid[y][x].walkable = true;
+                if(DefenceView.grid[y][x].x == right && DefenceView.grid[y][x].y == bottom) {
+                    DefenceView.grid[y][x].buildable = true;
+                    DefenceView.grid[y][x].walkable = true;
                 }
             }
         }

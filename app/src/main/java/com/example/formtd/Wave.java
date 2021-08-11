@@ -88,7 +88,6 @@ public class Wave {
                             enemy.alive = false;
                             checkEndWave();
                         }
-                        //todo: change every enemyWaypoints to enemy.enemyWaitPoints
                     } else if (enemy.currentWayPoint < enemy.enemyWayPoints.size()) {   //Make sure not to go over arraylast.
                         if (enemy.y == enemy.enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemy.enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
                             enemy.currentWayPoint++;     //Increment to next waypoint
