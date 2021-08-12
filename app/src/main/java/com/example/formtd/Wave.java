@@ -24,6 +24,7 @@ public class Wave {
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
     private int enemySpacing = 80;  //This is the time difference in the handler/timer
     public boolean pathNeedsUpdating = false;   //Set to true upon tower being built. That then will trigger a path update.
+    private Point[] centerPoints;
 
     //Takes a new Enemy() and amount of enemies in the wave.
     public Wave(AssetManager asset, String enemyType, int enemyAmount){
@@ -38,9 +39,16 @@ public class Wave {
         for (int i = 0; i < this.enemyAmount; i++) {
             this.enemy[i] = createEnemy(enemyType);
             this.enemy[i].y -= (i*enemySpacing);
-            this.enemy[i].enemyWayPoints = enemy[i].breadthSearch.getUpToDatePath(new Point(enemy[i].x, enemy[i].y));
+            this.enemy[i].enemyWayPoints = enemy[i].breadthSearch.getStartToCenterPath(new Point(enemy[i].x, enemy[i].y));
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
+        //Centerpoint
+        centerPoints = new Point[]{
+                new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y),
+                new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x + DefenceView.tileWidth, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y),
+                new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y + DefenceView.tileWidth),
+                new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x + DefenceView.tileWidth, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y + DefenceView.tileWidth)
+        };
 
     }
 
@@ -58,16 +66,19 @@ public class Wave {
 
 
     public void drawWave(Canvas canvas){
-        //Constantly update enemy path unless enemy hasn't entered the world yet.
-            for (Enemy enemy: enemy) {
-                if(enemy.alive) {
-                    enemy.enemyWayPoints = enemy.breadthSearch.getUpToDatePath(new Point(enemy.x, enemy.y));
-                    //If enemy hasn't spawned yet, then let enemy reach spawn spot first
-                    if(!(enemy.y < DefenceView.yGridStart)) {
-                        enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
-                    }
-                }
-            }
+        //Note: this is commented out and placed in thread below. Apply further testing to make sure this has no side-effects.
+//        //Constantly update enemy path unless enemy hasn't entered the world yet.
+//            for (Enemy enemy: enemy) {
+//                if(enemy.alive) {
+//                    if(!enemy.reachedCenter) {
+//                        enemy.enemyWayPoints = enemy.breadthSearch.getStartToCenterPath(new Point(enemy.x, enemy.y));
+//                        //If enemy hasn't spawned yet, then let enemy reach spawn spot first
+//                        if (!(enemy.y < DefenceView.yGridStart)) {
+//                            enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
+//                        }
+//                    }
+//                }
+//            }
 
         //Draw the actual enemies
         for (Enemy enemy: enemy) {
@@ -82,6 +93,22 @@ public class Wave {
         waveRunnable = new Runnable() {
             public void run() {
                 for (Enemy enemy: enemy) {
+                    //Constantly update enemy path unless enemy hasn't entered the world yet.
+                    if(enemy.alive) {
+                        if(!enemy.reachedCenter) {
+                            enemy.enemyWayPoints = enemy.breadthSearch.getStartToCenterPath(new Point(enemy.x, enemy.y));
+                            //If enemy hasn't spawned yet, then let enemy reach spawn spot first
+                            if (!(enemy.y < DefenceView.yGridStart)) {
+                                enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
+                            }
+                        }
+                        else{
+                            enemy.enemyWayPoints = enemy.breadthSearch.getCenterToEndPath(new Point(enemy.x, enemy.y));
+                        }
+                    }
+
+
+                    //Move enemies
                     if (enemy.y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
                         if(enemy.alive) {
                             DefenceView.lives -= 1;
@@ -105,6 +132,11 @@ public class Wave {
                     } else {   //else if health <= 0...
                         //todo else if enemy's health is 0 then checkEndWave(); and reward gold.
                     }
+
+                    //If enemy hasn't reached center, check if it has.
+                    if (enemyCenterReached(new Point(enemy.x, enemy.y)) && !enemy.reachedCenter) {
+                        enemy.reachedCenter = true;
+                    }
                 }
             }
         };
@@ -112,15 +144,9 @@ public class Wave {
     }
 
 
-    public boolean ifEnemyBlocking(RectanglePoints rectanglePoints){
-        int eX;
-        int eY;
-        for (Enemy enemy: enemy) {
-            eX = enemy.x - ((enemy.x - DefenceView.xGridStart) % DefenceView.tileWidth);
-            eY = enemy.y - ((enemy.y - DefenceView.yGridStart) % DefenceView.tileWidth);
-            if(rectanglePoints.left <= eX && eX <= rectanglePoints.right && rectanglePoints.top <= eY && eY <= rectanglePoints.bottom){
-                return true;
-            }
+    public boolean enemyCenterReached(Point enemyPos){
+        if(enemyPos.x >= centerPoints[0].x && enemyPos.x <= centerPoints[1].x && enemyPos.y >= centerPoints[0].y && enemyPos.y <= centerPoints[3].y){
+            return true;
         }
         return false;
     }

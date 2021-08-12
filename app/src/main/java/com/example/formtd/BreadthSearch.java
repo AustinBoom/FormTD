@@ -10,7 +10,6 @@ import java.util.Queue;
 
 public class BreadthSearch {
     private ArrayList<Point> enemyWayPoints;
-    private ArrayList<Point> centerToEndWayPoints;
     private Point endPoint;
     private Point[] centerPoints;
     private Queue<Point> frontier;
@@ -33,7 +32,7 @@ public class BreadthSearch {
 
 
     //Will calculate and return the path
-    public ArrayList<Point> getUpToDatePath(Point startPos){  //todo get enemies current position
+    public ArrayList<Point> getStartToCenterPath(Point startPos){
         //Initialize start conditions
         enemyWayPoints = new ArrayList<>();
         frontier = new LinkedList<>();
@@ -86,10 +85,70 @@ public class BreadthSearch {
 
         //enemyWayPoints.add(endPoint);
         if(enemyWayPoints.isEmpty()){
-            System.out.println("WAYPOINTS IS EMPTY. See BreadthSearch.getUpToDatePath");
+            System.out.println("WAYPOINTS IS EMPTY. See BreadthSearch.getStartToCenterPath");
         }
         return enemyWayPoints;
     }
+
+    //Will calculate and return the path
+    public ArrayList<Point> getCenterToEndPath(Point startPos){
+        //Initialize start conditions
+        enemyWayPoints = new ArrayList<>();
+        frontier = new LinkedList<>();
+        cameFrom = new HashMap<>();
+        goal = null;
+
+        frontier.add(startPos);
+        cameFrom.put(startPos, null);
+
+        //If enemy is BEFORE the spawn, start the path to the start, then to a centerpoint.
+        if(startPos.y < DefenceView.yGridStart){
+            enemyWayPoints.add(startPos);
+            enemyWayPoints.add(centerPoints[1]);
+            return enemyWayPoints;
+        }
+        //Loop through each possible available cell
+        while(!frontier.isEmpty()){
+            current = frontier.remove();    //maybe use poll if I just want to get a null
+
+            //If current queue equals any of the center points, exit loop.
+            if(current.y >= endPoint.y){
+                goal = current;
+                break;
+            }
+
+            //Check each neighbor for availability and add to queue and hashmap.
+            for (Point next : getNeighbors(current)) {
+                if(!cameFrom.containsKey(next)){    //If not already visited
+                    frontier.add(next);
+                    cameFrom.put(next, current);
+                }
+            }
+        }
+
+        //Check if blocking, if so go straight to center.
+        if(goal == null){
+            DefenceView.blocking = true;
+            enemyWayPoints.add(new Point(centerPoints[0].x + DefenceView.tileWidth/2, centerPoints[0].y + DefenceView.tileWidth/2));
+        }
+        else {          //Trace back each step in the path to get the points.
+            DefenceView.blocking = false;
+            current = goal;
+            while (current != startPos) {
+                enemyWayPoints.add(current);
+                current = cameFrom.get(current);
+            }
+            Collections.reverse(enemyWayPoints);
+        }
+
+
+        //enemyWayPoints.add(endPoint);
+        if(enemyWayPoints.isEmpty()){
+            System.out.println("WAYPOINTS IS EMPTY. See BreadthSearch.getCenterToEndPath");
+        }
+        return enemyWayPoints;
+    }
+
 
     private ArrayList<Point> getNeighbors(Point current){
         ArrayList<Point> neighbors = new ArrayList<>();
@@ -142,4 +201,52 @@ public class BreadthSearch {
 //        enemyWayPoints.add(new Point(DefenceView.grid[14][4].x, DefenceView.grid[14][4].y));
 //        return enemyWayPoints;
 //       }
+
+
+/**
+ //Go from center to end:
+ centerToEndWayPoints = new ArrayList<>();
+ frontier = new LinkedList<>();
+ cameFrom = new HashMap<>();
+ goal = null;
+
+ Point center = new Point(centerPoints[0].x, centerPoints[0].y);
+ frontier.add(center);
+ cameFrom.put(center, null);
+ //Loop through each possible available cell
+ while(!frontier.isEmpty()){
+ current = frontier.remove();    //maybe use poll if I just want to get a null
+
+ //If current queue equals any of the center points, exit loop.
+ if (current.y >= endPoint.y){
+ goal = current;
+ break;
+ }
+
+ //Check each neighbor for availability and add to queue and hashmap.
+ for (Point next : getNeighbors(current)) {
+ if(!cameFrom.containsKey(next)){    //If not already visited
+ frontier.add(next);
+ cameFrom.put(next, current);
+ }
+ }
+ }
+
+ //Check if blocking, if so go straight to center.
+ if(goal == null){
+ DefenceView.blocking = true;
+ centerToEndWayPoints.add(endPoint);
+ }
+ else {          //Trace back each step in the path to get the points.
+ DefenceView.blocking = false;
+ current = goal;
+ while (current != center) {
+ centerToEndWayPoints.add(current);
+ current = cameFrom.get(current);
+ }
+ Collections.reverse(centerToEndWayPoints);
+ }
+
+ enemyWayPoints.addAll(centerToEndWayPoints);
+ */
 

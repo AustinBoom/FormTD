@@ -17,6 +17,7 @@ public abstract class Enemy {
     public int health = 10;
     public int goldReward = 1;
     public boolean alive = true;
+    public boolean reachedCenter = false;
     public Bitmap art;
     public int currentWayPoint = 0;
     public int x = DefenceView.centerXGrid;
