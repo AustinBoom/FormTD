@@ -126,10 +126,10 @@ public class BreadthSearch {
             }
         }
 
-        //Check if blocking, if so go straight to center.
+        //Check if blocking, if so go straight to end.
         if(goal == null){
             DefenceView.blocking = true;
-            enemyWayPoints.add(new Point(centerPoints[0].x + DefenceView.tileWidth/2, centerPoints[0].y + DefenceView.tileWidth/2));
+            enemyWayPoints.add(endPoint);
         }
         else {          //Trace back each step in the path to get the points.
             DefenceView.blocking = false;
