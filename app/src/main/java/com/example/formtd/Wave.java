@@ -66,19 +66,6 @@ public class Wave {
 
 
     public void drawWave(Canvas canvas){
-        //Note: this is commented out and placed in thread below. Apply further testing to make sure this has no side-effects.
-//        //Constantly update enemy path unless enemy hasn't entered the world yet.
-//            for (Enemy enemy: enemy) {
-//                if(enemy.alive) {
-//                    if(!enemy.reachedCenter) {
-//                        enemy.enemyWayPoints = enemy.breadthSearch.getStartToCenterPath(new Point(enemy.x, enemy.y));
-//                        //If enemy hasn't spawned yet, then let enemy reach spawn spot first
-//                        if (!(enemy.y < DefenceView.yGridStart)) {
-//                            enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
-//                        }
-//                    }
-//                }
-//            }
 
         //Draw the actual enemies
         for (Enemy enemy: enemy) {
@@ -93,7 +80,7 @@ public class Wave {
         waveRunnable = new Runnable() {
             public void run() {
                 for (Enemy enemy: enemy) {
-                    //Constantly update enemy path unless enemy hasn't entered the world yet.
+                    //Constantly update enemy breadthSearch unless enemy hasn't entered the world yet.
                     if(enemy.alive) {
                         if(!enemy.reachedCenter) {
                             enemy.enemyWayPoints = enemy.breadthSearch.getStartToCenterPath(new Point(enemy.x, enemy.y));
@@ -107,8 +94,15 @@ public class Wave {
                         }
                     }
 
+                    //If enemy health is zero, then mark enemy as dead and check if wave needs to be ended.
+                    if(enemy.health <= 0){
+                        enemy.alive = false;
+                        if(endWave()){
+                            active = false;
+                        }
+                    }
 
-                    //Move enemies
+                    //Check for leaking
                     if (enemy.y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
                         if(enemy.alive) {
                             DefenceView.lives -= 1;
@@ -117,7 +111,7 @@ public class Wave {
                                 active = false;
                             }
                         }
-                    } else if (enemy.currentWayPoint < enemy.enemyWayPoints.size()) {   //Make sure not to go over arraylast.
+                    } else if (enemy.currentWayPoint < enemy.enemyWayPoints.size()) {   //Update enemy position
                         if (enemy.y == enemy.enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemy.enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
                             enemy.currentWayPoint++;     //Increment to next waypoint
                         } else if (enemy.x < enemy.enemyWayPoints.get(enemy.currentWayPoint).x) {
@@ -129,8 +123,6 @@ public class Wave {
                         } else if (enemy.y > enemy.enemyWayPoints.get(enemy.currentWayPoint).y) {
                             enemy.y--;
                         }
-                    } else {   //else if health <= 0...
-                        //todo else if enemy's health is 0 then checkEndWave(); and reward gold.
                     }
 
                     //If enemy hasn't reached center, check if it has.

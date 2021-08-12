@@ -107,9 +107,10 @@ public class DefenceView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            if(!begin){
+            if(!begin){     //ONE TIME BEGINNING STUFF HERE. Once screen is touched start certain actions.
                 begin = true;
                 startWaves();
+                activateTowers();
             }
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
@@ -333,6 +334,11 @@ public class DefenceView extends View implements View.OnTouchListener {
             }
         };
         timerCountdown.scheduleAtFixedRate(timerTaskCnt, 1000, 1000);  //Every second.
+    }
+
+    //Manages tower functions
+    private void activateTowers(){
+
     }
 
 }
