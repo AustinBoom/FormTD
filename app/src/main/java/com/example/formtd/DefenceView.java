@@ -9,8 +9,6 @@ import com.example.formtd.towers.*;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -18,7 +16,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.core.os.HandlerCompat;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -59,6 +56,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int lives = 50;
     public static int gold = 1000;
     public static boolean blocking = false;
+    public static int setEnemyID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
 
 
     public DefenceView(Context context) {
@@ -154,6 +152,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         //drawTestBall(canvas);
         drawHighLight(canvas);
         drawCurrentWave(canvas);
+        drawTowerProjectiles(canvas);
         drawUI(canvas);
         drawInfoBarStuff(canvas);
 
@@ -179,6 +178,12 @@ public class DefenceView extends View implements View.OnTouchListener {
     private void drawTowers(Canvas canvas){
         for (int i = 0; i < towers.size(); i++) {
             towers.get(i).drawTower(canvas);
+        }
+    }
+
+    private void drawTowerProjectiles(Canvas canvas){
+        for (int i = 0; i < towers.size(); i++) {
+            towers.get(i).drawProjectile(canvas);
         }
     }
 

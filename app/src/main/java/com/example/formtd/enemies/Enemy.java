@@ -8,10 +8,12 @@ import com.example.formtd.BreadthSearch;
 import com.example.formtd.DefenceView;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 //Abstract enemy class, holds basic enemy functions, specific enemy will be created upon child instantiation.
 public abstract class Enemy {
     AssetManager asset;
+    public int enemyID = DefenceView.setEnemyID++;
     public final int movementSpeed = 1;
     public int health = 10;
     public int goldReward = 1;
