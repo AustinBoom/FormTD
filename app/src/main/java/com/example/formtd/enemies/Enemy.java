@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public abstract class Enemy {
     AssetManager asset;
     public final int movementSpeed = 1;
-    public int animDelay = 20;   //For extra slow movement or "jumping"
     public int health = 10;
     public int goldReward = 1;
     public boolean alive = true;

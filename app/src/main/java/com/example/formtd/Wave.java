@@ -11,6 +11,7 @@ import androidx.core.os.HandlerCompat;
 
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.GhostEnemy;
+import com.example.formtd.towers.Tower;
 
 
 //Controls the spawn waves. Note: uses static grid from DefenceView.
@@ -19,12 +20,13 @@ public class Wave {
     private AssetManager asset;
     private final Handler waveHandler;
     private Runnable waveRunnable;
-    public Enemy[] enemy;
+    public Enemy[] enemies;   //todo rename enemies
     private int enemyAmount;
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
     private int enemySpacing = 80;  //This is the time difference in the handler/timer
     public boolean pathNeedsUpdating = false;   //Set to true upon tower being built. That then will trigger a path update.
     private Point[] centerPoints;
+    private final int tolerance = 5;      //this is how "off" an enemy can be from a point when traversing the path. (Not yet implemented.)
 
     //Takes a new Enemy() and amount of enemies in the wave.
     public Wave(AssetManager asset, String enemyType, int enemyAmount){
@@ -35,11 +37,11 @@ public class Wave {
         this.asset = asset;
         //Enemy array
         this.enemyAmount = enemyAmount;
-        this.enemy = new Enemy[enemyAmount];
+        this.enemies = new Enemy[enemyAmount];
         for (int i = 0; i < this.enemyAmount; i++) {
-            this.enemy[i] = createEnemy(enemyType);
-            this.enemy[i].y -= (i*enemySpacing);
-            this.enemy[i].enemyWayPoints = enemy[i].breadthSearch.getStartToCenterPath(new Point(enemy[i].x, enemy[i].y));
+            this.enemies[i] = createEnemy(enemyType);
+            this.enemies[i].y -= (i*enemySpacing);
+            this.enemies[i].enemyWayPoints = enemies[i].breadthSearch.getStartToCenterPath(new Point(enemies[i].x, enemies[i].y));
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
         //Centerpoint
@@ -57,7 +59,7 @@ public class Wave {
     }
 
     public boolean endWave(){
-        for (Enemy enemy : enemy) {
+        for (Enemy enemy : enemies) {
             if(enemy.alive)
                 return false;
         }
@@ -68,7 +70,7 @@ public class Wave {
     public void drawWave(Canvas canvas){
 
         //Draw the actual enemies
-        for (Enemy enemy: enemy) {
+        for (Enemy enemy: enemies) {
             if(enemy.alive) {
                 canvas.drawCircle(enemy.x + DefenceView.tileWidth / 2, enemy.y + DefenceView.tileWidth*2/5, DefenceView.tileWidth / 3, paint);  //shadow
                 canvas.drawBitmap(enemy.art, enemy.x - enemy.art.getWidth() / 6, enemy.y - enemy.art.getHeight()*3/5, null);                   //unit
@@ -79,60 +81,66 @@ public class Wave {
         //Handler that constantly updates enemy positions.
         waveRunnable = new Runnable() {
             public void run() {
-                for (Enemy enemy: enemy) {
+                /**Enemy Management**/
+                for (int i = 0; i < enemies.length; i++) {
                     //Constantly update enemy breadthSearch unless enemy hasn't entered the world yet.
-                    if(enemy.alive) {
-                        if(!enemy.reachedCenter) {
-                            enemy.enemyWayPoints = enemy.breadthSearch.getStartToCenterPath(new Point(enemy.x, enemy.y));
+                    if(enemies[i].alive) {
+                        if(!enemies[i].reachedCenter) {
+                             enemies[i].enemyWayPoints = enemies[i].breadthSearch.getStartToCenterPath(new Point(enemies[i].x, enemies[i].y));
                             //If enemy hasn't spawned yet, then let enemy reach spawn spot first
-                            if (!(enemy.y < DefenceView.yGridStart)) {
-                                enemy.currentWayPoint = 0;  //Reset waypoint to use new waypoints.
+                            if (!(enemies[i].y < DefenceView.yGridStart)) {
+                                enemies[i].currentWayPoint = 0;  //Reset waypoint to use new waypoints.
                             }
                         }
                         else{
-                            enemy.enemyWayPoints = enemy.breadthSearch.getCenterToEndPath(new Point(enemy.x, enemy.y));
+                            enemies[i].enemyWayPoints = enemies[i].breadthSearch.getCenterToEndPath(new Point(enemies[i].x, enemies[i].y));
                         }
                     }
 
                     //If enemy health is zero, then mark enemy as dead and check if wave needs to be ended.
-                    if(enemy.health <= 0){
-                        enemy.alive = false;
+                    if(enemies[i].health <= 0){
+                        enemies[i].alive = false;
                         if(endWave()){
                             active = false;
                         }
                     }
 
                     //Check for leaking
-                    if (enemy.y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
-                        if(enemy.alive) {
+                    if (enemies[i].y >= DefenceView.grid[DefenceView.grid.length - 1][0].y) { //If over last waypoint, see if the enemy has leaked.
+                        if(enemies[i].alive) {
                             DefenceView.lives -= 1;
-                            enemy.alive = false;
+                            enemies[i].alive = false;
                             if(endWave()){
                                 active = false;
                             }
                         }
-                    } else if (enemy.currentWayPoint < enemy.enemyWayPoints.size()) {   //Update enemy position
-                        if (enemy.y == enemy.enemyWayPoints.get(enemy.currentWayPoint).y && enemy.x == enemy.enemyWayPoints.get(enemy.currentWayPoint).x) { //If enemy has reached waypoint:
-                            enemy.currentWayPoint++;     //Increment to next waypoint
-                        } else if (enemy.x < enemy.enemyWayPoints.get(enemy.currentWayPoint).x) {
-                            enemy.x++;
-                        } else if (enemy.x > enemy.enemyWayPoints.get(enemy.currentWayPoint).x) {
-                            enemy.x--;
-                        } else if (enemy.y < enemy.enemyWayPoints.get(enemy.currentWayPoint).y) {
-                            enemy.y++;
-                        } else if (enemy.y > enemy.enemyWayPoints.get(enemy.currentWayPoint).y) {
-                            enemy.y--;
+                    } else if (enemies[i].currentWayPoint < enemies[i].enemyWayPoints.size()) {   //Update enemy position
+                        if (enemies[i].y == enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).y && enemies[i].x == enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).x) { //If enemy has reached waypoint:
+                            enemies[i].currentWayPoint++;     //Increment to next waypoint
+                        } else if (enemies[i].x < enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).x) {
+                            enemies[i].x++;
+                        } else if (enemies[i].x > enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).x) {
+                            enemies[i].x--;
+                        } else if (enemies[i].y < enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).y) {
+                            enemies[i].y++;
+                        } else if (enemies[i].y > enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).y) {
+                            enemies[i].y--;
                         }
                     }
 
                     //If enemy hasn't reached center, check if it has.
-                    if (enemyCenterReached(new Point(enemy.x, enemy.y)) && !enemy.reachedCenter) {
-                        enemy.reachedCenter = true;
+                    if (enemyCenterReached(new Point(enemies[i].x, enemies[i].y)) && !enemies[i].reachedCenter) {
+                        enemies[i].reachedCenter = true;
                     }
+                }
+
+                /**Tower management**/
+                for (Tower tower : DefenceView.towers) {
+                    tower.watch(enemies); //todo pass enemy array as param.
                 }
             }
         };
-        waveHandler.postDelayed(waveRunnable, enemy[0].animDelay); //Start animation
+        waveHandler.postDelayed(waveRunnable, 0); //Start animation
     }
 
 

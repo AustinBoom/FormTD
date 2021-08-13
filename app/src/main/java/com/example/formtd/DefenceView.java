@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.os.HandlerCompat;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,24 +41,23 @@ public class DefenceView extends View implements View.OnTouchListener {
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
     PlacementManager placementManager;              //Manages existing towers and spot availability.
-    ArrayList<Tower> towers;
+    public static ArrayList<Tower> towers;          //Towers are created/removed here, and managed in Wave class.
     public static boolean pathNeedsUpdating = false;    //Whenever a tower is placed, set this to true and Wave class will know about it.
     Paint paint;
-    int y = 100;        //todo only for test ball so this can be removed later.
 
     //Mechanics
-    public static boolean gameOver = false;
-    public static boolean lastWave = false;
+    StaticLayout staticLayout;      //For text
     TextPaint textPaint = new TextPaint();
     final int textSize = 32;
-    StaticLayout staticLayout;      //For text
-    public boolean begin = false;   //When game has begun
-    int waveTimer = 4000;           //Time between waves (ex. 60000ms = 60 seconds)
-    int countdown = 0;               //Countdown timer. Set to waveTimer/1000 then counts down each wave.
     ArrayList<Wave> wave;            //Holds every wave that exists
+    public boolean begin = false;   //When game has begun
+    protected int waveTimer = 4000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
+    public static boolean gameOver = false;
+    public static boolean lastWave = false;
     public static int currentWave = 0;
     public static int lives = 50;
-    public static int gold = 10000;
+    public static int gold = 1000;
     public static boolean blocking = false;
 
 
@@ -110,7 +110,6 @@ public class DefenceView extends View implements View.OnTouchListener {
             if(!begin){     //ONE TIME BEGINNING STUFF HERE. Once screen is touched start certain actions.
                 begin = true;
                 startWaves();
-                activateTowers();
             }
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
@@ -334,11 +333,6 @@ public class DefenceView extends View implements View.OnTouchListener {
             }
         };
         timerCountdown.scheduleAtFixedRate(timerTaskCnt, 1000, 1000);  //Every second.
-    }
-
-    //Manages tower functions
-    private void activateTowers(){
-
     }
 
 }

@@ -141,11 +141,6 @@ public class BreadthSearch {
             Collections.reverse(enemyWayPoints);
         }
 
-
-        //enemyWayPoints.add(endPoint);
-        if(enemyWayPoints.isEmpty()){
-            System.out.println("WAYPOINTS IS EMPTY. See BreadthSearch.getCenterToEndPath");
-        }
         return enemyWayPoints;
     }
 
