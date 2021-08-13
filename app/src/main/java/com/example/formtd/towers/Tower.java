@@ -103,7 +103,7 @@ public abstract class Tower {
                 System.out.println("WE ATTACK!");
                 //this.projecting = true;
                 updateProjectile(aggroEnemy);
-                //todo Make handler for attack damage update here
+                //todo Make handler for projectile range and attack damage update here
 
 
             } else {   //Stop attacking and lose aggro
@@ -135,6 +135,7 @@ public abstract class Tower {
 
         //Adjust projectile position
         if ((Math.abs(projectileX-enemy.x) < 5) && (Math.abs(projectileY-enemy.y) < 5)) { //If projectile has reached enemy, then clear it.
+            //todo Take enemies health here!
             projecting = false;
         }
         else{
