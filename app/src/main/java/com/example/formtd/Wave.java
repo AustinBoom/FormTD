@@ -20,16 +20,17 @@ public class Wave {
     private AssetManager asset;
     private final Handler waveHandler;
     private Runnable waveRunnable;
-    public Enemy[] enemies;   //todo rename enemies
+    public Enemy[] enemies;
     private int enemyAmount;
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
     private int enemySpacing = 80;  //This is the time difference in the handler/timer
     public boolean pathNeedsUpdating = false;   //Set to true upon tower being built. That then will trigger a path update.
     private Point[] centerPoints;
     private final int tolerance = 5;      //this is how "off" an enemy can be from a point when traversing the path. (Not yet implemented.)
+    public int waveID;
 
     //Takes a new Enemy() and amount of enemies in the wave.
-    public Wave(AssetManager asset, String enemyType, int enemyAmount){
+    public Wave(AssetManager asset, String enemyType, int enemyAmount, int waveID){
         //This paint is for the shadow
         paint = new Paint();
         paint.setARGB(17, 10, 10, 10);
@@ -51,7 +52,7 @@ public class Wave {
                 new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y + DefenceView.tileWidth),
                 new Point(DefenceView.grid[DefenceView.grid.length/2][DefenceView.grid[0].length/2 - 1].x + DefenceView.tileWidth, DefenceView.grid[DefenceView.grid.length/2 - 1][DefenceView.grid[0].length/2].y + DefenceView.tileWidth)
         };
-
+        this.waveID = waveID;
     }
 
     public void startWave(){
@@ -67,7 +68,7 @@ public class Wave {
     }
 
 
-    public void drawWave(Canvas canvas){
+    public synchronized void drawWave(Canvas canvas){
 
         //Draw the actual enemies
         for (Enemy enemy: enemies) {
@@ -118,13 +119,13 @@ public class Wave {
                         if (enemies[i].y == enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).y && enemies[i].x == enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).x) { //If enemy has reached waypoint:
                             enemies[i].currentWayPoint++;     //Increment to next waypoint
                         } else if (enemies[i].x < enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).x) {
-                            enemies[i].x++;
+                            enemies[i].x += enemies[i].movementSpeed;
                         } else if (enemies[i].x > enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).x) {
-                            enemies[i].x--;
+                            enemies[i].x -= enemies[i].movementSpeed;
                         } else if (enemies[i].y < enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).y) {
-                            enemies[i].y++;
+                            enemies[i].y += enemies[i].movementSpeed;
                         } else if (enemies[i].y > enemies[i].enemyWayPoints.get(enemies[i].currentWayPoint).y) {
-                            enemies[i].y--;
+                            enemies[i].y -= enemies[i].movementSpeed;
                         }
                     }
 
@@ -136,7 +137,7 @@ public class Wave {
 
                 /**Tower management**/
                 for (Tower tower : DefenceView.towers) {
-                    tower.watch(enemies); //todo pass enemy array as param.
+                    tower.watch(enemies, waveID); //todo pass enemy array as param.
                 }
             }
         };

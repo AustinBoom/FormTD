@@ -115,6 +115,14 @@ public class GridManager {
         return yGridStart;
     }
 
+    public int getyGridEnd(){
+        return grid[grid.length-1][0].y + tileWidth;
+    }
+
+    public int getxGridEnd(){
+        return grid[0][grid[0].length-1].x + tileWidth;
+    }
+
     public int getXCenterGridCoordinate(){
         return grid[0][grid[0].length/2].x;
     }

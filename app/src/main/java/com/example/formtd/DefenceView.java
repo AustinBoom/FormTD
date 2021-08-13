@@ -34,6 +34,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int tileWidth;
     public static int xGridStart;
     public static int yGridStart;
+    public static int xGridEnd;
+    public static int yGridEnd;
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
@@ -48,7 +50,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
-    protected int waveTimer = 4000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int waveTimer = 3000;           //Time between waves (ex. 60000ms = 60 seconds)
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -56,7 +58,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int lives = 50;
     public static int gold = 1000;
     public static boolean blocking = false;
-    public static int setEnemyID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
+    public static int waveID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
 
 
     public DefenceView(Context context) {
@@ -88,6 +90,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         tileWidth = gridManager.getTileWidth();
         xGridStart = gridManager.getxGridStart();
         yGridStart = gridManager.getyGridStart();
+        xGridEnd = gridManager.getxGridEnd();
+        yGridEnd = gridManager.getyGridEnd();
         asset = new AssetManager(context, gridManager.getTileWidth());
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxGridStart(), gridManager.getyGridStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
@@ -277,9 +281,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave = new ArrayList<>();
 
         //Add waves. These are how the levels are designed.
-        wave.add(new Wave(asset, "ghost", 1));
-        wave.add(new Wave(asset, "ghost",2));
-        wave.add(new Wave(asset, "ghost", 8));
+        wave.add(new Wave(asset, "ghost", 1, waveID++));
+        wave.add(new Wave(asset, "ghost",2, waveID++));
+        wave.add(new Wave(asset, "ghost", 8, waveID++));
 
     }
 
