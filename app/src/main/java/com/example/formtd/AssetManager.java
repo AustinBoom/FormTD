@@ -34,7 +34,7 @@ public class AssetManager {
     public Bitmap GHOST;
 
     //Towers
-
+    public Bitmap SNOWMAN;
 
     public AssetManager(Context context, int tileWidth){
         handler = new Handler();
@@ -70,6 +70,10 @@ public class AssetManager {
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
         GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
+
+        //Snowman
+        SNOWMAN = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
+        SNOWMAN = Bitmap.createScaledBitmap(SNOWMAN, tileWidth*2, tileWidth*2, false);
     }
 
     public void buildPressed(){

@@ -104,6 +104,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         yGridStart = gridManager.getyGridStart();
         xGridEnd = gridManager.getxGridEnd();
         yGridEnd = gridManager.getyGridEnd();
+
         //UI positions
         buildButtonX = xGridStart;
         buildButtonY = grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2);
@@ -212,7 +213,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     private void drawTowers(Canvas canvas){
         for (int i = 0; i < towers.size(); i++) {
-            towers.get(i).drawTower(canvas);
+            towers.get(i).drawTower(canvas, asset);
         }
     }
 

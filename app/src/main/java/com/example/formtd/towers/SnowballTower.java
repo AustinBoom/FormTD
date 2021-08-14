@@ -3,6 +3,7 @@ package com.example.formtd.towers;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.example.formtd.AssetManager;
 import com.example.formtd.DefenceView;
 import com.example.formtd.PlacementManager;
 import com.example.formtd.RectanglePoints;
@@ -28,9 +29,9 @@ public class SnowballTower extends Tower {
     //Customizables
     public int attackDamage = 1;       //Amount of damage tower does
     public int attackRange = 300;       //Radius of attack
-    public int attackMultipler = 1;     //Makes projectiles speed up or slowdown.
-    public int projectileSpeed = 6;    //Speed of projectile animation
-    public int tolerance = 20;
+    public int projectileSpeed = 4;    //Speed of projectile animation
+    public int tolerance = 4;           //Multiplies by projectile Radius
+    public int projectileRadius = 6;
     public static final int cost = 3;
 
     public SnowballTower(RectanglePoints rect, PlacementManager placementManager) {
@@ -56,15 +57,8 @@ public class SnowballTower extends Tower {
     }
 
 
-    public void drawTower(Canvas canvas){
-        //Draw tower underlay
-        paint.setARGB(255, 140, 165, 245);
-        canvas.drawRect(left, top, right, bottom, paint);
-
-        //Draw actual tower
-        paint.setARGB(255, 255, 235, 255);
-        canvas.drawRoundRect(left, top, right, bottom, 55, 30, paint);
-
+    public void drawTower(Canvas canvas, AssetManager asset){
+        canvas.drawBitmap(asset.SNOWMAN, left, top, null);
     }
 
     public int getCost(){
@@ -78,7 +72,7 @@ public class SnowballTower extends Tower {
             // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
 
             paint.setARGB(255, 220, 220, 255);
-            canvas.drawCircle(projectileX, projectileY, 10, paint);
+            canvas.drawCircle(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/6, projectileRadius, paint);  //Adds to 10 account for enemy's animation offset.
         }
     }
 
@@ -125,7 +119,7 @@ public class SnowballTower extends Tower {
         angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
 
         //Adjust projectile position    //TODO: make the tolerance the radius of the bitmap image!
-        if ((Math.abs(projectileX-enemy.x) < tolerance) && (Math.abs(projectileY-enemy.y) < tolerance)) { //If projectile has reached enemy, then clear it.
+        if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
             enemy.health -= attackDamage;
             projecting = false;
             aggroEnemy = -1;
