@@ -71,8 +71,11 @@ public class SnowballTower extends Tower {
             // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
             // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
 
-            paint.setARGB(255, 220, 220, 255);
-            canvas.drawCircle(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/6, projectileRadius, paint);  //Adds to 10 account for enemy's animation offset.
+
+             paint.setARGB(11, 20, 20, 45);   //Shadow
+             canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
+             paint.setARGB(255, 220, 220, 255);
+             canvas.drawCircle(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/6, projectileRadius, paint);  //Adds to 10 account for enemy's animation offset.
         }
     }
 
