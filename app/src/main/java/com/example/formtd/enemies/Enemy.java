@@ -25,10 +25,17 @@ public abstract class Enemy {
     public ArrayList<Point> enemyWayPoints;
     public static BreadthSearch breadthSearch;      //Figures out the path to take!
 
-    public Enemy(AssetManager asset){
+    public Enemy(AssetManager asset, Bitmap art){
         this.asset = asset;
-        art = asset.GHOST;
+        this.art = art;
         breadthSearch = new BreadthSearch();
+    }
+
+    public void kill(){
+        if(alive) { //Only reward gold once.
+            DefenceView.gold += goldReward;
+        }
+        alive = false;
     }
 
 }

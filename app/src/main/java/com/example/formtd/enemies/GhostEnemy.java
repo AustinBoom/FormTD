@@ -9,8 +9,7 @@ public class GhostEnemy extends Enemy{
     public int health = 10;
     public int goldReward = 1;
     public Bitmap art;
-    public GhostEnemy(AssetManager asset) {
-        super(asset);
-        this.art = asset.GHOST;
+    public GhostEnemy(AssetManager asset, Bitmap art) {
+        super(asset, art);
     }
 }

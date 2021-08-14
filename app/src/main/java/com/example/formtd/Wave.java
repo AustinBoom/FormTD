@@ -11,6 +11,7 @@ import androidx.core.os.HandlerCompat;
 
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.GhostEnemy;
+import com.example.formtd.enemies.MinerEnemy;
 import com.example.formtd.towers.Tower;
 
 
@@ -23,7 +24,7 @@ public class Wave {
     public Enemy[] enemies;
     private int enemyAmount;
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
-    private int enemySpacing = 80;  //This is the time difference in the handler/timer
+    private int enemySpacing = 100;  //This is the time difference in the handler/timer
     public boolean pathNeedsUpdating = false;   //Set to true upon tower being built. That then will trigger a path update.
     private Point[] centerPoints;
     private final int tolerance = 5;      //this is how "off" an enemy can be from a point when traversing the path. (Not yet implemented.)
@@ -100,7 +101,7 @@ public class Wave {
 
                     //If enemy health is zero, then mark enemy as dead and check if wave needs to be ended.
                     if(enemies[i].health <= 0){
-                        enemies[i].alive = false;
+                        enemies[i].kill();
                         if(endWave()){
                             active = false;
                         }
@@ -137,7 +138,7 @@ public class Wave {
 
                 /**Tower management**/
                 for (Tower tower : DefenceView.towers) {
-                    tower.watch(enemies, waveID); //todo pass enemy array as param.
+                    tower.watch(enemies, waveID);
                 }
             }
         };
@@ -156,7 +157,9 @@ public class Wave {
     public Enemy createEnemy(String enemy){
         switch (enemy){
             case "ghost":
-                return new GhostEnemy(asset);
+                return new GhostEnemy(asset, asset.GHOST);
+            case "miner":
+                return new MinerEnemy(asset, asset.MINER);
             default:
                 throw new Resources.NotFoundException();
         }

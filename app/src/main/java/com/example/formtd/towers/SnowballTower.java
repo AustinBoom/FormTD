@@ -25,6 +25,7 @@ public class SnowballTower extends Tower {
     public boolean alreadyAttacking;    //Make sure only one instance of projectile is being triggered.
     private int projectileX;
     private int projectileY;
+    public int attackDelayCounter;
 
     //Customizables
     public int attackDamage = 1;       //Amount of damage tower does
@@ -33,6 +34,7 @@ public class SnowballTower extends Tower {
     public int tolerance = 4;           //Multiplies by projectile Radius
     public int projectileRadius = 6;
     public static final int cost = 3;
+
 
     public SnowballTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
@@ -58,6 +60,10 @@ public class SnowballTower extends Tower {
 
 
     public void drawTower(Canvas canvas, AssetManager asset){
+        //Bottom shadow
+        paint.setARGB(25, 5, 5, 200);
+        canvas.drawRoundRect(left, top, right, bottom, 25, 25, paint);
+
         canvas.drawBitmap(asset.SNOWMAN, left, top, null);
     }
 
@@ -121,24 +127,23 @@ public class SnowballTower extends Tower {
         velocityY *= projectileSpeed/length;
         angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
 
-        //Adjust projectile position    //TODO: make the tolerance the radius of the bitmap image!
-        if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
+        //Adjust projectile position
+        if ((Math.abs(projectileX - enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY - enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
             enemy.health -= attackDamage;
             projecting = false;
             aggroEnemy = -1;
-        }
-        else if(projectileX < DefenceView.xGridStart || projectileX > DefenceView.xGridEnd || projectileY < DefenceView.yGridStart || projectileY > DefenceView.yGridEnd){ //If out of bounds it's a miss!
+        } else if (projectileX < DefenceView.xGridStart || projectileX > DefenceView.xGridEnd || projectileY < DefenceView.yGridStart || projectileY > DefenceView.yGridEnd) { //If out of bounds it's a miss!
             projecting = false;
             aggroEnemy = -1;
-        }
-        else if(!enemy.alive){  //If enemy is already dead, then quit trying to attack it!
+        } else if (!enemy.alive) {  //If enemy is already dead, then quit trying to attack it!
             projecting = false;
             aggroEnemy = -1;
-        }
-        else{
+        } else {
             projectileX += velocityX;
             projectileY += velocityY;
         }
+
+
 
         return enemy;
     }

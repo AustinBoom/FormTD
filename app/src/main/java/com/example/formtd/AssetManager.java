@@ -32,9 +32,13 @@ public class AssetManager {
 
     //Enemies
     public Bitmap GHOST;
+    public Bitmap MINER;
 
     //Towers
     public Bitmap SNOWMAN;
+    public Bitmap SNOWMANICON;
+    public Bitmap ARROWTOWER;
+    public Bitmap ARROWTOWERICON;
 
     public AssetManager(Context context, int tileWidth){
         handler = new Handler();
@@ -70,10 +74,22 @@ public class AssetManager {
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
         GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
+        MINER = BitmapFactory.decodeResource(context.getResources(), R.drawable.minerenemy);
+        MINER = Bitmap.createScaledBitmap(MINER, xScale, yScale, false);
 
         //Snowman
         SNOWMAN = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
         SNOWMAN = Bitmap.createScaledBitmap(SNOWMAN, tileWidth*2, tileWidth*2, false);
+        SNOWMANICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
+        SNOWMANICON = Bitmap.createScaledBitmap(SNOWMANICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        //ArrowTower
+        ARROWTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowtower);
+        ARROWTOWER = Bitmap.createScaledBitmap(ARROWTOWER, tileWidth*2, tileWidth*2, false);
+        ARROWTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowtower);
+        ARROWTOWERICON = Bitmap.createScaledBitmap(ARROWTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+
+
+
     }
 
     public void buildPressed(){

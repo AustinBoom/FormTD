@@ -1,5 +1,6 @@
 package com.example.formtd.towers;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -27,12 +28,12 @@ public class ArrowTower extends Tower{
     private int projectileY;
 
     //Customizables
-    public int attackDamage = 1;       //Amount of damage tower does
-    public int attackRange = 300;       //Radius of attack
-    public int projectileSpeed = 6;    //Speed of projectile animation
-    public int tolerance = 4;
-    public int projectileRadius = 6;
-    public static final int cost = 3;
+    public int attackDamage = 2;       //Amount of damage tower does
+    public int attackRange = 600;       //Radius of attack
+    public int projectileSpeed = 7;    //Speed of projectile animation
+    public int tolerance = 5;
+    public int projectileRadius = 10;
+    public static final int cost = 10;
 
     public ArrowTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
@@ -58,14 +59,10 @@ public class ArrowTower extends Tower{
 
 
     public void drawTower(Canvas canvas, AssetManager asset){
-        //Draw tower underlay
-        paint.setARGB(255, 140, 165, 245);
-        canvas.drawRect(left, top, right, bottom, paint);
-
-        //Draw actual tower
-        paint.setARGB(255, 255, 235, 255);
-        canvas.drawRoundRect(left, top, right, bottom, 55, 30, paint);
-
+        //Bottom shadow
+//        paint.setARGB(100, 170, 140, 110);
+//        canvas.drawRoundRect(left, top, right, bottom, 30, 30, paint);
+        canvas.drawBitmap(asset.ARROWTOWER, left, top, null);
     }
 
     public int getCost(){
@@ -79,8 +76,10 @@ public class ArrowTower extends Tower{
             // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
             // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
 
-            paint.setARGB(255, 220, 220, 255);
-            canvas.drawCircle(projectileX, projectileY, 10, paint);
+            paint.setARGB(11, 20, 20, 45);   //Shadow
+            canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
+            paint.setARGB(255, 150, 120, 100);
+            canvas.drawCircle(projectileX+ DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/6, 10, paint);
         }
     }
 
@@ -126,7 +125,7 @@ public class ArrowTower extends Tower{
         velocityY *= projectileSpeed/length;
         angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
 
-        //Adjust projectile position    //TODO: make the tolerance the radius of the bitmap image!
+        //Adjust projectile position
         if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
             enemy.health -= attackDamage;
             projecting = false;

@@ -126,7 +126,7 @@ public class FishSpy extends Tower{
         velocityY *= projectileSpeed/length;
         angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
 
-        //Adjust projectile position    //TODO: make the tolerance the radius of the bitmap image!
+        //Adjust projectile position
         if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
             enemy.health -= attackDamage;
             projecting = false;

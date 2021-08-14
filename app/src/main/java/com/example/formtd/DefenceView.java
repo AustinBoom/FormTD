@@ -43,6 +43,25 @@ public class DefenceView extends View implements View.OnTouchListener {
     public int removeButtonY;
     public int blankIconPlacerX;
     public int blankIconPlacerY;
+    public int towerIconOneX;
+    public int towerIconOneY;
+    public int towerIconTwoX;
+    public int towerIconTwoY;
+    public int towerIconThreeX;
+    public int towerIconThreeY;
+    public int towerIconFourX;
+    public int towerIconFourY;
+    public int towerIconFiveX;
+    public int towerIconFiveY;
+    public int towerIconSixX;
+    public int towerIconSixY;
+    public int towerIconSevenX;
+    public int towerIconSevenY;
+    public int towerIconEightX;
+    public int towerIconEightY;
+    public int towerIconNineX;
+    public int towerIconNineY;
+    public static final int towerIconWidth = 146;   //To fit inside box.
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
@@ -57,7 +76,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
-    protected int waveTimer = 3000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int waveTimer = 9000;           //Time between waves (ex. 60000ms = 60 seconds)
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -67,6 +86,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static float returnRate = 0.75f;
     public static boolean blocking = false;
     public static int waveID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
+    public int selectedTowerIcon = 1;
 
 
     public DefenceView(Context context) {
@@ -113,7 +133,25 @@ public class DefenceView extends View implements View.OnTouchListener {
         blankIconPlacerX = xGridStart;
         blankIconPlacerY = buildButtonY + xGridStart + asset.BUILD.getHeight();
 
-        //Assets
+        //Tower Icons
+        towerIconOneX = blankIconPlacerX + 2;
+        towerIconOneY = blankIconPlacerY + 2;
+        towerIconTwoX  = towerIconOneX + 3 + towerIconWidth;
+        towerIconTwoY = blankIconPlacerY + 2;
+        towerIconThreeX = towerIconTwoX + 3 + towerIconWidth;
+        towerIconThreeY  = blankIconPlacerY + 2;
+        towerIconFourX = blankIconPlacerX + 2;
+        towerIconFourY = towerIconOneY + 3 + towerIconWidth;
+        towerIconFiveX = towerIconFourX + 3 + towerIconWidth;
+        towerIconFiveY = towerIconOneY + 3 + towerIconWidth;
+        towerIconSixX = towerIconFiveX + 3 + towerIconWidth;
+        towerIconSixY = towerIconOneY + 3 + towerIconWidth;
+        towerIconSevenX = blankIconPlacerX + 2;
+        towerIconSevenY = towerIconFourY + 3 + towerIconWidth;
+        towerIconEightX = towerIconSevenX + 3 + towerIconWidth;
+        towerIconEightY  = towerIconFourY + 3 + towerIconWidth;
+        towerIconNineX = towerIconEightX + 3 + towerIconWidth;
+        towerIconNineY = towerIconFourY + 3 + towerIconWidth;
 
 
         //Higlight and placement managers
@@ -139,12 +177,15 @@ public class DefenceView extends View implements View.OnTouchListener {
             }
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
+            //If user presses on a tower icon, make that the new selected icon (default is 1)
+            ifTouchInTowerIcon(motionEvent);
+
             //Add tower
             if(ifTouchIsInBuildButton(motionEvent)){
                 asset.buildPressed();
-                if(gold >= SnowballTower.cost) {    //If enough gold
+                if(gold >= getSelectedTowerCost()) {    //If enough gold todo: fix this
                     if (placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())) { //If spot available
-                        towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
+                        towers.add(addSelectedTowerType());
                         for (int i = 0; i < wave.size(); i++) {
                             wave.get(i).pathNeedsUpdating = true;
                         }
@@ -253,6 +294,26 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawBitmap(asset.REMOVE, removeButtonX, removeButtonY, null);
         //BlankIconPlacer
         canvas.drawBitmap(asset.BLANKICONPLACER, blankIconPlacerX, blankIconPlacerY, null);
+        //Tower Icon 1
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconOneX, towerIconOneY, null);
+        //Tower Icon 2
+        canvas.drawBitmap(asset.ARROWTOWERICON, towerIconTwoX, towerIconTwoY, null);
+        //Tower Icon 3
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconThreeX, towerIconThreeY, null);
+        //Tower Icon 4
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconFourX, towerIconFourY, null);
+        //Tower Icon 5
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconFiveX, towerIconFiveY, null);
+        //Tower Icon 6
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconSixX, towerIconSixY, null);
+        //Tower Icon 7
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconSevenX, towerIconSevenY, null);
+        //Tower Icon 8
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconEightX, towerIconEightY, null);
+        //Tower Icon 9
+        canvas.drawBitmap(asset.SNOWMANICON, towerIconNineX, towerIconNineY, null);
+
+
 
     }
 
@@ -311,13 +372,107 @@ public class DefenceView extends View implements View.OnTouchListener {
                 && removeButtonY < motionEvent.getY() && motionEvent.getY() < removeButtonY + asset.REMOVE.getHeight();
     }
 
+    private void ifTouchInTowerIcon(MotionEvent motionEvent){
+        //Select tower depending on icon selected
+            if(towerIconOneX < motionEvent.getX() && motionEvent.getX() < towerIconOneX + towerIconWidth
+                && towerIconOneY < motionEvent.getY() && motionEvent.getY() < towerIconOneY + towerIconWidth){
+                selectedTowerIcon = 1;
+            }
+            else if(towerIconTwoX < motionEvent.getX() && motionEvent.getX() < towerIconTwoX + towerIconWidth
+                    && towerIconTwoY < motionEvent.getY() && motionEvent.getY() < towerIconTwoY + towerIconWidth){
+                selectedTowerIcon = 2;
+            }
+            else if(towerIconThreeX < motionEvent.getX() && motionEvent.getX() < towerIconThreeX + towerIconWidth
+                    && towerIconThreeY < motionEvent.getY() && motionEvent.getY() < towerIconThreeY + towerIconWidth){
+                selectedTowerIcon = 3;
+            }
+            else if(towerIconFourX < motionEvent.getX() && motionEvent.getX() < towerIconFourX + towerIconWidth
+                    && towerIconFourY < motionEvent.getY() && motionEvent.getY() < towerIconFourY + towerIconWidth){
+                selectedTowerIcon = 4;
+            }
+            else if(towerIconFiveX < motionEvent.getX() && motionEvent.getX() < towerIconFiveX + towerIconWidth
+                    && towerIconFiveY < motionEvent.getY() && motionEvent.getY() < towerIconFiveY + towerIconWidth){
+                selectedTowerIcon = 5;
+            }
+            else if(towerIconSixX < motionEvent.getX() && motionEvent.getX() < towerIconSixX + towerIconWidth
+                    && towerIconSixY < motionEvent.getY() && motionEvent.getY() < towerIconSixY + towerIconWidth){
+                selectedTowerIcon = 6;
+            }
+            else if(towerIconSevenX < motionEvent.getX() && motionEvent.getX() < towerIconSevenX + towerIconWidth
+                    && towerIconSevenY < motionEvent.getY() && motionEvent.getY() < towerIconSevenY + towerIconWidth){
+                selectedTowerIcon = 7;
+            }
+            else if(towerIconEightX < motionEvent.getX() && motionEvent.getX() < towerIconEightX + towerIconWidth
+                    && towerIconEightY < motionEvent.getY() && motionEvent.getY() < towerIconEightY + towerIconWidth){
+                selectedTowerIcon = 8;
+            }
+            else if(towerIconNineX < motionEvent.getX() && motionEvent.getX() < towerIconNineX + towerIconWidth
+                    && towerIconNineY < motionEvent.getY() && motionEvent.getY() < towerIconNineY + towerIconWidth){
+                selectedTowerIcon = 9;
+            }
+    }
+
+    private Tower addSelectedTowerType(){
+        switch (selectedTowerIcon){
+            case 1:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 2:
+                return new ArrowTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 3:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 4:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 5:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 6:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 7:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 8:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            case 9:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+            default:
+                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+
+        }
+    }
+
+    private int getSelectedTowerCost(){
+        switch (selectedTowerIcon){
+            case 1:
+                return SnowballTower.cost;
+            case 2:
+                return ArrowTower.cost;
+            case 3:
+                return SnowballTower.cost;
+            case 4:
+                return SnowballTower.cost;
+            case 5:
+                return SnowballTower.cost;
+            case 6:
+                return SnowballTower.cost;
+            case 7:
+                return SnowballTower.cost;
+            case 8:
+                return SnowballTower.cost;
+            case 9:
+                return SnowballTower.cost;
+            default:
+                return SnowballTower.cost;
+
+        }
+    }
+
     private void initWaves(){
         wave = new ArrayList<>();
 
         //Add waves. These are how the levels are designed.
         wave.add(new Wave(asset, "ghost", 1, waveID++));
         wave.add(new Wave(asset, "ghost",2, waveID++));
-        wave.add(new Wave(asset, "ghost", 8, waveID++));
+        wave.add(new Wave(asset, "ghost", 6, waveID++));
+        wave.add(new Wave(asset, "miner", 10, waveID++));
+
 
     }
 
