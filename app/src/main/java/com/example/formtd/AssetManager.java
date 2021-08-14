@@ -21,6 +21,7 @@ public class AssetManager {
     private int yScale;
 
     //UI and other
+    public Bitmap BLANKICONPLACER;
     public Bitmap TAPTOSTART;
     public Bitmap BUILD;
     public Bitmap BUILDUNPRESSED;
@@ -42,6 +43,10 @@ public class AssetManager {
         this.yScale = (int)(tileWidth*1.5);
 
         /**Assets**/
+        //Blank icon placer
+        BLANKICONPLACER = BitmapFactory.decodeResource(context.getResources(), R.drawable.blankiconplacer);
+        BLANKICONPLACER = Bitmap.createScaledBitmap(BLANKICONPLACER, 448, 448, false);
+
         //Tap to start tooltip
         TAPTOSTART = BitmapFactory.decodeResource(context.getResources(), R.drawable.taptostart);
         TAPTOSTART = Bitmap.createScaledBitmap(TAPTOSTART, 900, 150, false);
@@ -52,7 +57,7 @@ public class AssetManager {
         BUILDUNPRESSED = BitmapFactory.decodeResource(context.getResources(), R.drawable.build);
         BUILDUNPRESSED = Bitmap.createScaledBitmap(BUILD, 250, 80, false);
         BUILDPRESSED = BitmapFactory.decodeResource(context.getResources(), R.drawable.buildpressed);
-        BUILDPRESSED = Bitmap.createScaledBitmap(BUILDPRESSED, 249, 79, false);
+        BUILDPRESSED = Bitmap.createScaledBitmap(BUILDPRESSED, 249, 79, false); //249 to make it look shrinked when pressed
 
         //Remove button
         REMOVE = BitmapFactory.decodeResource(context.getResources(), R.drawable.removeoff);

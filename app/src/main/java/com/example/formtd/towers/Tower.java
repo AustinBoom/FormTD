@@ -15,8 +15,6 @@ import com.example.formtd.enemies.Enemy;
 
 //Abstract tower class, holds basic tower functions, specific tower will be created upon child instantiation.
 public abstract class Tower {
-    private final Handler towerHandler;
-    private Runnable towerRunnable;
     PlacementManager placementManager;
     Paint paint;
     private double angle;
@@ -30,17 +28,20 @@ public abstract class Tower {
     public int currentWaveID;        //Making sure the wave is in sync with aggro
     public boolean projecting;          //Mark whether or not to send projectile
     public boolean alreadyAttacking;    //Make sure only one instance of projectile is being triggered.
-    public int attackDamage = 1;       //Amount of damage tower does
-    public int attackRange = 300;       //Radius of attack
-    public int attackSpeed = 2000;       //Time between attacks
-    public int projectileSpeed = 6;    //Speed of projectile animation
-    public int tolerance = 20;
     private int projectileX;
     private int projectileY;
 
+    //Customizables
+    public int attackDamage = 1;       //Amount of damage tower does
+    public int attackRange = 300;       //Radius of attack
+    public int attackMultipler = 1;     //Makes projectiles speed up or slowdown.
+    public int projectileSpeed = 6;    //Speed of projectile animation
+    public int tolerance = 20;
+
+    public static final int cost = 0;
+
 
     public Tower(RectanglePoints rect, PlacementManager placementManager){
-        this.towerHandler = HandlerCompat.createAsync(Looper.getMainLooper());
         this.placementManager = placementManager;
         placementManager.placeTower(rect);
         paint = new Paint();
@@ -56,6 +57,9 @@ public abstract class Tower {
         this.projectileX = towerCenterX;
         this.projectileY = towerCenterY;
         this.aggroEnemy = -1;
+
+        //Upon creation charge gold
+        DefenceView.gold -= cost;
     }
 
     //If points all match up, this is the tower selected
@@ -71,6 +75,10 @@ public abstract class Tower {
         return false;
     }
 
+    public int getCost(){
+        return this.cost;
+    }
+
     //Draws towers and initializes canvas.
     public void drawTower(Canvas canvas){
         paint.setARGB(255, 255, 0, 255);
@@ -80,10 +88,10 @@ public abstract class Tower {
     public void drawProjectile(Canvas canvas){
         //Only draw projectile when projecting. Otherwise don't draw.
         if(projecting) {
-            paint.setARGB(10, 255, 0, 255);
-            canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
+           // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
+           // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
 
-            paint.setARGB(255, 255, 0, 0);
+            paint.setARGB(255, 220, 220, 255);
             canvas.drawCircle(projectileX, projectileY, 10, paint);
         }
     }
@@ -151,43 +159,3 @@ public abstract class Tower {
     }
 
 }
-
-
-//    //Constantly called by DefenceView towerHandler. Look for nearby enemies and attack!
-//    public synchronized Enemy[] watch(Enemy[] enemies) {     //TODO::::::::: Try returning enemy[] to update new enemy health!
-//        //Get pythagorean values
-//        double a;
-//        double b;
-//        double c;
-//
-//        //Check each enemy in range. If found an enemy, set aggro
-//        if (aggroEnemy == null) {
-//            for (Enemy enemy : enemies) {
-//                a = Math.abs(towerCenterX - enemy.x) * Math.abs(towerCenterX - enemy.x);
-//                b = Math.abs(towerCenterY - enemy.y) * Math.abs(towerCenterY - enemy.y);
-//                c = attackRange * attackRange;
-//
-//                if (Math.sqrt(a + b) < Math.sqrt(c)) { //If enemy is in range,
-//                    System.out.println("WE GOT AGGRO!");
-//                    aggroEnemy = enemy;
-//                }
-//            }
-//        } else { //enemy already aggro'd, attack until either dead or out of range.
-//            a = Math.abs(towerCenterX - aggroEnemy.x) * Math.abs(towerCenterX - aggroEnemy.x);
-//            b = Math.abs(towerCenterY - aggroEnemy.y) * Math.abs(towerCenterY - aggroEnemy.y);
-//            c = attackRange * attackRange;
-//            if ((Math.sqrt(a + b) < Math.sqrt(c)) && aggroEnemy.health > 0 && aggroEnemy.alive) { //If enemy is in range, and alive, attack!
-//                //attack!
-//                this.projecting = true;
-//                updateProjectile(aggroEnemy);
-//
-//            } else {   //Stop attacking and lose aggro
-//                aggroEnemy = null;
-//                this.projecting = false;
-//                projectileX = towerCenterX;
-//                projectileY = towerCenterY;
-//            }
-//        }
-//
-//        return enemies;
-//    }

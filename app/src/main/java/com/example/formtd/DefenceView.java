@@ -15,6 +15,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     //Boiler Plate
     Context context;
 
-    //World
+    //World & Layout
     public static Grid[][] grid;                    //The grid which is the world!
     public static int deviceWidth;
     public static int deviceHeight;
@@ -36,6 +37,12 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int yGridStart;
     public static int xGridEnd;
     public static int yGridEnd;
+    public int buildButtonX;
+    public int buildButtonY;
+    public int removeButtonX;
+    public int removeButtonY;
+    public int blankIconPlacerX;
+    public int blankIconPlacerY;
     AssetManager asset;
     GridManager gridManager;                        //Creates/updates grid
     HighlightManager highlightManager;              //Manages placement via touch.
@@ -56,7 +63,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static boolean lastWave = false;
     public static int currentWave = 0;
     public static int lives = 50;
-    public static int gold = 1000;
+    public static int gold = 125;
+    public static float returnRate = 0.75f;
     public static boolean blocking = false;
     public static int waveID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
 
@@ -84,15 +92,30 @@ public class DefenceView extends View implements View.OnTouchListener {
         deviceWidth = MeasureSpec.getSize(widthMeasure);
         deviceHeight = MeasureSpec.getSize(heightMeasure);
 
+        //Grid manager
         gridManager = new GridManager(deviceWidth, deviceHeight);
         grid = gridManager.getGrid();
+        asset = new AssetManager(context, gridManager.getTileWidth());
+
+        //Needed measurements
         centerXGrid = gridManager.getXCenterGridCoordinate();
         tileWidth = gridManager.getTileWidth();
         xGridStart = gridManager.getxGridStart();
         yGridStart = gridManager.getyGridStart();
         xGridEnd = gridManager.getxGridEnd();
         yGridEnd = gridManager.getyGridEnd();
-        asset = new AssetManager(context, gridManager.getTileWidth());
+        //UI positions
+        buildButtonX = xGridStart;
+        buildButtonY = grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2);
+        removeButtonX = xGridStart*2 + asset.BUILD.getWidth();
+        removeButtonY = grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2);
+        blankIconPlacerX = xGridStart;
+        blankIconPlacerY = buildButtonY + xGridStart + asset.BUILD.getHeight();
+
+        //Assets
+
+
+        //Higlight and placement managers
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxGridStart(), gridManager.getyGridStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
 
@@ -115,21 +138,29 @@ public class DefenceView extends View implements View.OnTouchListener {
             }
             highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
 
+            //Add tower
             if(ifTouchIsInBuildButton(motionEvent)){
                 asset.buildPressed();
-                if(placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())){
-                    towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
-                    for (int i = 0; i < wave.size(); i++) {
-                        wave.get(i).pathNeedsUpdating = true;
+                if(gold >= SnowballTower.cost) {    //If enough gold
+                    if (placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())) { //If spot available
+                        towers.add(new SnowballTower(highlightManager.getHighlightPlacement(), placementManager));
+                        for (int i = 0; i < wave.size(); i++) {
+                            wave.get(i).pathNeedsUpdating = true;
+                        }
                     }
+                }
+                else{
+                    Toast.makeText(context,(String)"Not enough gold!", Toast.LENGTH_SHORT).show();
                 }
             }
 
+            //Remove tower
             if(ifTouchIsInRemoveButton(motionEvent)){
                 //Check each tower if it's the one that's highlighted
                 for (int i = 0; i < towers.size(); i++) {
                     if(towers.get(i).selectTower(highlightManager.getHighlightPlacement())){
                         placementManager.removeTower(highlightManager.getHighlightPlacement()); //Remove tower from grid
+                        gold += Math.ceil(towers.get(i).getCost() * returnRate);
                         towers.remove(i);   //Remove tower from towers arraylist
                         asset.removeOFF();
                         for (int j = 0; j < wave.size(); j++) {
@@ -216,9 +247,11 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawRect(0, 0, deviceWidth, deviceHeight/40, paint);
 
         //Build Button
-        canvas.drawBitmap(asset.BUILD, deviceWidth - gridManager.getxGridStart()*2 - (asset.BUILD.getWidth()) - (asset.REMOVE.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+        canvas.drawBitmap(asset.BUILD, buildButtonX, buildButtonY, null);
         //Remove button
-        canvas.drawBitmap(asset.REMOVE, deviceWidth - gridManager.getxGridStart() - (asset.REMOVE.getWidth()), grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2), null);
+        canvas.drawBitmap(asset.REMOVE, removeButtonX, removeButtonY, null);
+        //BlankIconPlacer
+        canvas.drawBitmap(asset.BLANKICONPLACER, blankIconPlacerX, blankIconPlacerY, null);
 
     }
 
@@ -268,13 +301,13 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private boolean ifTouchIsInBuildButton(MotionEvent motionEvent){
-        return deviceWidth - gridManager.getxGridStart()*2 - (asset.BUILD.getWidth()) - (asset.REMOVE.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxGridStart()*2 - (asset.REMOVE.getWidth())
-                && grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) + asset.BUILD.getHeight();
+        return buildButtonX < motionEvent.getX() && motionEvent.getX() < buildButtonX + asset.BUILD.getWidth()
+                && buildButtonY < motionEvent.getY() && motionEvent.getY() < buildButtonY + asset.BUILD.getHeight();
     }
 
     private boolean ifTouchIsInRemoveButton(MotionEvent motionEvent){
-        return deviceWidth - gridManager.getxGridStart() - (asset.REMOVE.getWidth()) < motionEvent.getX() && motionEvent.getX() < deviceWidth - gridManager.getxGridStart()
-                && grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) < motionEvent.getY() && motionEvent.getY() < grid[grid.length - 1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth() / 2) + asset.BUILD.getHeight();
+        return removeButtonX < motionEvent.getX() && motionEvent.getX() < removeButtonX + asset.REMOVE.getWidth()
+                && removeButtonY < motionEvent.getY() && motionEvent.getY() < removeButtonY + asset.REMOVE.getHeight();
     }
 
     private void initWaves(){
@@ -286,6 +319,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave.add(new Wave(asset, "ghost", 8, waveID++));
 
     }
+
 
     //Updates the current wave when the time has come. If waves run out, game is over.
     private void startWaves(){
@@ -343,6 +377,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         };
         timerCountdown.scheduleAtFixedRate(timerTaskCnt, 1000, 1000);  //Every second.
     }
+
 
 }
 

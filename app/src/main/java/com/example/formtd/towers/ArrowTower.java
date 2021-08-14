@@ -8,7 +8,7 @@ import com.example.formtd.PlacementManager;
 import com.example.formtd.RectanglePoints;
 import com.example.formtd.enemies.Enemy;
 
-public class SnowballTower extends Tower {
+public class ArrowTower extends Tower{
     PlacementManager placementManager;
     Paint paint;
     private double angle;
@@ -33,7 +33,7 @@ public class SnowballTower extends Tower {
     public int tolerance = 20;
     public static final int cost = 3;
 
-    public SnowballTower(RectanglePoints rect, PlacementManager placementManager) {
+    public ArrowTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
         this.placementManager = placementManager;
         placementManager.placeTower(rect);
@@ -70,6 +70,7 @@ public class SnowballTower extends Tower {
     public int getCost(){
         return this.cost;
     }
+
 
     public void drawProjectile(Canvas canvas){
         //Only draw projectile when projecting. Otherwise don't draw.
