@@ -22,6 +22,7 @@ public class AssetManager {
 
     //UI and other
     public Bitmap BLANKICONPLACER;
+    public Bitmap TOWERDESCRIPTOR;
     public Bitmap TAPTOSTART;
     public Bitmap BUILD;
     public Bitmap BUILDUNPRESSED;
@@ -50,10 +51,13 @@ public class AssetManager {
         this.xScale = (int)(tileWidth*1.5);
         this.yScale = (int)(tileWidth*1.5);
 
-        /**Assets**/
+        /**UI**/
         //Blank icon placer
         BLANKICONPLACER = BitmapFactory.decodeResource(context.getResources(), R.drawable.blankiconplacer);
         BLANKICONPLACER = Bitmap.createScaledBitmap(BLANKICONPLACER, 448, 448, false);
+
+        TOWERDESCRIPTOR = BitmapFactory.decodeResource(context.getResources(), R.drawable.towerdescriptor);
+        TOWERDESCRIPTOR = Bitmap.createScaledBitmap(TOWERDESCRIPTOR, 448, 448, false);
 
         //Tap to start tooltip
         TAPTOSTART = BitmapFactory.decodeResource(context.getResources(), R.drawable.taptostart);
@@ -75,6 +79,7 @@ public class AssetManager {
         REMOVEON = BitmapFactory.decodeResource(context.getResources(), R.drawable.removeon);
         REMOVEON = Bitmap.createScaledBitmap(REMOVEON, 80, 80, false);
 
+        /**ENEMIES**/
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
         GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
@@ -85,17 +90,18 @@ public class AssetManager {
         EYE = BitmapFactory.decodeResource(context.getResources(), R.drawable.eyeenemy);
         EYE = Bitmap.createScaledBitmap(EYE, xScale, yScale, false);
 
+        /**TOWERS**/
         //Snowman
         SNOWMAN = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
         SNOWMAN = Bitmap.createScaledBitmap(SNOWMAN, tileWidth*2, tileWidth*2, false);
         SNOWMANICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
         SNOWMANICON = Bitmap.createScaledBitmap(SNOWMANICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+
         //ArrowTower
         ARROWTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowtower);
         ARROWTOWER = Bitmap.createScaledBitmap(ARROWTOWER, tileWidth*2, tileWidth*2, false);
         ARROWTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowtower);
         ARROWTOWERICON = Bitmap.createScaledBitmap(ARROWTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
-
         ARROWPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowprojectile);
         ARROWPROJECTILE = Bitmap.createScaledBitmap(ARROWPROJECTILE, 30, 30, false);
 

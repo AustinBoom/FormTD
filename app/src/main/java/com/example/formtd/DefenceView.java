@@ -43,6 +43,10 @@ public class DefenceView extends View implements View.OnTouchListener {
     public int removeButtonY;
     public int blankIconPlacerX;
     public int blankIconPlacerY;
+    public int towerDescriptorX;
+    public int towerDescriptorY;
+    public int currentTowerIconHighlightX;
+    public int currentTowerIconHighlightY;
     public int towerIconOneX;
     public int towerIconOneY;
     public int towerIconTwoX;
@@ -126,12 +130,15 @@ public class DefenceView extends View implements View.OnTouchListener {
         yGridEnd = gridManager.getyGridEnd();
 
         //UI positions
-        buildButtonX = xGridStart;
+        buildButtonX = deviceWidth/2 - asset.BLANKICONPLACER.getWidth();
         buildButtonY = grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2);
-        removeButtonX = xGridStart*2 + asset.BUILD.getWidth();
+        removeButtonX = buildButtonX + asset.BUILD.getWidth() + gridManager.getTileWidth()/2;
         removeButtonY = grid[grid.length-1][0].y + (gridManager.getTileWidth() + gridManager.getTileWidth()/2);
-        blankIconPlacerX = xGridStart;
+        blankIconPlacerX = deviceWidth/2 - asset.BLANKICONPLACER.getWidth();
         blankIconPlacerY = buildButtonY + xGridStart + asset.BUILD.getHeight();
+        towerDescriptorX = blankIconPlacerX + asset.BLANKICONPLACER.getWidth() + gridManager.getTileWidth()/2;
+        towerDescriptorY = blankIconPlacerY;
+
 
         //Tower Icons
         towerIconOneX = blankIconPlacerX + 2;
@@ -152,6 +159,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         towerIconEightY  = towerIconFourY + 3 + towerIconWidth;
         towerIconNineX = towerIconEightX + 3 + towerIconWidth;
         towerIconNineY = towerIconFourY + 3 + towerIconWidth;
+        currentTowerIconHighlightX = towerIconOneX;
+        currentTowerIconHighlightY = towerIconOneY;
 
 
         //Higlight and placement managers
@@ -230,7 +239,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         drawCurrentWave(canvas);
         drawTowerProjectiles(canvas);
         drawUI(canvas);
-        drawInfoBarStuff(canvas);
+        drawInfoBarAndDescriptorStuff(canvas);
 
 
         //invalidate();       //PUT SOMEWHERE ELSE. This makes drawview update
@@ -293,6 +302,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawBitmap(asset.REMOVE, removeButtonX, removeButtonY, null);
         //BlankIconPlacer
         canvas.drawBitmap(asset.BLANKICONPLACER, blankIconPlacerX, blankIconPlacerY, null);
+        //Icon Placer Highlight
+        paint.setARGB(255, 70, 62, 62);
+        canvas.drawRect(currentTowerIconHighlightX, currentTowerIconHighlightY, currentTowerIconHighlightX + asset.SNOWMANICON.getWidth(), currentTowerIconHighlightY + asset.SNOWMANICON.getHeight(), paint);
         //Tower Icon 1
         canvas.drawBitmap(asset.SNOWMANICON, towerIconOneX, towerIconOneY, null);
         //Tower Icon 2
@@ -312,11 +324,14 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Tower Icon 9
         canvas.drawBitmap(asset.SNOWMANICON, towerIconNineX, towerIconNineY, null);
 
+        //Descriptor
+        canvas.drawBitmap(asset.TOWERDESCRIPTOR, towerDescriptorX, towerDescriptorY, null);
 
 
     }
 
-    private void drawInfoBarStuff(Canvas canvas){
+
+    private void drawInfoBarAndDescriptorStuff(Canvas canvas){
         //Set the text of the wave timer
         textPaint.setARGB(255, 200, 200, 200);
         textPaint.setTextSize(textSize);
@@ -368,6 +383,8 @@ public class DefenceView extends View implements View.OnTouchListener {
             canvas.restore();
         }
 
+        //Todo descriptor stuff here
+
         //invalidate();
     }
 
@@ -385,38 +402,56 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Select tower depending on icon selected
             if(towerIconOneX < motionEvent.getX() && motionEvent.getX() < towerIconOneX + towerIconWidth
                 && towerIconOneY < motionEvent.getY() && motionEvent.getY() < towerIconOneY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconOneX;
+                currentTowerIconHighlightY = towerIconOneY;
                 selectedTowerIcon = 1;
             }
             else if(towerIconTwoX < motionEvent.getX() && motionEvent.getX() < towerIconTwoX + towerIconWidth
                     && towerIconTwoY < motionEvent.getY() && motionEvent.getY() < towerIconTwoY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconTwoX;
+                currentTowerIconHighlightY = towerIconTwoY;
                 selectedTowerIcon = 2;
             }
             else if(towerIconThreeX < motionEvent.getX() && motionEvent.getX() < towerIconThreeX + towerIconWidth
                     && towerIconThreeY < motionEvent.getY() && motionEvent.getY() < towerIconThreeY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconThreeX;
+                currentTowerIconHighlightY = towerIconThreeY;
                 selectedTowerIcon = 3;
             }
             else if(towerIconFourX < motionEvent.getX() && motionEvent.getX() < towerIconFourX + towerIconWidth
                     && towerIconFourY < motionEvent.getY() && motionEvent.getY() < towerIconFourY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconFourX;
+                currentTowerIconHighlightY = towerIconFourY;
                 selectedTowerIcon = 4;
             }
             else if(towerIconFiveX < motionEvent.getX() && motionEvent.getX() < towerIconFiveX + towerIconWidth
                     && towerIconFiveY < motionEvent.getY() && motionEvent.getY() < towerIconFiveY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconFiveX;
+                currentTowerIconHighlightY = towerIconFiveY;
                 selectedTowerIcon = 5;
             }
             else if(towerIconSixX < motionEvent.getX() && motionEvent.getX() < towerIconSixX + towerIconWidth
                     && towerIconSixY < motionEvent.getY() && motionEvent.getY() < towerIconSixY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconSixX;
+                currentTowerIconHighlightY = towerIconSixY;
                 selectedTowerIcon = 6;
             }
             else if(towerIconSevenX < motionEvent.getX() && motionEvent.getX() < towerIconSevenX + towerIconWidth
                     && towerIconSevenY < motionEvent.getY() && motionEvent.getY() < towerIconSevenY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconSevenX;
+                currentTowerIconHighlightY = towerIconSevenY;
                 selectedTowerIcon = 7;
             }
             else if(towerIconEightX < motionEvent.getX() && motionEvent.getX() < towerIconEightX + towerIconWidth
                     && towerIconEightY < motionEvent.getY() && motionEvent.getY() < towerIconEightY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconEightX;
+                currentTowerIconHighlightY = towerIconEightY;
                 selectedTowerIcon = 8;
             }
             else if(towerIconNineX < motionEvent.getX() && motionEvent.getX() < towerIconNineX + towerIconWidth
                     && towerIconNineY < motionEvent.getY() && motionEvent.getY() < towerIconNineY + towerIconWidth){
+                currentTowerIconHighlightX = towerIconNineX;
+                currentTowerIconHighlightY = towerIconNineY;
                 selectedTowerIcon = 9;
             }
     }
