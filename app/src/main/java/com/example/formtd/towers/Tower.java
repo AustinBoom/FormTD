@@ -85,16 +85,7 @@ public abstract class Tower {
         canvas.drawRect(left, top, right, bottom, paint);
     }
 
-    public void drawProjectile(Canvas canvas){
-        //Only draw projectile when projecting. Otherwise don't draw.
-        if(projecting) {
-           // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
-           // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
-
-            paint.setARGB(255, 220, 220, 255);
-            canvas.drawCircle(projectileX + DefenceView.tileWidth/4, projectileY  - DefenceView.tileWidth/6, 10, paint);
-        }
-    }
+    public abstract void drawProjectile(Canvas canvas, AssetManager asset);
 
     //Constantly called by DefenceView towerHandler. Look for nearby enemies and attack!
     public synchronized Enemy[] watch(Enemy[] enemies, int waveID) {    //Note: this still mutates the array since the value is the reference to the array.

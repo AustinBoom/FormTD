@@ -76,7 +76,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
-    protected int waveTimer = 9000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int waveTimer = 12000;           //Time between waves (ex. 60000ms = 60 seconds)
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -260,7 +260,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     private void drawTowerProjectiles(Canvas canvas){
         for (int i = 0; i < towers.size(); i++) {
-            towers.get(i).drawProjectile(canvas);
+            towers.get(i).drawProjectile(canvas, asset);
         }
     }
 

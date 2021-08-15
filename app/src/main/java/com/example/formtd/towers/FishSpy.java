@@ -73,7 +73,7 @@ public class FishSpy extends Tower{
     }
 
 
-    public void drawProjectile(Canvas canvas){
+    public void drawProjectile(Canvas canvas, AssetManager asset){
         //Only draw projectile when projecting. Otherwise don't draw.
         if(projecting) {
             // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.

@@ -40,6 +40,9 @@ public class AssetManager {
     public Bitmap ARROWTOWER;
     public Bitmap ARROWTOWERICON;
 
+    //Projectiles
+    public Bitmap ARROWPROJECTILE;
+
     public AssetManager(Context context, int tileWidth){
         handler = new Handler();
         this.tileWidth = tileWidth;
@@ -87,6 +90,9 @@ public class AssetManager {
         ARROWTOWER = Bitmap.createScaledBitmap(ARROWTOWER, tileWidth*2, tileWidth*2, false);
         ARROWTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowtower);
         ARROWTOWERICON = Bitmap.createScaledBitmap(ARROWTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+
+        ARROWPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowprojectile);
+        ARROWPROJECTILE = Bitmap.createScaledBitmap(ARROWPROJECTILE, 20, 20, false);
 
 
 

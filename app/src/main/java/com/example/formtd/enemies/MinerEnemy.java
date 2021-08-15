@@ -9,7 +9,11 @@ public class MinerEnemy extends Enemy{
     public int health = 100;
     public int goldReward = 3;
     public Bitmap art;
-    public MinerEnemy(AssetManager asset, Bitmap art) {
-        super(asset, art);
+    public MinerEnemy(AssetManager asset) {
+        super(asset);
+        super.setArt(asset.MINER);
+        super.setHealth(health);
+        super.setGoldReward(goldReward);
+        super.setMovementSpeed(movementSpeed);
     }
 }

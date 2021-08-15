@@ -157,9 +157,9 @@ public class Wave {
     public Enemy createEnemy(String enemy){
         switch (enemy){
             case "ghost":
-                return new GhostEnemy(asset, asset.GHOST);
+                return new GhostEnemy(asset);
             case "miner":
-                return new MinerEnemy(asset, asset.MINER);
+                return new MinerEnemy(asset);
             default:
                 throw new Resources.NotFoundException();
         }
