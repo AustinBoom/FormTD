@@ -76,7 +76,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
-    protected int waveTimer = 15000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int waveTimer = 50000;           //Time between waves (ex. 60000ms = 60 seconds)
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -478,7 +478,7 @@ public class DefenceView extends View implements View.OnTouchListener {
 
         //Add waves. These are how the levels are designed.
         wave.add(new Wave(asset, "ghost", 10, waveID++));
-        wave.add(new Wave(asset, "sleddingelf",30, waveID++));
+        wave.add(new Wave(asset, "sleddingelf",20, waveID++));
         wave.add(new Wave(asset, "eye", 5, waveID++));
 
 
@@ -498,6 +498,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                     wave.get(currentWave).startWave();
                     wave.get(currentWave).active = true;
                     currentWave++;
+                    gold += currentWave * 4;    //Give gold equal to the next wave times 3.
                 }
                 else{
                     //TODO put end of game stuff here

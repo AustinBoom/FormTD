@@ -8,8 +8,8 @@ public class EyeEnemy extends Enemy{
     public Bitmap art;
     public final int enemySpacing = 250;
     public final int movementSpeed = 1;
-    public int health = 500;
-    public int goldReward = 10;
+    public int health = 1500;
+    public int goldReward = 15;
 
     public EyeEnemy(AssetManager asset) {
         super(asset);

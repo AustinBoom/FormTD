@@ -29,8 +29,8 @@ public class SnowballTower extends Tower {
 
     //Customizables
     public int attackDamage = 1;       //Amount of damage tower does
-    public int attackRange = 300;       //Radius of attack
-    public int projectileSpeed = 4;    //Speed of projectile animation
+    public int attackRange = 250;       //Radius of attack
+    public int projectileSpeed = 3;    //Speed of projectile animation
     public int tolerance = 4;           //Multiplies by projectile Radius
     public int projectileRadius = 6;
     public static final int cost = 3;
@@ -61,8 +61,12 @@ public class SnowballTower extends Tower {
 
     public void drawTower(Canvas canvas, AssetManager asset){
         //Bottom shadow
-        paint.setARGB(25, 5, 5, 200);
-        canvas.drawRoundRect(left, top, right, bottom, 25, 25, paint);
+//        paint.setARGB(25, 5, 5, 200);
+//        canvas.drawRoundRect(left, top, right, bottom, 25, 25, paint);
+
+        paint.setARGB(17, 10, 10, 10);
+        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth, paint);
+
 
         canvas.drawBitmap(asset.SNOWMAN, left, top, null);
     }
