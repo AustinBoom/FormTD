@@ -4,14 +4,17 @@ import android.graphics.Bitmap;
 
 import com.example.formtd.AssetManager;
 
-public class MinerEnemy extends Enemy{
+public class SleddingElfEnemy extends Enemy{
+    public Bitmap art;
+    public final int enemySpacing = 90;
     public final int movementSpeed = 1;
     public int health = 100;
     public int goldReward = 3;
-    public Bitmap art;
-    public MinerEnemy(AssetManager asset) {
+
+    public SleddingElfEnemy(AssetManager asset) {
         super(asset);
-        super.setArt(asset.MINER);
+        super.setArt(asset.SLEDDINGELF);
+        super.setEnemySpacing(enemySpacing);
         super.setHealth(health);
         super.setGoldReward(goldReward);
         super.setMovementSpeed(movementSpeed);

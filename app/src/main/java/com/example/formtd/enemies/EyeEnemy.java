@@ -4,16 +4,16 @@ import android.graphics.Bitmap;
 
 import com.example.formtd.AssetManager;
 
-public class GhostEnemy extends Enemy{
+public class EyeEnemy extends Enemy{
     public Bitmap art;
-    public final int enemySpacing = 120;
+    public final int enemySpacing = 250;
     public final int movementSpeed = 1;
-    public int health = 20;
-    public int goldReward = 1;
+    public int health = 500;
+    public int goldReward = 10;
 
-    public GhostEnemy(AssetManager asset) {
+    public EyeEnemy(AssetManager asset) {
         super(asset);
-        super.setArt(asset.GHOST);
+        super.setArt(asset.EYE);
         super.setEnemySpacing(enemySpacing);
         super.setHealth(health);
         super.setGoldReward(goldReward);

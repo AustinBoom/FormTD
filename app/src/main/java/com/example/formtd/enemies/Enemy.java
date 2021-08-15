@@ -25,13 +25,14 @@ public abstract class Enemy {
 
     //These get updated by child.
     public Bitmap art;
+    public int enemySpacing = 100;      //Reccomended minimum is 100
     public int health = 100;
     public int goldReward = 1;
-    public int movementSpeed = 1;
+    public int movementSpeed = 1;       //Required minimum is 1
 
     public Enemy(AssetManager asset){
         this.asset = asset;
-        this.art = art;
+        this.art = asset.GHOST;
         breadthSearch = new BreadthSearch();
     }
 
@@ -46,6 +47,10 @@ public abstract class Enemy {
 
     public void setArt(Bitmap art) {
         this.art = art;
+    }
+
+    public void setEnemySpacing(int enemySpacing) {
+        this.enemySpacing = enemySpacing;
     }
 
     public void setHealth(int health) {

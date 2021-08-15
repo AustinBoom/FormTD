@@ -76,7 +76,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
-    protected int waveTimer = 12000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int waveTimer = 15000;           //Time between waves (ex. 60000ms = 60 seconds)
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -226,7 +226,6 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Just to test drawview
         gridManager.drawGrid(canvas);
         drawTowers(canvas);
-        //drawTestBall(canvas);
         drawHighLight(canvas);
         drawCurrentWave(canvas);
         drawTowerProjectiles(canvas);
@@ -335,6 +334,15 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.restore();
 
         //Set the text of the life meter
+        if(lives > 30){
+            textPaint.setARGB(255, 0, 160, 0);
+        }
+        else if(lives > 10){
+            textPaint.setARGB(255, 180, 180, 0);
+        }
+        else{
+            textPaint.setARGB(255, 190, 0, 0);
+        }
         staticLayout = new StaticLayout("Lives: " + lives, textPaint, 150, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( deviceWidth*3/5 - staticLayout.getWidth()/2, deviceHeight/80 - textSize/2);
@@ -342,6 +350,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.restore();
 
         //Set the text of the current gold
+        textPaint.setARGB(255, 170, 160, 0);
         staticLayout = new StaticLayout("Gold: " + gold, textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( deviceWidth*3/4, deviceHeight/80 - textSize/2);
@@ -468,10 +477,10 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave = new ArrayList<>();
 
         //Add waves. These are how the levels are designed.
-        wave.add(new Wave(asset, "ghost", 1, waveID++));
-        wave.add(new Wave(asset, "ghost",2, waveID++));
-        wave.add(new Wave(asset, "ghost", 6, waveID++));
-        wave.add(new Wave(asset, "miner", 10, waveID++));
+        wave.add(new Wave(asset, "ghost", 10, waveID++));
+        wave.add(new Wave(asset, "sleddingelf",30, waveID++));
+        wave.add(new Wave(asset, "eye", 5, waveID++));
+
 
 
     }

@@ -78,8 +78,9 @@ public class ArrowTower extends Tower{
             // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
             // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
 
-            paint.setARGB(11, 20, 20, 45);   //Shadow
-            canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
+//            //Shadow
+//            paint.setARGB(11, 20, 20, 45);   //Shadow
+//            canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
 
             //Arrow
             matrix.setRotate(angle, asset.ARROWPROJECTILE.getWidth()/2, asset.ARROWPROJECTILE.getHeight()/2);
@@ -128,7 +129,7 @@ public class ArrowTower extends Tower{
         double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
         velocityX *= projectileSpeed/length;
         velocityY *= projectileSpeed/length;
-        angle = (float) Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX) *50;  //For bitmap rotation!
+        angle = (float) Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX) *60;  //For bitmap rotation!
 
         //Adjust projectile position
         if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.

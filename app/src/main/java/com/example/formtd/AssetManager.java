@@ -32,7 +32,8 @@ public class AssetManager {
 
     //Enemies
     public Bitmap GHOST;
-    public Bitmap MINER;
+    public Bitmap SLEDDINGELF;
+    public Bitmap EYE;
 
     //Towers
     public Bitmap SNOWMAN;
@@ -77,8 +78,12 @@ public class AssetManager {
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
         GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
-        MINER = BitmapFactory.decodeResource(context.getResources(), R.drawable.minerenemy);
-        MINER = Bitmap.createScaledBitmap(MINER, xScale, yScale, false);
+        //Sledding Elf
+        SLEDDINGELF = BitmapFactory.decodeResource(context.getResources(), R.drawable.sleddingelfenemy);
+        SLEDDINGELF = Bitmap.createScaledBitmap(SLEDDINGELF, xScale, yScale, false);
+        //Eye
+        EYE = BitmapFactory.decodeResource(context.getResources(), R.drawable.eyeenemy);
+        EYE = Bitmap.createScaledBitmap(EYE, xScale, yScale, false);
 
         //Snowman
         SNOWMAN = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
@@ -92,7 +97,7 @@ public class AssetManager {
         ARROWTOWERICON = Bitmap.createScaledBitmap(ARROWTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
 
         ARROWPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowprojectile);
-        ARROWPROJECTILE = Bitmap.createScaledBitmap(ARROWPROJECTILE, 20, 20, false);
+        ARROWPROJECTILE = Bitmap.createScaledBitmap(ARROWPROJECTILE, 30, 30, false);
 
 
 

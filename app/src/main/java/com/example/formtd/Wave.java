@@ -10,8 +10,9 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 
 import com.example.formtd.enemies.Enemy;
+import com.example.formtd.enemies.EyeEnemy;
 import com.example.formtd.enemies.GhostEnemy;
-import com.example.formtd.enemies.MinerEnemy;
+import com.example.formtd.enemies.SleddingElfEnemy;
 import com.example.formtd.towers.Tower;
 
 
@@ -24,7 +25,6 @@ public class Wave {
     public Enemy[] enemies;
     private int enemyAmount;
     public boolean active;          //If the wave is active (if active, draw and do things, otherwise ignore wave)
-    private int enemySpacing = 100;  //This is the time difference in the handler/timer
     public boolean pathNeedsUpdating = false;   //Set to true upon tower being built. That then will trigger a path update.
     private Point[] centerPoints;
     private final int tolerance = 5;      //this is how "off" an enemy can be from a point when traversing the path. (Not yet implemented.)
@@ -42,7 +42,7 @@ public class Wave {
         this.enemies = new Enemy[enemyAmount];
         for (int i = 0; i < this.enemyAmount; i++) {
             this.enemies[i] = createEnemy(enemyType);
-            this.enemies[i].y -= (i*enemySpacing);
+            this.enemies[i].y -= (i*enemies[i].enemySpacing);
             this.enemies[i].enemyWayPoints = enemies[i].breadthSearch.getStartToCenterPath(new Point(enemies[i].x, enemies[i].y));
         }
         this.active = false;    //If this wave is active. If not active, it will not be drawn.
@@ -158,8 +158,10 @@ public class Wave {
         switch (enemy){
             case "ghost":
                 return new GhostEnemy(asset);
-            case "miner":
-                return new MinerEnemy(asset);
+            case "sleddingelf":
+                return new SleddingElfEnemy(asset);
+            case "eye":
+                return new EyeEnemy(asset);
             default:
                 throw new Resources.NotFoundException();
         }
