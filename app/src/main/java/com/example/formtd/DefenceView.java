@@ -4,9 +4,11 @@
  */
 
 package com.example.formtd;
+import com.example.formtd.enemies.GhostEnemy;
 import com.example.formtd.towers.*;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.Layout;
@@ -49,6 +51,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     public int blankIconPlacerY;
     public int towerDescriptorX;
     public int towerDescriptorY;
+    public int enemyDescriptorX;
+    public int enemyDescriptorY;
     public int currentTowerIconHighlightX;
     public int currentTowerIconHighlightY;
     public int towerIconOneX;
@@ -76,6 +80,8 @@ public class DefenceView extends View implements View.OnTouchListener {
     public int towerDescriptorRange;
     public String towerDescriptorSpeed;
     public String towerDescriptorAccuracy;
+    public Bitmap currentWaveBitmap;
+    public int currentWaveHealth;
 
     public static ArrayList<Tower> towers;          //Towers are created/removed here, and managed in Wave class.
     public static boolean pathNeedsUpdating = false;    //Whenever a tower is placed, set this to true and Wave class will know about it.
@@ -145,14 +151,18 @@ public class DefenceView extends View implements View.OnTouchListener {
         blankIconPlacerY = buildButtonY + xGridStart + asset.BUILD.getHeight();
         towerDescriptorX = blankIconPlacerX + asset.BLANKICONPLACER.getWidth() + gridManager.getTileWidth()/2;
         towerDescriptorY = blankIconPlacerY;
+        enemyDescriptorX = blankIconPlacerX + asset.BLANKICONPLACER.getWidth() + gridManager.getTileWidth()/2;
+        enemyDescriptorY = buildButtonY;
+        currentWaveBitmap = asset.DEFAULTBITMAP;
+        currentWaveHealth = 0;
 
-        //Tower descriptions;
-        towerDescriptorDescription = "";
-        towerDescriptorCost = 0;
-        towerDescriptorDamage = 0;
-        towerDescriptorRange = 0;
-        towerDescriptorSpeed = "";
-        towerDescriptorAccuracy = "";
+        //Tower descriptions. Start out with snowball tower as default.
+        towerDescriptorDescription = "This tower is more of a wall than anything...";
+        towerDescriptorCost  = SnowballTower.cost;
+        towerDescriptorDamage = SnowballTower.attackDamage;
+        towerDescriptorRange = SnowballTower.attackRange;
+        towerDescriptorSpeed = "Slow";
+        towerDescriptorAccuracy = "Poor";
 
 
         //Tower Icons
@@ -342,6 +352,9 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Descriptor
         canvas.drawBitmap(asset.TOWERDESCRIPTOR, towerDescriptorX, towerDescriptorY, null);
 
+        //Enemy Descriptor
+        canvas.drawBitmap(asset.ENEMYDESCRIPTOR, enemyDescriptorX, enemyDescriptorY, null);
+
 
     }
 
@@ -408,40 +421,48 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.restore();
         //Cost
         textPaint.setARGB(255, 200, 200, 200);
-        staticLayout = new StaticLayout("Cost:" + towerDescriptorCost, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
-        canvas.save();
-        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 124 - textSize/2);
-        staticLayout.draw(canvas);
-        canvas.restore();
-        //Damage
-        textPaint.setARGB(255, 200, 200, 200);
-        staticLayout = new StaticLayout("Damage:\t" + towerDescriptorDamage, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        staticLayout = new StaticLayout("Cost: " + towerDescriptorCost, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 174 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
-        //Range
+        //Damage
         textPaint.setARGB(255, 200, 200, 200);
-        staticLayout = new StaticLayout("Range:\t" + towerDescriptorRange, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        staticLayout = new StaticLayout("Damage: " + towerDescriptorDamage, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 224 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
-        //Speed
+        //Range
         textPaint.setARGB(255, 200, 200, 200);
-        staticLayout = new StaticLayout("Speed:\t" + towerDescriptorSpeed, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        staticLayout = new StaticLayout("Range: " + towerDescriptorRange, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 274 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
-        //Accuracy
+        //Speed
         textPaint.setARGB(255, 200, 200, 200);
-        staticLayout = new StaticLayout("Accuracy:\t" + towerDescriptorAccuracy, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        staticLayout = new StaticLayout("Speed: " + towerDescriptorSpeed, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 324 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
+        //Accuracy
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Accuracy: " + towerDescriptorAccuracy, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 374 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
 
+        /**Enemy descriptor **/
+        canvas.drawBitmap(currentWaveBitmap, enemyDescriptorX + 12, enemyDescriptorY + 2, null);
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Health rating: " + currentWaveHealth, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( enemyDescriptorX + asset.ENEMYDESCRIPTOR.getWidth()/4, enemyDescriptorY - textSize/2 + asset.ENEMYDESCRIPTOR.getHeight()/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
 
         //invalidate();
     }
@@ -462,18 +483,24 @@ public class DefenceView extends View implements View.OnTouchListener {
                 && towerIconOneY < motionEvent.getY() && motionEvent.getY() < towerIconOneY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconOneX;
                 currentTowerIconHighlightY = towerIconOneY;
-                towerDescriptorDescription = "";
-//                towerDescriptorCost;
-//                towerDescriptorDamage;
-//                towerDescriptorRange;
-//                towerDescriptorSpeed;
-//                towerDescriptorAccuracy;
+                towerDescriptorDescription = "This tower is more of a wall than anything...";
+                towerDescriptorCost  = SnowballTower.cost;
+                towerDescriptorDamage = SnowballTower.attackDamage;
+                towerDescriptorRange = SnowballTower.attackRange;
+                towerDescriptorSpeed = "Slow";
+                towerDescriptorAccuracy = "Poor";
                 selectedTowerIcon = 1;
             }
             else if(towerIconTwoX < motionEvent.getX() && motionEvent.getX() < towerIconTwoX + towerIconWidth
                     && towerIconTwoY < motionEvent.getY() && motionEvent.getY() < towerIconTwoY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconTwoX;
                 currentTowerIconHighlightY = towerIconTwoY;
+                towerDescriptorDescription = "Well rounded but not well versed.";
+                towerDescriptorCost  = ArrowTower.cost;
+                towerDescriptorDamage = ArrowTower.attackDamage;
+                towerDescriptorRange = ArrowTower.attackRange;
+                towerDescriptorSpeed = "Medium";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 2;
             }
             else if(towerIconThreeX < motionEvent.getX() && motionEvent.getX() < towerIconThreeX + towerIconWidth
@@ -596,6 +623,8 @@ public class DefenceView extends View implements View.OnTouchListener {
                         lastWave = true;
                     wave.get(currentWave).startWave();
                     wave.get(currentWave).active = true;
+                    currentWaveBitmap = wave.get(currentWave).enemies[0].art;
+                    currentWaveHealth = wave.get(currentWave).enemies[0].health;
                     currentWave++;
                     gold += currentWave * 4;    //Give gold equal to the next wave times 3.
                 }

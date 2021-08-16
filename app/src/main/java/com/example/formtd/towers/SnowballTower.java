@@ -28,11 +28,11 @@ public class SnowballTower extends Tower {
     public int attackDelayCounter;
 
     //Customizables
-    public int attackDamage = 1;       //Amount of damage tower does
-    public int attackRange = 250;       //Radius of attack
-    public int projectileSpeed = 3;    //Speed of projectile animation
-    public int tolerance = 4;           //Multiplies by projectile Radius
-    public int projectileRadius = 6;
+    public static int attackDamage = 1;       //Amount of damage tower does
+    public static int attackRange = 250;       //Radius of attack
+    public static int projectileSpeed = 3;    //Speed of projectile animation
+    public static int tolerance = 4;           //Multiplies by projectile Radius
+    public static int projectileRadius = 6;
     public static final int cost = 3;
 
 
@@ -62,25 +62,6 @@ public class SnowballTower extends Tower {
         return this.cost;
     }
 
-    public int getAttackDamage() {
-        return attackDamage;
-    }
-
-    public int getAttackRange() {
-        return attackRange;
-    }
-
-    public int getProjectileSpeed() {
-        return projectileSpeed;
-    }
-
-    public int getTolerance() {
-        return tolerance;
-    }
-
-    public int getProjectileRadius() {
-        return projectileRadius;
-    }
 
     public void drawTower(Canvas canvas, AssetManager asset){
         //Bottom shadow
@@ -144,7 +125,7 @@ public class SnowballTower extends Tower {
         return enemies;
     }
 
-    private synchronized Enemy updateProjectile(Enemy enemy){
+    public synchronized Enemy updateProjectile(Enemy enemy){
         int velocityX = enemy.x - towerCenterX;
         int velocityY = enemy.y - towerCenterY;
         double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);

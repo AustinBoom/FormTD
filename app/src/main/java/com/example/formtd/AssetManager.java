@@ -21,8 +21,10 @@ public class AssetManager {
     private int yScale;
 
     //UI and other
+    public Bitmap DEFAULTBITMAP;
     public Bitmap BLANKICONPLACER;
     public Bitmap TOWERDESCRIPTOR;
+    public Bitmap ENEMYDESCRIPTOR;
     public Bitmap TAPTOSTART;
     public Bitmap BUILD;
     public Bitmap BUILDUNPRESSED;
@@ -52,12 +54,18 @@ public class AssetManager {
         this.yScale = (int)(tileWidth*1.5);
 
         /**UI**/
+        //Default: used in place of a bitmap when a bitmap isn't ready!
+        DEFAULTBITMAP = BitmapFactory.decodeResource(context.getResources(), R.drawable.defaultbitmap);
+        DEFAULTBITMAP = Bitmap.createScaledBitmap(DEFAULTBITMAP, 1, 1, false);
         //Blank icon placer
         BLANKICONPLACER = BitmapFactory.decodeResource(context.getResources(), R.drawable.blankiconplacer);
         BLANKICONPLACER = Bitmap.createScaledBitmap(BLANKICONPLACER, 448, 448, false);
-
+        //Tower descriptor background
         TOWERDESCRIPTOR = BitmapFactory.decodeResource(context.getResources(), R.drawable.towerdescriptor);
         TOWERDESCRIPTOR = Bitmap.createScaledBitmap(TOWERDESCRIPTOR, 448, 448, false);
+        //Enemy descriptor background
+        ENEMYDESCRIPTOR = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemydescriptor);
+        ENEMYDESCRIPTOR = Bitmap.createScaledBitmap(ENEMYDESCRIPTOR, 448, 80, false);
 
         //Tap to start tooltip
         TAPTOSTART = BitmapFactory.decodeResource(context.getResources(), R.drawable.taptostart);

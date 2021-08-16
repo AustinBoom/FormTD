@@ -38,7 +38,7 @@ public abstract class Tower {
     public int projectileSpeed = 6;    //Speed of projectile animation
     public int tolerance = 4;
     public int projectileRadius = 6;
-    public static final int cost = 0;
+    public final int cost = 0;
 
 
     public Tower(RectanglePoints rect, PlacementManager placementManager){
@@ -80,73 +80,13 @@ public abstract class Tower {
     }
 
     //Draws towers and initializes canvas.
-    public void drawTower(Canvas canvas, AssetManager asset){
-        paint.setARGB(255, 255, 0, 255);
-        canvas.drawRect(left, top, right, bottom, paint);
-    }
+    public abstract void drawTower(Canvas canvas, AssetManager asset);
 
     public abstract void drawProjectile(Canvas canvas, AssetManager asset);
 
     //Constantly called by DefenceView towerHandler. Look for nearby enemies and attack!
-    public synchronized Enemy[] watch(Enemy[] enemies, int waveID) {    //Note: this still mutates the array since the value is the reference to the array.
-        //Get pythagorean values
-        double a;
-        double b;
-        double c;
+    public abstract Enemy[] watch(Enemy[] enemies, int waveID);
 
-        //Check each enemy in range. If found an enemy, set aggro
-        for (int i = 0; i < enemies.length; i++){
-            a = Math.abs(towerCenterX - enemies[i].x) * Math.abs(towerCenterX - enemies[i].x);
-            b = Math.abs(towerCenterY - enemies[i].y) * Math.abs(towerCenterY - enemies[i].y);
-            c = attackRange * attackRange;
-
-            if (Math.sqrt(a + b) < Math.sqrt(c) && enemies[i].health > 0 && enemies[i].alive && aggroEnemy == -1) { //If enemy is in range,
-                //attack!
-                aggroEnemy = i;
-                currentWaveID = waveID;
-                projectileX = towerCenterX;
-                projectileY = towerCenterY;
-            }
-        }
-
-        //If an enemy is aggro'd, attack!
-        if(aggroEnemy != -1 && waveID == currentWaveID){
-            this.projecting = true;
-            enemies[aggroEnemy] = updateProjectile(enemies[aggroEnemy]);
-        }
-
-
-        return enemies;
-    }
-
-    private synchronized Enemy updateProjectile(Enemy enemy){
-        int velocityX = enemy.x - towerCenterX;
-        int velocityY = enemy.y - towerCenterY;
-        double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-        velocityX *= projectileSpeed/length;
-        velocityY *= projectileSpeed/length;
-        angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
-
-        //Adjust projectile position
-        if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
-            enemy.health -= attackDamage;
-            projecting = false;
-            aggroEnemy = -1;
-        }
-        else if(projectileX < DefenceView.xGridStart || projectileX > DefenceView.xGridEnd || projectileY < DefenceView.yGridStart || projectileY > DefenceView.yGridEnd){ //If out of bounds it's a miss!
-            projecting = false;
-            aggroEnemy = -1;
-        }
-        else if(!enemy.alive){  //If enemy is already dead, then quit trying to attack it!
-            projecting = false;
-            aggroEnemy = -1;
-        }
-        else{
-            projectileX += velocityX;
-            projectileY += velocityY;
-         }
-
-        return enemy;
-    }
+    public abstract Enemy updateProjectile(Enemy enemy);
 
 }

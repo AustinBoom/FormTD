@@ -118,7 +118,7 @@ public class FishSpy extends Tower{
         return enemies;
     }
 
-    private synchronized Enemy updateProjectile(Enemy enemy){
+    public synchronized Enemy updateProjectile(Enemy enemy){
         int velocityX = enemy.x - towerCenterX;
         int velocityY = enemy.y - towerCenterY;
         double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);

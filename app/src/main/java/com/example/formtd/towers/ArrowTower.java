@@ -30,11 +30,11 @@ public class ArrowTower extends Tower{
     Matrix matrix = new Matrix();
 
     //Customizables
-    public int attackDamage = 2;       //Amount of damage tower does
-    public int attackRange = 600;       //Radius of attack
-    public int projectileSpeed = 8;    //Speed of projectile animation
-    public int tolerance = 4;
-    public int projectileRadius = 10;
+    public static int attackDamage = 2;       //Amount of damage tower does
+    public static int attackRange = 600;       //Radius of attack
+    public static int projectileSpeed = 8;    //Speed of projectile animation
+    public static int tolerance = 4;
+    public static int projectileRadius = 10;
     public static final int cost = 10;
 
     public ArrowTower(RectanglePoints rect, PlacementManager placementManager) {
@@ -123,7 +123,7 @@ public class ArrowTower extends Tower{
         return enemies;
     }
 
-    private synchronized Enemy updateProjectile(Enemy enemy){
+    public synchronized Enemy updateProjectile(Enemy enemy){
         int velocityX = enemy.x - towerCenterX;
         int velocityY = enemy.y - towerCenterY;
         double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
