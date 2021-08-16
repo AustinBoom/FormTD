@@ -9,7 +9,7 @@ public class EyeEnemy extends Enemy{
     public final int enemySpacing = 250;
     public final int movementSpeed = 1;
     public int health = 2000;
-    public int goldReward = 15;
+    public int goldReward = 20;
 
     public EyeEnemy(AssetManager asset) {
         super(asset);

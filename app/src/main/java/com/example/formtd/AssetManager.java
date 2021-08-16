@@ -4,13 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.widget.ImageView;
-
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static android.os.SystemClock.sleep;
 
 //Holds all assets and has ability to rescale images.
 public class AssetManager {
@@ -39,13 +32,19 @@ public class AssetManager {
     public Bitmap EYE;
 
     //Towers
-    public Bitmap SNOWMAN;
-    public Bitmap SNOWMANICON;
+    public Bitmap SNOWMANTOWER;
+    public Bitmap SNOWMANTOWERICON;
     public Bitmap ARROWTOWER;
     public Bitmap ARROWTOWERICON;
     public Bitmap FISHSPY;
     public Bitmap FISHSPYICON;
     public Bitmap FISHSPYSWORD;
+    public Bitmap GOLEMTOWER;
+    public Bitmap GOLEMTOWERICON;
+    public Bitmap BOUDLER;
+    public Bitmap FRUITSTANDTOWER;
+    public Bitmap FRUITSTANDTOWERICON;
+    public Bitmap BANANA;
 
     //Projectiles
     public Bitmap ARROWPROJECTILE;
@@ -103,10 +102,10 @@ public class AssetManager {
 
         /**TOWERS**/
         //Snowman
-        SNOWMAN = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
-        SNOWMAN = Bitmap.createScaledBitmap(SNOWMAN, tileWidth*2, tileWidth*2, false);
-        SNOWMANICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
-        SNOWMANICON = Bitmap.createScaledBitmap(SNOWMANICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        SNOWMANTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
+        SNOWMANTOWER = Bitmap.createScaledBitmap(SNOWMANTOWER, tileWidth*2, tileWidth*2, false);
+        SNOWMANTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.snowman);
+        SNOWMANTOWERICON = Bitmap.createScaledBitmap(SNOWMANTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
 
         //ArrowTower
         ARROWTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowtower);
@@ -122,7 +121,26 @@ public class AssetManager {
         FISHSPYICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspy);
         FISHSPYICON = Bitmap.createScaledBitmap(FISHSPYICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         FISHSPYSWORD = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspysword);
-        FISHSPYSWORD = Bitmap.createScaledBitmap( FISHSPYSWORD, 100, 100, false);
+        FISHSPYSWORD = Bitmap.createScaledBitmap( FISHSPYSWORD, tileWidth*2, tileWidth*2, false);
+
+        //FruitStand tower
+        FRUITSTANDTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.fruistandtower);
+        FRUITSTANDTOWER = Bitmap.createScaledBitmap(FRUITSTANDTOWER, tileWidth*2, tileWidth*2, false);
+        FRUITSTANDTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.fruistandtower);
+        FRUITSTANDTOWERICON = Bitmap.createScaledBitmap(FRUITSTANDTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        BANANA = BitmapFactory.decodeResource(context.getResources(), R.drawable.banana);
+        BANANA = Bitmap.createScaledBitmap(BANANA, 20, 20, false);
+
+
+        //Golem Tower
+        GOLEMTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.golemtower);
+        GOLEMTOWER = Bitmap.createScaledBitmap(GOLEMTOWER, tileWidth*2, tileWidth*2, false);
+        GOLEMTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.golemtower);
+        GOLEMTOWERICON = Bitmap.createScaledBitmap(GOLEMTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        BOUDLER = BitmapFactory.decodeResource(context.getResources(), R.drawable.boulder);
+        BOUDLER = Bitmap.createScaledBitmap( BOUDLER, 80, 80, false);
+
+
 
     }
 

@@ -92,7 +92,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     final int textSize = 32;
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
-    protected int waveTimer = 50000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int waveTimer = 60000;           //Time between waves (ex. 60000ms = 60 seconds)
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -344,25 +344,25 @@ public class DefenceView extends View implements View.OnTouchListener {
         canvas.drawBitmap(asset.BLANKICONPLACER, blankIconPlacerX, blankIconPlacerY, null);
         //Icon Placer Highlight
         paint.setARGB(255, 70, 62, 62);
-        canvas.drawRect(currentTowerIconHighlightX, currentTowerIconHighlightY, currentTowerIconHighlightX + asset.SNOWMANICON.getWidth(), currentTowerIconHighlightY + asset.SNOWMANICON.getHeight(), paint);
+        canvas.drawRect(currentTowerIconHighlightX, currentTowerIconHighlightY, currentTowerIconHighlightX + asset.SNOWMANTOWERICON.getWidth(), currentTowerIconHighlightY + asset.SNOWMANTOWERICON.getHeight(), paint);
         //Tower Icon 1
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconOneX, towerIconOneY, null);
+        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconOneX, towerIconOneY, null);
         //Tower Icon 2
         canvas.drawBitmap(asset.ARROWTOWERICON, towerIconTwoX, towerIconTwoY, null);
         //Tower Icon 3
         canvas.drawBitmap(asset.FISHSPYICON, towerIconThreeX, towerIconThreeY, null);
         //Tower Icon 4
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconFourX, towerIconFourY, null);
+        canvas.drawBitmap(asset.FRUITSTANDTOWERICON, towerIconFourX, towerIconFourY, null);
         //Tower Icon 5
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconFiveX, towerIconFiveY, null);
+        canvas.drawBitmap(asset.GOLEMTOWERICON, towerIconFiveX, towerIconFiveY, null);
         //Tower Icon 6
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconSixX, towerIconSixY, null);
+        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconSixX, towerIconSixY, null);
         //Tower Icon 7
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconSevenX, towerIconSevenY, null);
+        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconSevenX, towerIconSevenY, null);
         //Tower Icon 8
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconEightX, towerIconEightY, null);
+        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconEightX, towerIconEightY, null);
         //Tower Icon 9
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconNineX, towerIconNineY, null);
+        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconNineX, towerIconNineY, null);
 
         //Descriptor
         canvas.drawBitmap(asset.TOWERDESCRIPTOR, towerDescriptorX, towerDescriptorY, null);
@@ -531,12 +531,24 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconFourY < motionEvent.getY() && motionEvent.getY() < towerIconFourY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconFourX;
                 currentTowerIconHighlightY = towerIconFourY;
+                towerDescriptorDescription = "Throw all the fruit! Decent range.";
+                towerDescriptorCost  = FruitStandTower.cost;
+                towerDescriptorDamage = FruitStandTower.attackDamage;
+                towerDescriptorRange = FruitStandTower.attackRange;
+                towerDescriptorSpeed = "Fast";
+                towerDescriptorAccuracy = "Medium";
                 selectedTowerIcon = 4;
             }
             else if(towerIconFiveX < motionEvent.getX() && motionEvent.getX() < towerIconFiveX + towerIconWidth
                     && towerIconFiveY < motionEvent.getY() && motionEvent.getY() < towerIconFiveY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconFiveX;
                 currentTowerIconHighlightY = towerIconFiveY;
+                towerDescriptorDescription = "Not very nimble, but no escaping a boulder...";
+                towerDescriptorCost  = GolemTower.cost;
+                towerDescriptorDamage = GolemTower.attackDamage;
+                towerDescriptorRange = GolemTower.attackRange;
+                towerDescriptorSpeed = "Slow";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 5;
             }
             else if(towerIconSixX < motionEvent.getX() && motionEvent.getX() < towerIconSixX + towerIconWidth
@@ -574,9 +586,9 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 3:
                 return new FishSpyTower(highlightManager.getHighlightPlacement(), placementManager);
             case 4:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new FruitStandTower(highlightManager.getHighlightPlacement(), placementManager);
             case 5:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new GolemTower(highlightManager.getHighlightPlacement(), placementManager);
             case 6:
                 return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
             case 7:
@@ -600,9 +612,9 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 3:
                 return FishSpyTower.cost;
             case 4:
-                return SnowballTower.cost;
+                return FruitStandTower.cost;
             case 5:
-                return SnowballTower.cost;
+                return GolemTower.cost;
             case 6:
                 return SnowballTower.cost;
             case 7:
@@ -624,6 +636,11 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave.add(new Wave(asset, "ghost", 10, waveID++));
         wave.add(new Wave(asset, "sleddingelf",20, waveID++));
         wave.add(new Wave(asset, "eye", 5, waveID++));
+        wave.add(new Wave(asset, "eye", 6, waveID++));
+        wave.add(new Wave(asset, "eye", 7, waveID++));
+        wave.add(new Wave(asset, "eye", 8, waveID++));
+        wave.add(new Wave(asset, "eye", 9, waveID++));
+        wave.add(new Wave(asset, "eye", 10, waveID++));
 
 
 
@@ -644,7 +661,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                     currentWaveBitmap = wave.get(currentWave).enemies[0].art;
                     currentWaveHealth = wave.get(currentWave).enemies[0].health;
                     currentWave++;
-                    gold += currentWave * 4;    //Give gold equal to the next wave times 3.
+                    gold += currentWave * 5;    //Give gold equal to the next wave times 3.
                 }
                 else{
                     //TODO put end of game stuff here
