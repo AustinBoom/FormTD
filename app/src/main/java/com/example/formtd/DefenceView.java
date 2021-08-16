@@ -29,6 +29,10 @@ public class DefenceView extends View implements View.OnTouchListener {
 
     //World & Layout
     public static Grid[][] grid;                    //The grid which is the world!
+    AssetManager asset;
+    GridManager gridManager;                        //Creates/updates grid
+    HighlightManager highlightManager;              //Manages placement via touch.
+    PlacementManager placementManager;              //Manages existing towers and spot availability.
     public static int deviceWidth;
     public static int deviceHeight;
     public static int centerXGrid;
@@ -66,10 +70,13 @@ public class DefenceView extends View implements View.OnTouchListener {
     public int towerIconNineX;
     public int towerIconNineY;
     public static final int towerIconWidth = 146;   //To fit inside box.
-    AssetManager asset;
-    GridManager gridManager;                        //Creates/updates grid
-    HighlightManager highlightManager;              //Manages placement via touch.
-    PlacementManager placementManager;              //Manages existing towers and spot availability.
+    public String towerDescriptorDescription;
+    public int towerDescriptorCost;
+    public int towerDescriptorDamage;
+    public int towerDescriptorRange;
+    public String towerDescriptorSpeed;
+    public String towerDescriptorAccuracy;
+
     public static ArrayList<Tower> towers;          //Towers are created/removed here, and managed in Wave class.
     public static boolean pathNeedsUpdating = false;    //Whenever a tower is placed, set this to true and Wave class will know about it.
     Paint paint;
@@ -138,6 +145,14 @@ public class DefenceView extends View implements View.OnTouchListener {
         blankIconPlacerY = buildButtonY + xGridStart + asset.BUILD.getHeight();
         towerDescriptorX = blankIconPlacerX + asset.BLANKICONPLACER.getWidth() + gridManager.getTileWidth()/2;
         towerDescriptorY = blankIconPlacerY;
+
+        //Tower descriptions;
+        towerDescriptorDescription = "";
+        towerDescriptorCost = 0;
+        towerDescriptorDamage = 0;
+        towerDescriptorRange = 0;
+        towerDescriptorSpeed = "";
+        towerDescriptorAccuracy = "";
 
 
         //Tower Icons
@@ -383,7 +398,50 @@ public class DefenceView extends View implements View.OnTouchListener {
             canvas.restore();
         }
 
-        //Todo descriptor stuff here
+        /**Descriptor information**/
+        //Description
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout( towerDescriptorDescription, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 24 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        //Cost
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Cost:" + towerDescriptorCost, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 124 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        //Damage
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Damage:\t" + towerDescriptorDamage, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 174 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        //Range
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Range:\t" + towerDescriptorRange, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 224 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        //Speed
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Speed:\t" + towerDescriptorSpeed, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 274 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+        //Accuracy
+        textPaint.setARGB(255, 200, 200, 200);
+        staticLayout = new StaticLayout("Accuracy:\t" + towerDescriptorAccuracy, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( towerDescriptorX + 24, towerDescriptorY + 324 - textSize/2);
+        staticLayout.draw(canvas);
+        canvas.restore();
+
 
         //invalidate();
     }
@@ -404,6 +462,12 @@ public class DefenceView extends View implements View.OnTouchListener {
                 && towerIconOneY < motionEvent.getY() && motionEvent.getY() < towerIconOneY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconOneX;
                 currentTowerIconHighlightY = towerIconOneY;
+                towerDescriptorDescription = "";
+//                towerDescriptorCost;
+//                towerDescriptorDamage;
+//                towerDescriptorRange;
+//                towerDescriptorSpeed;
+//                towerDescriptorAccuracy;
                 selectedTowerIcon = 1;
             }
             else if(towerIconTwoX < motionEvent.getX() && motionEvent.getX() < towerIconTwoX + towerIconWidth

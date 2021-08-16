@@ -58,6 +58,29 @@ public class SnowballTower extends Tower {
         DefenceView.gold -= cost;
     }
 
+    public int getCost(){
+        return this.cost;
+    }
+
+    public int getAttackDamage() {
+        return attackDamage;
+    }
+
+    public int getAttackRange() {
+        return attackRange;
+    }
+
+    public int getProjectileSpeed() {
+        return projectileSpeed;
+    }
+
+    public int getTolerance() {
+        return tolerance;
+    }
+
+    public int getProjectileRadius() {
+        return projectileRadius;
+    }
 
     public void drawTower(Canvas canvas, AssetManager asset){
         //Bottom shadow
@@ -71,9 +94,7 @@ public class SnowballTower extends Tower {
         canvas.drawBitmap(asset.SNOWMAN, left, top, null);
     }
 
-    public int getCost(){
-        return this.cost;
-    }
+
 
     public void drawProjectile(Canvas canvas, AssetManager asset){
         //Only draw projectile when projecting. Otherwise don't draw.
