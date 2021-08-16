@@ -99,7 +99,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static boolean lastWave = false;
     public static int currentWave = 0;
     public static int lives = 50;
-    public static int gold = 125;
+    public static int gold = 100;
     public static float returnRate = 0.75f;
     public static boolean blocking = false;
     public static int waveID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
@@ -204,7 +204,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     //When screen is touched, respond!
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP && lives > 0) {
             if(!begin){     //ONE TIME BEGINNING STUFF HERE. Once screen is touched start certain actions.
                 begin = true;
                 startWaves();
@@ -266,8 +266,24 @@ public class DefenceView extends View implements View.OnTouchListener {
         drawUI(canvas);
         drawInfoBarAndDescriptorStuff(canvas);
 
-
+        if(lives <= 0){
+            defeatText(canvas);
+        }
         //invalidate();       //PUT SOMEWHERE ELSE. This makes drawview update
+    }
+
+    private void defeatText(Canvas canvas){
+        textPaint.setARGB(150, 255, 10, 10);
+        textPaint.setTextSize(textSize*3);
+        textPaint.setFakeBoldText(true);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        staticLayout = new StaticLayout("DEFEAT: GAME OVER", textPaint, deviceWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+        canvas.save();
+        canvas.translate( deviceWidth/2, deviceHeight / 6 - (staticLayout.getHeight()/2));
+        staticLayout.draw(canvas);
+        canvas.restore();
+        textPaint.setFakeBoldText(false);
+        textPaint.setTextAlign(Paint.Align.LEFT);
     }
 
 
@@ -414,46 +430,43 @@ public class DefenceView extends View implements View.OnTouchListener {
         /**Descriptor information**/
         //Description
         textPaint.setARGB(255, 200, 200, 200);
+        textPaint.setFakeBoldText(true);
         staticLayout = new StaticLayout( towerDescriptorDescription, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 24 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
         //Cost
-        textPaint.setARGB(255, 200, 200, 200);
         staticLayout = new StaticLayout("Cost: " + towerDescriptorCost, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 174 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
         //Damage
-        textPaint.setARGB(255, 200, 200, 200);
         staticLayout = new StaticLayout("Damage: " + towerDescriptorDamage, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 224 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
         //Range
-        textPaint.setARGB(255, 200, 200, 200);
         staticLayout = new StaticLayout("Range: " + towerDescriptorRange, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 274 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
         //Speed
-        textPaint.setARGB(255, 200, 200, 200);
         staticLayout = new StaticLayout("Speed: " + towerDescriptorSpeed, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 324 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
         //Accuracy
-        textPaint.setARGB(255, 200, 200, 200);
         staticLayout = new StaticLayout("Accuracy: " + towerDescriptorAccuracy, textPaint, 400, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
         canvas.save();
         canvas.translate( towerDescriptorX + 24, towerDescriptorY + 374 - textSize/2);
         staticLayout.draw(canvas);
         canvas.restore();
+        textPaint.setFakeBoldText(false);
 
         /**Enemy descriptor **/
         canvas.drawBitmap(currentWaveBitmap, enemyDescriptorX + 12, enemyDescriptorY + 2, null);
