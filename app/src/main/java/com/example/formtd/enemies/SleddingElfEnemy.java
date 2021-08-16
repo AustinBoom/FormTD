@@ -9,7 +9,7 @@ public class SleddingElfEnemy extends Enemy{
     public final int enemySpacing = 110;
     public final int movementSpeed = 1;
     public int health = 100;
-    public int goldReward = 3;
+    public int goldReward = 10;
 
     public SleddingElfEnemy(AssetManager asset) {
         super(asset);

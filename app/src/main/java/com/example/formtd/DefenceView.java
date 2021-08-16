@@ -93,6 +93,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
     protected int waveTimer = 60000;           //Time between waves (ex. 60000ms = 60 seconds)
+    protected int firstWaveReduction = 30000;   //Make the first wave shorter
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -356,7 +357,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Tower Icon 5
         canvas.drawBitmap(asset.GOLEMTOWERICON, towerIconFiveX, towerIconFiveY, null);
         //Tower Icon 6
-        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconSixX, towerIconSixY, null);
+        canvas.drawBitmap(asset.CASTLETOWERICON, towerIconSixX, towerIconSixY, null);
         //Tower Icon 7
         canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconSevenX, towerIconSevenY, null);
         //Tower Icon 8
@@ -555,6 +556,12 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconSixY < motionEvent.getY() && motionEvent.getY() < towerIconSixY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconSixX;
                 currentTowerIconHighlightY = towerIconSixY;
+                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorCost  = CastleTower.cost;
+                towerDescriptorDamage = CastleTower.attackDamage;
+                towerDescriptorRange = CastleTower.attackRange;
+                towerDescriptorSpeed = "Fast";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 6;
             }
             else if(towerIconSevenX < motionEvent.getX() && motionEvent.getX() < towerIconSevenX + towerIconWidth
@@ -590,7 +597,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 5:
                 return new GolemTower(highlightManager.getHighlightPlacement(), placementManager);
             case 6:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new CastleTower(highlightManager.getHighlightPlacement(), placementManager);
             case 7:
                 return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
             case 8:
@@ -616,7 +623,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 5:
                 return GolemTower.cost;
             case 6:
-                return SnowballTower.cost;
+                return CastleTower.cost;
             case 7:
                 return SnowballTower.cost;
             case 8:
@@ -653,6 +660,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         TimerTask timerTask =  new TimerTask(){
             @Override
             public void run(){
+                firstWaveReduction = 0;
                 if(currentWave < wave.size() && !gameOver) {
                     if(currentWave == wave.size()-1)
                         lastWave = true;
@@ -670,7 +678,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                 }
             }
         };
-        timer.scheduleAtFixedRate(timerTask, waveTimer, waveTimer);  //Start wave
+        timer.scheduleAtFixedRate(timerTask, waveTimer-firstWaveReduction, waveTimer);  //Start wave
         startWaveTimer();                                           //Start wave timer
     }
 
@@ -686,7 +694,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     }
 
     private void startWaveTimer(){
-        countdown = waveTimer/1000;
+        countdown = (waveTimer-firstWaveReduction)/1000;
         final Timer timerCountdown = new Timer();
         TimerTask timerTaskCnt =  new TimerTask(){
             @Override

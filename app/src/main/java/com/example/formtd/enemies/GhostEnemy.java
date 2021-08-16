@@ -9,7 +9,7 @@ public class GhostEnemy extends Enemy{
     public final int enemySpacing = 130;
     public final int movementSpeed = 1;
     public int health = 20;
-    public int goldReward = 1;
+    public int goldReward = 3;
 
     public GhostEnemy(AssetManager asset) {
         super(asset);

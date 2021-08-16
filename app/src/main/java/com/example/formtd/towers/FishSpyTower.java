@@ -34,7 +34,7 @@ public class FishSpyTower extends Tower{
     public static int projectileSpeed = 9;    //Speed of projectile animation
     public static int tolerance = 3;
     public static int projectileRadius = 5;
-    public static final int cost = 125;
+    public static final int cost = 120;
 
     public FishSpyTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);

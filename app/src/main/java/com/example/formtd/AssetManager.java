@@ -45,6 +45,9 @@ public class AssetManager {
     public Bitmap FRUITSTANDTOWER;
     public Bitmap FRUITSTANDTOWERICON;
     public Bitmap BANANA;
+    public Bitmap CASTLETOWER;
+    public Bitmap CASTLETOWERICON;
+    public Bitmap CASTLEKNIGHT;
 
     //Projectiles
     public Bitmap ARROWPROJECTILE;
@@ -139,6 +142,14 @@ public class AssetManager {
         GOLEMTOWERICON = Bitmap.createScaledBitmap(GOLEMTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         BOUDLER = BitmapFactory.decodeResource(context.getResources(), R.drawable.boulder);
         BOUDLER = Bitmap.createScaledBitmap( BOUDLER, 80, 80, false);
+
+        //Castle Tower
+        CASTLETOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.castle);
+        CASTLETOWER = Bitmap.createScaledBitmap(CASTLETOWER, tileWidth*2, tileWidth*2, false);
+        CASTLETOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.castle);
+        CASTLETOWERICON = Bitmap.createScaledBitmap(CASTLETOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        CASTLEKNIGHT = BitmapFactory.decodeResource(context.getResources(), R.drawable.knight);
+        CASTLEKNIGHT = Bitmap.createScaledBitmap(CASTLEKNIGHT, 60, 60, false);
 
 
 
