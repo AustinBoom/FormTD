@@ -43,6 +43,9 @@ public class AssetManager {
     public Bitmap SNOWMANICON;
     public Bitmap ARROWTOWER;
     public Bitmap ARROWTOWERICON;
+    public Bitmap FISHSPY;
+    public Bitmap FISHSPYICON;
+    public Bitmap FISHSPYSWORD;
 
     //Projectiles
     public Bitmap ARROWPROJECTILE;
@@ -113,7 +116,13 @@ public class AssetManager {
         ARROWPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.arrowprojectile);
         ARROWPROJECTILE = Bitmap.createScaledBitmap(ARROWPROJECTILE, 30, 30, false);
 
-
+        //FishSpyTower
+        FISHSPY = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspy);
+        FISHSPY = Bitmap.createScaledBitmap(FISHSPY, tileWidth*2, tileWidth*2, false);
+        FISHSPYICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspy);
+        FISHSPYICON = Bitmap.createScaledBitmap(FISHSPYICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        FISHSPYSWORD = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspysword);
+        FISHSPYSWORD = Bitmap.createScaledBitmap( FISHSPYSWORD, 100, 100, false);
 
     }
 

@@ -27,7 +27,7 @@ public class ArrowTower extends Tower{
     public boolean alreadyAttacking;    //Make sure only one instance of projectile is being triggered.
     private int projectileX;
     private int projectileY;
-    Matrix matrix = new Matrix();
+    Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
     public static int attackDamage = 2;       //Amount of damage tower does
@@ -35,7 +35,7 @@ public class ArrowTower extends Tower{
     public static int projectileSpeed = 8;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 10;
-    public static final int cost = 10;
+    public static final int cost = 15;
 
     public ArrowTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
@@ -61,9 +61,6 @@ public class ArrowTower extends Tower{
 
 
     public void drawTower(Canvas canvas, AssetManager asset){
-        //Bottom shadow
-//        paint.setARGB(100, 170, 140, 110);
-//        canvas.drawRoundRect(left, top, right, bottom, 30, 30, paint);
         canvas.drawBitmap(asset.ARROWTOWER, left, top, null);
     }
 

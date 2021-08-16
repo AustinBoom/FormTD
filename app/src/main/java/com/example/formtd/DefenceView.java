@@ -4,7 +4,6 @@
  */
 
 package com.example.formtd;
-import com.example.formtd.enemies.GhostEnemy;
 import com.example.formtd.towers.*;
 
 import android.content.Context;
@@ -351,7 +350,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Tower Icon 2
         canvas.drawBitmap(asset.ARROWTOWERICON, towerIconTwoX, towerIconTwoY, null);
         //Tower Icon 3
-        canvas.drawBitmap(asset.SNOWMANICON, towerIconThreeX, towerIconThreeY, null);
+        canvas.drawBitmap(asset.FISHSPYICON, towerIconThreeX, towerIconThreeY, null);
         //Tower Icon 4
         canvas.drawBitmap(asset.SNOWMANICON, towerIconFourX, towerIconFourY, null);
         //Tower Icon 5
@@ -520,6 +519,12 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconThreeY < motionEvent.getY() && motionEvent.getY() < towerIconThreeY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconThreeX;
                 currentTowerIconHighlightY = towerIconThreeY;
+                towerDescriptorDescription = "Melee range but fairly vicious";
+                towerDescriptorCost  = FishSpyTower.cost;
+                towerDescriptorDamage = FishSpyTower.attackDamage;
+                towerDescriptorRange = FishSpyTower.attackRange;
+                towerDescriptorSpeed = "Fast";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 3;
             }
             else if(towerIconFourX < motionEvent.getX() && motionEvent.getX() < towerIconFourX + towerIconWidth
@@ -567,7 +572,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 2:
                 return new ArrowTower(highlightManager.getHighlightPlacement(), placementManager);
             case 3:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new FishSpyTower(highlightManager.getHighlightPlacement(), placementManager);
             case 4:
                 return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
             case 5:
@@ -593,7 +598,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 2:
                 return ArrowTower.cost;
             case 3:
-                return SnowballTower.cost;
+                return FishSpyTower.cost;
             case 4:
                 return SnowballTower.cost;
             case 5:

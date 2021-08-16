@@ -12,7 +12,7 @@ import com.example.formtd.enemies.Enemy;
 public class SnowballTower extends Tower {
     PlacementManager placementManager;
     Paint paint;
-    private double angle;
+    private float angle;
     protected int left;
     protected int top;
     protected int right;
@@ -65,12 +65,8 @@ public class SnowballTower extends Tower {
 
     public void drawTower(Canvas canvas, AssetManager asset){
         //Bottom shadow
-//        paint.setARGB(25, 5, 5, 200);
-//        canvas.drawRoundRect(left, top, right, bottom, 25, 25, paint);
-
         paint.setARGB(17, 10, 10, 10);
         canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth, paint);
-
 
         canvas.drawBitmap(asset.SNOWMAN, left, top, null);
     }
@@ -131,7 +127,7 @@ public class SnowballTower extends Tower {
         double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
         velocityX *= projectileSpeed/length;
         velocityY *= projectileSpeed/length;
-        angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
+        angle = (float) Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
 
         //Adjust projectile position
         if ((Math.abs(projectileX - enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY - enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.

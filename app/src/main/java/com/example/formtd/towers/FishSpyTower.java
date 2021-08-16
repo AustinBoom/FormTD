@@ -1,6 +1,7 @@
 package com.example.formtd.towers;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import com.example.formtd.AssetManager;
@@ -9,10 +10,10 @@ import com.example.formtd.PlacementManager;
 import com.example.formtd.RectanglePoints;
 import com.example.formtd.enemies.Enemy;
 
-public class FishSpy extends Tower{
+public class FishSpyTower extends Tower{
     PlacementManager placementManager;
     Paint paint;
-    private double angle;
+    private float angle;
     protected int left;
     protected int top;
     protected int right;
@@ -25,16 +26,17 @@ public class FishSpy extends Tower{
     public boolean alreadyAttacking;    //Make sure only one instance of projectile is being triggered.
     private int projectileX;
     private int projectileY;
+    Matrix matrix = new Matrix();   //For projectile angle
 
     //Customizables
-    public int attackDamage = 1;       //Amount of damage tower does
-    public int attackRange = 300;       //Radius of attack
-    public int projectileSpeed = 6;    //Speed of projectile animation
-    public int tolerance = 4;
-    public int projectileRadius = 6;
-    public static final int cost = 3;
+    public static int attackDamage = 25;       //Amount of damage tower does
+    public static int attackRange = 130;       //Radius of attack
+    public static int projectileSpeed = 9;    //Speed of projectile animation
+    public static int tolerance = 3;
+    public static int projectileRadius = 5;
+    public static final int cost = 125;
 
-    public FishSpy(RectanglePoints rect, PlacementManager placementManager) {
+    public FishSpyTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
         this.placementManager = placementManager;
         placementManager.placeTower(rect);
@@ -58,14 +60,14 @@ public class FishSpy extends Tower{
 
 
     public void drawTower(Canvas canvas, AssetManager asset){
-        //Draw tower underlay
-        paint.setARGB(255, 140, 165, 245);
-        canvas.drawRect(left, top, right, bottom, paint);
+        //Bottom shadow
+        paint.setARGB(17, 10, 10, 10);
+        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.2f,  DefenceView.tileWidth, paint);
 
-        //Draw actual tower
-        paint.setARGB(255, 255, 235, 255);
-        canvas.drawRoundRect(left, top, right, bottom, 55, 30, paint);
-
+        //See attack radius
+//        paint.setARGB(100, 170, 140, 110);
+//        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth, attackRange, paint);
+        canvas.drawBitmap(asset.FISHSPY, left, top, null);
     }
 
     public int getCost(){
@@ -76,11 +78,9 @@ public class FishSpy extends Tower{
     public void drawProjectile(Canvas canvas, AssetManager asset){
         //Only draw projectile when projecting. Otherwise don't draw.
         if(projecting) {
-            // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
-            // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
-
-            paint.setARGB(255, 220, 220, 255);
-            canvas.drawCircle(projectileX, projectileY, 10, paint);
+            matrix.setRotate(angle, asset.ARROWPROJECTILE.getWidth()/2, asset.ARROWPROJECTILE.getHeight()/2);
+            matrix.postTranslate(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/5);
+            canvas.drawBitmap(asset.FISHSPYSWORD, matrix, null);
         }
     }
 
@@ -124,7 +124,7 @@ public class FishSpy extends Tower{
         double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
         velocityX *= projectileSpeed/length;
         velocityY *= projectileSpeed/length;
-        angle = Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
+        angle = (float) Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX) *60;  //For bitmap rotation!
 
         //Adjust projectile position
         if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.

@@ -18,7 +18,7 @@ import com.example.formtd.enemies.Enemy;
 public abstract class Tower {
     PlacementManager placementManager;
     Paint paint;
-    private double angle;
+    private float angle;
     protected int left;
     protected int top;
     protected int right;
