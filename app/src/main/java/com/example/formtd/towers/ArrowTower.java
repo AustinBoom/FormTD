@@ -101,7 +101,7 @@ public class ArrowTower extends Tower{
             b = Math.abs(towerCenterY - enemies[i].y) * Math.abs(towerCenterY - enemies[i].y);
             c = attackRange * attackRange;
 
-            if (Math.sqrt(a + b) < Math.sqrt(c) && enemies[i].health > 0 && enemies[i].alive && aggroEnemy == -1) { //If enemy is in range,
+            if (Math.sqrt(a + b) < Math.sqrt(c) && enemies[i].health > 0 && enemies[i].alive && aggroEnemy == -1 && enemies[i].y > 0) { //If enemy is in range,
                 //attack!
                 aggroEnemy = i;
                 currentWaveID = waveID;

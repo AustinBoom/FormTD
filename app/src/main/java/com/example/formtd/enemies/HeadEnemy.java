@@ -5,19 +5,20 @@ import android.graphics.Bitmap;
 import com.example.formtd.AssetManager;
 import com.example.formtd.DefenceView;
 
-public class EyeEnemy extends Enemy{
+public class HeadEnemy  extends Enemy{
     public Bitmap art;
-    public final int enemySpacing = 250;
+    public final int enemySpacing = 120;
     public final int movementSpeed = 1;
-    public int health = 2000;
-    public int goldReward = 20;
+    public int health = 250;
+    public int goldReward = 5;
 
-    public EyeEnemy(AssetManager asset) {
+    public HeadEnemy(AssetManager asset) {
         super(asset);
-        super.setArt(asset.EYE);
+        super.setArt(asset.HEAD);
         super.setEnemySpacing(enemySpacing);
         super.setHealth((int) (health * DefenceView.difficultyModifier.getEnemyHealthModifier()));
         super.setGoldReward(goldReward);
         super.setMovementSpeed(movementSpeed);
     }
 }
+

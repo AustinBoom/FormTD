@@ -38,6 +38,7 @@ public class AssetManager {
     public Bitmap EYE;
     public Bitmap LAVAGHOST;
     public Bitmap SNEK;
+    public Bitmap BABYFISHSPYENEMY;
 
     //Towers
     public Bitmap SNOWMANTOWER;
@@ -132,6 +133,10 @@ public class AssetManager {
         //Snek
         SNEK = BitmapFactory.decodeResource(context.getResources(), R.drawable.snek);
         SNEK = Bitmap.createScaledBitmap(SNEK, xScale, yScale, false);
+        //BabyFishSpy
+        BABYFISHSPYENEMY = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspy);
+        BABYFISHSPYENEMY = Bitmap.createScaledBitmap(BABYFISHSPYENEMY, xScale, yScale, false);
+
 
         /**TOWERS**/
         //Snowman

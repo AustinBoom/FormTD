@@ -688,16 +688,15 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave = new ArrayList<>();
 
         //Add waves. These are how the levels are designed.
+        wave.add(new Wave(asset, "ant", 20, waveID++));
         wave.add(new Wave(asset, "ghost", 10, waveID++));
-        wave.add(new Wave(asset, "sleddingelf",20, waveID++));
+        wave.add(new Wave(asset, "sleddingelf",15, waveID++));
+        wave.add(new Wave(asset, "waterghost", 12, waveID++));
+        wave.add(new Wave(asset, "head", 20, waveID++));
         wave.add(new Wave(asset, "eye", 5, waveID++));
-        wave.add(new Wave(asset, "eye", 6, waveID++));
-        wave.add(new Wave(asset, "eye", 7, waveID++));
-        wave.add(new Wave(asset, "eye", 8, waveID++));
-        wave.add(new Wave(asset, "eye", 9, waveID++));
-        wave.add(new Wave(asset, "eye", 10, waveID++));
-
-
+        wave.add(new Wave(asset, "lavaghost", 8, waveID++));
+        wave.add(new Wave(asset, "snek", 20, waveID++));
+        wave.add(new Wave(asset, "babyfishspy", 10, waveID++));
 
     }
 

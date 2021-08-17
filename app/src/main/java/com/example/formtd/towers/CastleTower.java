@@ -29,8 +29,8 @@ public class CastleTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 1750;       //Amount of damage tower does
-    public static int attackRange = 1200;       //Radius of attack
+    public static int attackDamage = 1500;       //Amount of damage tower does
+    public static int attackRange = 2000;       //Radius of attack
     public static int projectileSpeed = 10;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 10;
@@ -96,7 +96,7 @@ public class CastleTower extends Tower{
             b = Math.abs(towerCenterY - enemies[i].y) * Math.abs(towerCenterY - enemies[i].y);
             c = attackRange * attackRange;
 
-            if (Math.sqrt(a + b) < Math.sqrt(c) && enemies[i].health > 0 && enemies[i].alive && aggroEnemy == -1) { //If enemy is in range,
+            if (Math.sqrt(a + b) < Math.sqrt(c) && enemies[i].health > 0 && enemies[i].alive && aggroEnemy == -1 && enemies[i].y > 0) { //If enemy is in range,
                 //attack!
                 aggroEnemy = i;
                 currentWaveID = waveID;

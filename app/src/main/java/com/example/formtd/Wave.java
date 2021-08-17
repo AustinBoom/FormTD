@@ -9,10 +9,16 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
+import com.example.formtd.enemies.AntEnemy;
+import com.example.formtd.enemies.BabyFishSpyEnemy;
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.EyeEnemy;
 import com.example.formtd.enemies.GhostEnemy;
+import com.example.formtd.enemies.HeadEnemy;
+import com.example.formtd.enemies.LavaGhostEnemy;
 import com.example.formtd.enemies.SleddingElfEnemy;
+import com.example.formtd.enemies.SnekEnemy;
+import com.example.formtd.enemies.WaterGhostEnemy;
 import com.example.formtd.towers.Tower;
 
 
@@ -156,12 +162,24 @@ public class Wave {
 
     public Enemy createEnemy(String enemy){
         switch (enemy){
+            case "ant":
+                return new AntEnemy(asset);
             case "ghost":
                 return new GhostEnemy(asset);
             case "sleddingelf":
                 return new SleddingElfEnemy(asset);
+            case "waterghost":
+                return new WaterGhostEnemy(asset);
+            case "head":
+                return new HeadEnemy(asset);
             case "eye":
                 return new EyeEnemy(asset);
+            case "lavaghost":
+                return new LavaGhostEnemy(asset);
+            case "snek":
+                return new SnekEnemy(asset);
+            case "babyfishspy":
+                return new BabyFishSpyEnemy(asset);
             default:
                 throw new Resources.NotFoundException();
         }
