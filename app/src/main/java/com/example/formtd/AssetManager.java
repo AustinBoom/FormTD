@@ -19,6 +19,9 @@ public class AssetManager {
     public Bitmap TOWERDESCRIPTOR;
     public Bitmap ENEMYDESCRIPTOR;
     public Bitmap TAPTOSTART;
+    public Bitmap EASY;
+    public Bitmap MEDIUM;
+    public Bitmap HARD;
     public Bitmap BUILD;
     public Bitmap BUILDUNPRESSED;
     public Bitmap BUILDPRESSED;
@@ -28,8 +31,13 @@ public class AssetManager {
 
     //Enemies
     public Bitmap GHOST;
+    public Bitmap ANT;
     public Bitmap SLEDDINGELF;
+    public Bitmap WATERGHOST;
+    public Bitmap HEAD;
     public Bitmap EYE;
+    public Bitmap LAVAGHOST;
+    public Bitmap SNEK;
 
     //Towers
     public Bitmap SNOWMANTOWER;
@@ -75,6 +83,13 @@ public class AssetManager {
         //Tap to start tooltip
         TAPTOSTART = BitmapFactory.decodeResource(context.getResources(), R.drawable.taptostart);
         TAPTOSTART = Bitmap.createScaledBitmap(TAPTOSTART, 900, 150, false);
+        //Game modes:
+        EASY = BitmapFactory.decodeResource(context.getResources(), R.drawable.easy);
+        EASY = Bitmap.createScaledBitmap(EASY, 299, 299, false);
+        MEDIUM = BitmapFactory.decodeResource(context.getResources(), R.drawable.medium);
+        MEDIUM = Bitmap.createScaledBitmap(MEDIUM, 299, 299, false);
+        HARD = BitmapFactory.decodeResource(context.getResources(), R.drawable.hard);
+        HARD = Bitmap.createScaledBitmap(HARD, 299, 299, false);
 
         //Build Button
         BUILD = BitmapFactory.decodeResource(context.getResources(), R.drawable.build);
@@ -93,15 +108,30 @@ public class AssetManager {
         REMOVEON = Bitmap.createScaledBitmap(REMOVEON, 80, 80, false);
 
         /**ENEMIES**/
+        //Ant
+        ANT = BitmapFactory.decodeResource(context.getResources(), R.drawable.ant);
+        ANT = Bitmap.createScaledBitmap(ANT, xScale, yScale, false);
         //Ghost
         GHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.ghostenemy);
         GHOST = Bitmap.createScaledBitmap(GHOST, xScale, yScale, false);
         //Sledding Elf
         SLEDDINGELF = BitmapFactory.decodeResource(context.getResources(), R.drawable.sleddingelfenemy);
         SLEDDINGELF = Bitmap.createScaledBitmap(SLEDDINGELF, xScale, yScale, false);
+        //Water ghost
+        WATERGHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.waterghost);
+        WATERGHOST = Bitmap.createScaledBitmap(WATERGHOST, xScale, yScale, false);
+        //Head
+        HEAD = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
+        HEAD = Bitmap.createScaledBitmap(HEAD, xScale, yScale, false);
         //Eye
         EYE = BitmapFactory.decodeResource(context.getResources(), R.drawable.eyeenemy);
         EYE = Bitmap.createScaledBitmap(EYE, xScale, yScale, false);
+        //Lava ghost
+        LAVAGHOST = BitmapFactory.decodeResource(context.getResources(), R.drawable.lavaghost);
+        LAVAGHOST = Bitmap.createScaledBitmap(LAVAGHOST, xScale, yScale, false);
+        //Snek
+        SNEK = BitmapFactory.decodeResource(context.getResources(), R.drawable.snek);
+        SNEK = Bitmap.createScaledBitmap(SNEK, xScale, yScale, false);
 
         /**TOWERS**/
         //Snowman

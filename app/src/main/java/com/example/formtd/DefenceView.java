@@ -4,6 +4,7 @@
  */
 
 package com.example.formtd;
+import com.example.formtd.difficulty.*;
 import com.example.formtd.towers.*;
 
 import android.content.Context;
@@ -72,6 +73,10 @@ public class DefenceView extends View implements View.OnTouchListener {
     public int towerIconEightY;
     public int towerIconNineX;
     public int towerIconNineY;
+    public int easySelectorX;
+    public int mediumSelectorX;
+    public int hardSelectorX;
+    public int difficultySelectorY;
     public static final int towerIconWidth = 146;   //To fit inside box.
     public String towerDescriptorDescription;
     public int towerDescriptorCost;
@@ -100,10 +105,11 @@ public class DefenceView extends View implements View.OnTouchListener {
     public static int currentWave = 0;
     public static int lives = 50;
     public static int gold = 100;
-    public static float returnRate = 0.75f;
+    public static float returnRate = 0.8f;
     public static boolean blocking = false;
     public static int waveID = 0;       //Global id assigned to enemies. Used to count up for uniqueness. (don't need heavy duty like UUID)
     public int selectedTowerIcon = 1;
+    public static Difficulty difficultyModifier;
 
 
     public DefenceView(Context context) {
@@ -112,6 +118,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         setOnTouchListener(this);
         towers = new ArrayList<>();
         paint = new Paint();
+        difficultyModifier = new Medium();
     }
 
     public DefenceView(Context context, AttributeSet attributeSet) {
@@ -120,6 +127,7 @@ public class DefenceView extends View implements View.OnTouchListener {
         setOnTouchListener(this);
         towers = new ArrayList<>();
         paint = new Paint();
+        difficultyModifier = new Medium();
     }
 
 
@@ -187,13 +195,16 @@ public class DefenceView extends View implements View.OnTouchListener {
         currentTowerIconHighlightX = towerIconOneX;
         currentTowerIconHighlightY = towerIconOneY;
 
+        //Difficulty selectors
+        difficultySelectorY = deviceHeight/3 - asset.EASY.getHeight()/2;
+        mediumSelectorX = deviceWidth/2 - asset.MEDIUM.getWidth()/2;
+        easySelectorX = mediumSelectorX - asset.MEDIUM.getWidth()/2 - asset.EASY.getWidth()/2 - tileWidth;
+        hardSelectorX = mediumSelectorX + asset.MEDIUM.getWidth()/2 + asset.HARD.getWidth()/2 + tileWidth;
+
 
         //Higlight and placement managers
         highlightManager = new HighlightManager(grid, gridManager.getTileWidth(), gridManager.getxGridStart(), gridManager.getyGridStart());
         placementManager = new PlacementManager(grid, gridManager.getTileWidth());
-
-
-        initWaves();        //Set up waves now that dimensions are in place.
 
         //Boiler plate. Removing this is CATASTROPHIC!
         setMeasuredDimension(deviceWidth, deviceHeight);
@@ -206,46 +217,45 @@ public class DefenceView extends View implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP && lives > 0) {
             if(!begin){     //ONE TIME BEGINNING STUFF HERE. Once screen is touched start certain actions.
-                begin = true;
-                startWaves();
+                selectDifficulty(motionEvent);
             }
-            highlightManager.setHighlightPlacement((int)motionEvent.getX(), (int)motionEvent.getY());
+            else {
+                //Update highlight
+                highlightManager.setHighlightPlacement((int) motionEvent.getX(), (int) motionEvent.getY());
+                //If user presses on a tower icon, make that the new selected icon (default is 1)
+                ifTouchInTowerIcon(motionEvent);
 
-            //If user presses on a tower icon, make that the new selected icon (default is 1)
-            ifTouchInTowerIcon(motionEvent);
+                //Add tower
+                if (ifTouchIsInBuildButton(motionEvent)) {
+                    asset.buildPressed();
+                    if (gold >= getSelectedTowerCost()) {    //If enough gold todo: fix this
+                        if (placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())) { //If spot available
+                            towers.add(addSelectedTowerType());
+                            for (int i = 0; i < wave.size(); i++) {
+                                wave.get(i).pathNeedsUpdating = true;
+                            }
+                        }
+                    } else {
+                        Toast.makeText(context, (String) "Not enough gold!", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-            //Add tower
-            if(ifTouchIsInBuildButton(motionEvent)){
-                asset.buildPressed();
-                if(gold >= getSelectedTowerCost()) {    //If enough gold todo: fix this
-                    if (placementManager.checkSpotAvailability(highlightManager.getHighlightPlacement())) { //If spot available
-                        towers.add(addSelectedTowerType());
-                        for (int i = 0; i < wave.size(); i++) {
-                            wave.get(i).pathNeedsUpdating = true;
+                //Remove tower
+                if (ifTouchIsInRemoveButton(motionEvent)) {
+                    //Check each tower if it's the one that's highlighted
+                    for (int i = 0; i < towers.size(); i++) {
+                        if (towers.get(i).selectTower(highlightManager.getHighlightPlacement())) {
+                            placementManager.removeTower(highlightManager.getHighlightPlacement()); //Remove tower from grid
+                            gold += Math.ceil(towers.get(i).getCost() * returnRate);
+                            towers.remove(i);   //Remove tower from towers arraylist
+                            asset.removeOFF();
+                            for (int j = 0; j < wave.size(); j++) {
+                                wave.get(j).pathNeedsUpdating = true;
+                            }
                         }
                     }
                 }
-                else{
-                    Toast.makeText(context,(String)"Not enough gold!", Toast.LENGTH_SHORT).show();
-                }
             }
-
-            //Remove tower
-            if(ifTouchIsInRemoveButton(motionEvent)){
-                //Check each tower if it's the one that's highlighted
-                for (int i = 0; i < towers.size(); i++) {
-                    if(towers.get(i).selectTower(highlightManager.getHighlightPlacement())){
-                        placementManager.removeTower(highlightManager.getHighlightPlacement()); //Remove tower from grid
-                        gold += Math.ceil(towers.get(i).getCost() * returnRate);
-                        towers.remove(i);   //Remove tower from towers arraylist
-                        asset.removeOFF();
-                        for (int j = 0; j < wave.size(); j++) {
-                            wave.get(j).pathNeedsUpdating = true;
-                        }
-                    }
-                }
-            }
-
         }
 
         invalidate();       //update drawings.
@@ -270,6 +280,34 @@ public class DefenceView extends View implements View.OnTouchListener {
             defeatText(canvas);
         }
         //invalidate();       //PUT SOMEWHERE ELSE. This makes drawview update
+    }
+
+    private void selectDifficulty(MotionEvent motionEvent){
+        //Touch is within Y range,
+        if(motionEvent.getY() > difficultySelectorY && motionEvent.getY() < difficultySelectorY + asset.EASY.getHeight()){
+            //Easy
+            if(motionEvent.getX() > easySelectorX && motionEvent.getX() < easySelectorX + asset.EASY.getWidth()){
+                difficultyModifier = new Easy();
+                begin = true;
+            }//Medium
+            else if(motionEvent.getX() > mediumSelectorX && motionEvent.getX() < mediumSelectorX + asset.EASY.getWidth()){
+                difficultyModifier = new Medium();
+                begin = true;
+
+            }//Hard
+            else if(motionEvent.getX() > hardSelectorX && motionEvent.getX() < hardSelectorX + asset.EASY.getWidth()){
+                difficultyModifier = new Hard();
+                begin = true;
+            }
+        }
+        //If difficulty selected, begin. (this happens only once)
+        if(begin){
+            startWaves();
+            lives += difficultyModifier.getLivesModifier();
+            returnRate += difficultyModifier.getSellValueModifier();
+            gold += difficultyModifier.getStartGoldModifier();
+            initWaves();        //Set up waves now that settings are in place.
+        }
     }
 
     private void defeatText(Canvas canvas){
@@ -319,8 +357,18 @@ public class DefenceView extends View implements View.OnTouchListener {
             //First rect is shadow, second is actual tap to start
             paint.setARGB(40, 5, 5, 5);
             canvas.drawRect(deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) + 12, deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, asset.TAPTOSTART.getWidth() + deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2) + 12, asset.TAPTOSTART.getHeight() + deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2) + 17, paint);
-            paint.setARGB(200, 255, 255, 255);
+            paint.setARGB(210, 255, 255, 255);
             canvas.drawBitmap(asset.TAPTOSTART, deviceWidth / 2 - (asset.TAPTOSTART.getWidth() / 2), deviceHeight / 6 - (asset.TAPTOSTART.getHeight() / 2), paint);
+
+            //Display game mode selectors
+            paint.setARGB(255, 255, 255, 255);
+            //Easy
+            canvas.drawBitmap(asset.EASY, easySelectorX, difficultySelectorY, paint);
+            //Medium
+            canvas.drawBitmap(asset.MEDIUM, mediumSelectorX, difficultySelectorY, paint);
+            //Hard
+            canvas.drawBitmap(asset.HARD, hardSelectorX, difficultySelectorY, paint);
+
         }
         //Remove button highlight on
         for (int i = 0; i < towers.size(); i++) {
@@ -669,7 +717,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                     currentWaveBitmap = wave.get(currentWave).enemies[0].art;
                     currentWaveHealth = wave.get(currentWave).enemies[0].health;
                     currentWave++;
-                    gold += currentWave * 5;    //Give gold equal to the next wave times 3.
+                    gold += currentWave * (5 + difficultyModifier.getWaveGoldModifier());    //Give gold equal to the next wave times 3.
                 }
                 else{
                     //TODO put end of game stuff here
@@ -685,10 +733,12 @@ public class DefenceView extends View implements View.OnTouchListener {
 
 
     private void drawCurrentWave(Canvas canvas){
-        for (Wave wave: wave) {     //for each wave in wave,
-            if(wave.active){
-                wave.drawWave(canvas);
-                invalidate();
+        if(begin) {
+            for (Wave wave : wave) {     //for each wave in wave,
+                if (wave.active) {
+                    wave.drawWave(canvas);
+                    invalidate();
+                }
             }
         }
     }

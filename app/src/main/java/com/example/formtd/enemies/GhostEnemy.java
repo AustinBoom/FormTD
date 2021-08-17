@@ -3,6 +3,7 @@ package com.example.formtd.enemies;
 import android.graphics.Bitmap;
 
 import com.example.formtd.AssetManager;
+import com.example.formtd.DefenceView;
 
 public class GhostEnemy extends Enemy{
     public Bitmap art;
@@ -15,7 +16,7 @@ public class GhostEnemy extends Enemy{
         super(asset);
         super.setArt(asset.GHOST);
         super.setEnemySpacing(enemySpacing);
-        super.setHealth(health);
+        super.setHealth((int) (health * DefenceView.difficultyModifier.getEnemyHealthModifier()));
         super.setGoldReward(goldReward);
         super.setMovementSpeed(movementSpeed);
     }
