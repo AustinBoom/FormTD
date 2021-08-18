@@ -11,11 +11,13 @@ import androidx.core.os.HandlerCompat;
 
 import com.example.formtd.enemies.AntEnemy;
 import com.example.formtd.enemies.BabyFishSpyEnemy;
+import com.example.formtd.enemies.CrimsonEyeEnemy;
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.EyeEnemy;
 import com.example.formtd.enemies.GhostEnemy;
 import com.example.formtd.enemies.HeadEnemy;
 import com.example.formtd.enemies.LavaGhostEnemy;
+import com.example.formtd.enemies.MilkGlassEnemy;
 import com.example.formtd.enemies.SleddingElfEnemy;
 import com.example.formtd.enemies.SnekEnemy;
 import com.example.formtd.enemies.WaterGhostEnemy;
@@ -180,6 +182,10 @@ public class Wave {
                 return new SnekEnemy(asset);
             case "babyfishspy":
                 return new BabyFishSpyEnemy(asset);
+            case "milkglass":
+                return new MilkGlassEnemy(asset);
+            case "crimsoneye":
+                return new CrimsonEyeEnemy(asset);
             default:
                 throw new Resources.NotFoundException();
         }

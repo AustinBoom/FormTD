@@ -40,6 +40,7 @@ public class AssetManager {
     public Bitmap SNEK;
     public Bitmap BABYFISHSPYENEMY;
     public Bitmap GLASSOFMILK;
+    public Bitmap CRIMSONEYE;
 
     //Towers
     public Bitmap SNOWMANTOWER;
@@ -149,6 +150,9 @@ public class AssetManager {
         //GlassOfMilk
         GLASSOFMILK = BitmapFactory.decodeResource(context.getResources(), R.drawable.glassofmilk);
         GLASSOFMILK = Bitmap.createScaledBitmap(GLASSOFMILK, xScale, yScale, false);
+        //Crimson Eye
+        CRIMSONEYE = BitmapFactory.decodeResource(context.getResources(), R.drawable.crimsoneye);
+        CRIMSONEYE = Bitmap.createScaledBitmap(CRIMSONEYE, xScale, yScale, false);
 
 
         /**TOWERS**/

@@ -5,16 +5,16 @@ import android.graphics.Bitmap;
 import com.example.formtd.AssetManager;
 import com.example.formtd.DefenceView;
 
-public class BabyFishSpyEnemy extends Enemy{
+public class MilkGlassEnemy extends Enemy{
     public Bitmap art;
-    public final int enemySpacing = 170;
+    public final int enemySpacing = 190;
     public final int movementSpeed = 1;
-    public int health = 20000;
-    public int goldReward = 30;
+    public int health = 50000;
+    public int goldReward = 100;
 
-    public BabyFishSpyEnemy(AssetManager asset) {
+    public MilkGlassEnemy(AssetManager asset) {
         super(asset);
-        super.setArt(asset.BABYFISHSPYENEMY);
+        super.setArt(asset.GLASSOFMILK);
         super.setEnemySpacing(enemySpacing);
         super.setHealth((int) (health * DefenceView.difficultyModifier.getEnemyHealthModifier()));
         super.setGoldReward(goldReward);
