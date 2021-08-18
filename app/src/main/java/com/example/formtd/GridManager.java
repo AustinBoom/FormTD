@@ -82,7 +82,7 @@ public class GridManager {
     //Draws the spawn point, midpoint, and endpoint. This is hard coded since it's part of the world.
     private void drawSpawnMidEndPoints(Canvas canvas){
         Paint paint = new Paint();
-        paint.setARGB(255, 65, 5, 35);
+        paint.setARGB(255, 0, 66, 70);
         //Draw spawnpoint
         RectanglePoints corner = new RectanglePoints(grid[0][0].x, grid[0][0].y, grid[0][grid[0].length-1].x + tileWidth, grid[1][0].y);
         canvas.drawRoundRect(corner.left, corner.top, corner.right, corner.bottom, 30, 30, paint);
