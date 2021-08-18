@@ -10,7 +10,7 @@ public class CrimsonEyeEnemy extends Enemy{
     public final int enemySpacing = 300;
     public final int movementSpeed = 1;
     public int health = 6000000;
-    public int goldReward = 200;
+    public int goldReward = 500;
 
     public CrimsonEyeEnemy(AssetManager asset) {
         super(asset);
