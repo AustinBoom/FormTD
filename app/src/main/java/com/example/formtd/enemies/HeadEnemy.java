@@ -9,7 +9,7 @@ public class HeadEnemy  extends Enemy{
     public Bitmap art;
     public final int enemySpacing = 120;
     public final int movementSpeed = 1;
-    public int health = 250;
+    public int health = 300;
     public int goldReward = 5;
 
     public HeadEnemy(AssetManager asset) {

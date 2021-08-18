@@ -34,7 +34,7 @@ public class WaterTower extends Tower{
     public static int projectileSpeed = 11;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 8;
-    public static final int cost = 1800;
+    public static final int cost = 1600;
 
     public WaterTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);

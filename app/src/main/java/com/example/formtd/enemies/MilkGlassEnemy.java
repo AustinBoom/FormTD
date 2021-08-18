@@ -10,7 +10,7 @@ public class MilkGlassEnemy extends Enemy{
     public final int enemySpacing = 190;
     public final int movementSpeed = 1;
     public int health = 50000;
-    public int goldReward = 100;
+    public int goldReward = 125;
 
     public MilkGlassEnemy(AssetManager asset) {
         super(asset);

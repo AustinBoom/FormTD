@@ -30,9 +30,9 @@ public class GolemTower extends Tower{
 
     //Customizables
     public static int attackDamage = 1500;       //Amount of damage tower does
-    public static int attackRange = 450;       //Radius of attack
+    public static int attackRange = 425;       //Radius of attack
     public static int projectileSpeed = 3;    //Speed of projectile animation
-    public static int tolerance = 4;
+    public static int tolerance = 5;
     public static int projectileRadius = 15;
     public static final int cost = 325;
 

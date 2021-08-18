@@ -34,7 +34,7 @@ public class PansyTower extends Tower{
     public static int projectileSpeed = 9;    //Speed of projectile animation
     public static int tolerance = 5;
     public static int projectileRadius = 15;
-    public static final int cost = 4250;
+    public static final int cost = 3750;
 
     public PansyTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);

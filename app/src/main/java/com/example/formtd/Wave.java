@@ -11,6 +11,7 @@ import androidx.core.os.HandlerCompat;
 
 import com.example.formtd.enemies.AntEnemy;
 import com.example.formtd.enemies.BabyFishSpyEnemy;
+import com.example.formtd.enemies.ButterflyEnemy;
 import com.example.formtd.enemies.CrimsonEyeEnemy;
 import com.example.formtd.enemies.Enemy;
 import com.example.formtd.enemies.EyeEnemy;
@@ -186,6 +187,8 @@ public class Wave {
                 return new MilkGlassEnemy(asset);
             case "crimsoneye":
                 return new CrimsonEyeEnemy(asset);
+            case "butterfly":
+                return new ButterflyEnemy(asset);
             default:
                 throw new Resources.NotFoundException();
         }

@@ -561,14 +561,14 @@ public class DefenceView extends View implements View.OnTouchListener {
                 towerDescriptorDamage = ArrowTower.attackDamage;
                 towerDescriptorRange = ArrowTower.attackRange;
                 towerDescriptorSpeed = "Medium";
-                towerDescriptorAccuracy = "Good";
+                towerDescriptorAccuracy = "Medium";
                 selectedTowerIcon = 2;
             }
             else if(towerIconThreeX < motionEvent.getX() && motionEvent.getX() < towerIconThreeX + towerIconWidth
                     && towerIconThreeY < motionEvent.getY() && motionEvent.getY() < towerIconThreeY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconThreeX;
                 currentTowerIconHighlightY = towerIconThreeY;
-                towerDescriptorDescription = "Melee range but fairly vicious. Not really sure if can trust it though.";
+                towerDescriptorDescription = "Melee range but fairly vicious. Not really sure if you can trust it though.";
                 towerDescriptorCost  = FishSpyTower.cost;
                 towerDescriptorDamage = FishSpyTower.attackDamage;
                 towerDescriptorRange = FishSpyTower.attackRange;
@@ -716,7 +716,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave.add(new Wave(asset, "snek", 15, waveID++));
         wave.add(new Wave(asset, "babyfishspy", 11, waveID++));
         wave.add(new Wave(asset, "milkglass", 9, waveID++));
-        wave.add(new Wave(asset, "crimsoneye", 5, waveID++));
+        wave.add(new Wave(asset, "butterfly", 13, waveID++));
+        wave.add(new Wave(asset, "crimsoneye", 3, waveID++));
 
     }
 

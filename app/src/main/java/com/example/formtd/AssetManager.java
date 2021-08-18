@@ -41,6 +41,7 @@ public class AssetManager {
     public Bitmap BABYFISHSPYENEMY;
     public Bitmap GLASSOFMILK;
     public Bitmap CRIMSONEYE;
+    public Bitmap BUTTERFLY;
 
     //Towers
     public Bitmap SNOWMANTOWER;
@@ -150,6 +151,9 @@ public class AssetManager {
         //GlassOfMilk
         GLASSOFMILK = BitmapFactory.decodeResource(context.getResources(), R.drawable.glassofmilk);
         GLASSOFMILK = Bitmap.createScaledBitmap(GLASSOFMILK, xScale, yScale, false);
+        //Butterfly
+        BUTTERFLY = BitmapFactory.decodeResource(context.getResources(), R.drawable.butterfly);
+        BUTTERFLY = Bitmap.createScaledBitmap(BUTTERFLY, xScale, yScale, false);
         //Crimson Eye
         CRIMSONEYE = BitmapFactory.decodeResource(context.getResources(), R.drawable.crimsoneye);
         CRIMSONEYE = Bitmap.createScaledBitmap(CRIMSONEYE, xScale, yScale, false);
@@ -184,7 +188,7 @@ public class AssetManager {
         FRUITSTANDTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.fruistandtower);
         FRUITSTANDTOWERICON = Bitmap.createScaledBitmap(FRUITSTANDTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         BANANA = BitmapFactory.decodeResource(context.getResources(), R.drawable.banana);
-        BANANA = Bitmap.createScaledBitmap(BANANA, 20, 20, false);
+        BANANA = Bitmap.createScaledBitmap(BANANA, 30, 30, false);
 
 
         //Golem Tower
