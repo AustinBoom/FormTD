@@ -9,8 +9,8 @@ public class BabyFishSpyEnemy  extends Enemy{
     public Bitmap art;
     public final int enemySpacing = 170;
     public final int movementSpeed = 1;
-    public int health = 50000;
-    public int goldReward = 50;
+    public int health = 100000;
+    public int goldReward = 30;
 
     public BabyFishSpyEnemy(AssetManager asset) {
         super(asset);

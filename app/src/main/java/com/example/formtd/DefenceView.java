@@ -169,8 +169,8 @@ public class DefenceView extends View implements View.OnTouchListener {
         towerDescriptorCost  = SnowballTower.cost;
         towerDescriptorDamage = SnowballTower.attackDamage;
         towerDescriptorRange = SnowballTower.attackRange;
-        towerDescriptorSpeed = "Slow";
-        towerDescriptorAccuracy = "Poor";
+        towerDescriptorSpeed = "0";
+        towerDescriptorAccuracy = "0";
 
 
         //Tower Icons
@@ -407,11 +407,11 @@ public class DefenceView extends View implements View.OnTouchListener {
         //Tower Icon 6
         canvas.drawBitmap(asset.CASTLETOWERICON, towerIconSixX, towerIconSixY, null);
         //Tower Icon 7
-        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconSevenX, towerIconSevenY, null);
+        canvas.drawBitmap(asset.BULBTOWERICON, towerIconSevenX, towerIconSevenY, null);
         //Tower Icon 8
-        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconEightX, towerIconEightY, null);
+        canvas.drawBitmap(asset.WATERTOWERICON, towerIconEightX, towerIconEightY, null);
         //Tower Icon 9
-        canvas.drawBitmap(asset.SNOWMANTOWERICON, towerIconNineX, towerIconNineY, null);
+        canvas.drawBitmap(asset.PANSYTOWERICON, towerIconNineX, towerIconNineY, null);
 
         //Descriptor
         canvas.drawBitmap(asset.TOWERDESCRIPTOR, towerDescriptorX, towerDescriptorY, null);
@@ -548,8 +548,8 @@ public class DefenceView extends View implements View.OnTouchListener {
                 towerDescriptorCost  = SnowballTower.cost;
                 towerDescriptorDamage = SnowballTower.attackDamage;
                 towerDescriptorRange = SnowballTower.attackRange;
-                towerDescriptorSpeed = "Slow";
-                towerDescriptorAccuracy = "Poor";
+                towerDescriptorSpeed = "0";
+                towerDescriptorAccuracy = "0";
                 selectedTowerIcon = 1;
             }
             else if(towerIconTwoX < motionEvent.getX() && motionEvent.getX() < towerIconTwoX + towerIconWidth
@@ -568,7 +568,7 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconThreeY < motionEvent.getY() && motionEvent.getY() < towerIconThreeY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconThreeX;
                 currentTowerIconHighlightY = towerIconThreeY;
-                towerDescriptorDescription = "Melee range but fairly vicious";
+                towerDescriptorDescription = "Melee range but fairly vicious. Not really sure if can trust it though.";
                 towerDescriptorCost  = FishSpyTower.cost;
                 towerDescriptorDamage = FishSpyTower.attackDamage;
                 towerDescriptorRange = FishSpyTower.attackRange;
@@ -616,18 +616,36 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconSevenY < motionEvent.getY() && motionEvent.getY() < towerIconSevenY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconSevenX;
                 currentTowerIconHighlightY = towerIconSevenY;
+                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorCost  = BulbTower.cost;
+                towerDescriptorDamage = BulbTower.attackDamage;
+                towerDescriptorRange = BulbTower.attackRange;
+                towerDescriptorSpeed = "Fast";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 7;
             }
             else if(towerIconEightX < motionEvent.getX() && motionEvent.getX() < towerIconEightX + towerIconWidth
                     && towerIconEightY < motionEvent.getY() && motionEvent.getY() < towerIconEightY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconEightX;
                 currentTowerIconHighlightY = towerIconEightY;
+                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorCost  = WaterTower.cost;
+                towerDescriptorDamage = WaterTower.attackDamage;
+                towerDescriptorRange = WaterTower.attackRange;
+                towerDescriptorSpeed = "Fast";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 8;
             }
             else if(towerIconNineX < motionEvent.getX() && motionEvent.getX() < towerIconNineX + towerIconWidth
                     && towerIconNineY < motionEvent.getY() && motionEvent.getY() < towerIconNineY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconNineX;
                 currentTowerIconHighlightY = towerIconNineY;
+                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorCost  = PansyTower.cost;
+                towerDescriptorDamage = PansyTower.attackDamage;
+                towerDescriptorRange = PansyTower.attackRange;
+                towerDescriptorSpeed = "Fast";
+                towerDescriptorAccuracy = "Good";
                 selectedTowerIcon = 9;
             }
     }
@@ -647,11 +665,11 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 6:
                 return new CastleTower(highlightManager.getHighlightPlacement(), placementManager);
             case 7:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new BulbTower(highlightManager.getHighlightPlacement(), placementManager);
             case 8:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new WaterTower(highlightManager.getHighlightPlacement(), placementManager);
             case 9:
-                return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new PansyTower(highlightManager.getHighlightPlacement(), placementManager);
             default:
                 return new SnowballTower(highlightManager.getHighlightPlacement(), placementManager);
 
@@ -673,11 +691,11 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 6:
                 return CastleTower.cost;
             case 7:
-                return SnowballTower.cost;
+                return BulbTower.cost;
             case 8:
-                return SnowballTower.cost;
+                return WaterTower.cost;
             case 9:
-                return SnowballTower.cost;
+                return PansyTower.cost;
             default:
                 return SnowballTower.cost;
 
@@ -691,11 +709,11 @@ public class DefenceView extends View implements View.OnTouchListener {
         wave.add(new Wave(asset, "ant", 20, waveID++));
         wave.add(new Wave(asset, "ghost", 10, waveID++));
         wave.add(new Wave(asset, "sleddingelf",15, waveID++));
-        wave.add(new Wave(asset, "waterghost", 12, waveID++));
-        wave.add(new Wave(asset, "head", 20, waveID++));
+        wave.add(new Wave(asset, "waterghost", 10, waveID++));
+        wave.add(new Wave(asset, "head", 15, waveID++));
         wave.add(new Wave(asset, "eye", 5, waveID++));
         wave.add(new Wave(asset, "lavaghost", 8, waveID++));
-        wave.add(new Wave(asset, "snek", 20, waveID++));
+        wave.add(new Wave(asset, "snek", 15, waveID++));
         wave.add(new Wave(asset, "babyfishspy", 10, waveID++));
 
     }

@@ -10,7 +10,7 @@ import com.example.formtd.PlacementManager;
 import com.example.formtd.RectanglePoints;
 import com.example.formtd.enemies.Enemy;
 
-public class CastleTower extends Tower{
+public class PansyTower extends Tower{
     PlacementManager placementManager;
     Paint paint;
     private float angle;
@@ -29,14 +29,14 @@ public class CastleTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 1500;       //Amount of damage tower does
-    public static int attackRange = 2000;       //Radius of attack
-    public static int projectileSpeed = 11;    //Speed of projectile animation
+    public static int attackDamage = 2;       //Amount of damage tower does
+    public static int attackRange = 500;       //Radius of attack
+    public static int projectileSpeed = 8;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 10;
-    public static final int cost = 525;
+    public static final int cost = 15;
 
-    public CastleTower(RectanglePoints rect, PlacementManager placementManager) {
+    public PansyTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
         this.placementManager = placementManager;
         placementManager.placeTower(rect);
@@ -60,9 +60,11 @@ public class CastleTower extends Tower{
 
 
     public void drawTower(Canvas canvas, AssetManager asset){
-//        paint.setARGB(30, 255, 0, 255);   //uncomment to see attack range.
-//        canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
-        canvas.drawBitmap(asset.CASTLETOWER, left, top, null);
+        //Shadow
+        paint.setARGB(17, 10, 10, 10);
+        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth - 5, paint);
+
+        canvas.drawBitmap(asset.PANSYTOWER, left, top, null);
     }
 
     public int getCost(){
@@ -73,11 +75,17 @@ public class CastleTower extends Tower{
     public void drawProjectile(Canvas canvas, AssetManager asset){
         //Only draw projectile when projecting. Otherwise don't draw.
         if(projecting) {
+            // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
+            // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
+
+            //Shadow
             paint.setARGB(11, 20, 20, 45);   //Shadow
             canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
-            //Knight projectile
-            paint.setARGB(255, 220, 220, 255);
-            canvas.drawBitmap(asset.CASTLEKNIGHT, projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/6, paint);
+
+            //Arrow
+            matrix.setRotate(angle, asset.ARROWPROJECTILE.getWidth()/2, asset.ARROWPROJECTILE.getHeight()/2);
+            matrix.postTranslate(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/5);
+            canvas.drawBitmap(asset.PANSYPROJECTILE, matrix, null);
         }
     }
 

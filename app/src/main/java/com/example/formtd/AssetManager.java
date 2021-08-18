@@ -39,6 +39,7 @@ public class AssetManager {
     public Bitmap LAVAGHOST;
     public Bitmap SNEK;
     public Bitmap BABYFISHSPYENEMY;
+    public Bitmap GLASSOFMILK;
 
     //Towers
     public Bitmap SNOWMANTOWER;
@@ -57,6 +58,15 @@ public class AssetManager {
     public Bitmap CASTLETOWER;
     public Bitmap CASTLETOWERICON;
     public Bitmap CASTLEKNIGHT;
+    public Bitmap BULBTOWER;
+    public Bitmap BULBTOWERICON;
+    public Bitmap BULBPROJECTILE;
+    public Bitmap WATERTOWER;
+    public Bitmap WATERTOWERICON;
+    public Bitmap WATERPROJECTILE;
+    public Bitmap PANSYTOWER;
+    public Bitmap PANSYTOWERICON;
+    public Bitmap PANSYPROJECTILE;
 
     //Projectiles
     public Bitmap ARROWPROJECTILE;
@@ -136,6 +146,9 @@ public class AssetManager {
         //BabyFishSpy
         BABYFISHSPYENEMY = BitmapFactory.decodeResource(context.getResources(), R.drawable.fishspy);
         BABYFISHSPYENEMY = Bitmap.createScaledBitmap(BABYFISHSPYENEMY, xScale, yScale, false);
+        //GlassOfMilk
+        GLASSOFMILK = BitmapFactory.decodeResource(context.getResources(), R.drawable.glassofmilk);
+        GLASSOFMILK = Bitmap.createScaledBitmap(GLASSOFMILK, xScale, yScale, false);
 
 
         /**TOWERS**/
@@ -185,6 +198,30 @@ public class AssetManager {
         CASTLETOWERICON = Bitmap.createScaledBitmap(CASTLETOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         CASTLEKNIGHT = BitmapFactory.decodeResource(context.getResources(), R.drawable.knight);
         CASTLEKNIGHT = Bitmap.createScaledBitmap(CASTLEKNIGHT, 60, 60, false);
+
+        //Bulb Tower
+        BULBTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.bulbtower);
+        BULBTOWER = Bitmap.createScaledBitmap(BULBTOWER, tileWidth*2, tileWidth*2, false);
+        BULBTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.bulbtower);
+        BULBTOWERICON = Bitmap.createScaledBitmap(BULBTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        BULBPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.bulbprojectile);
+        BULBPROJECTILE = Bitmap.createScaledBitmap(BULBPROJECTILE, 80, 40, false);
+
+        //Water Tower
+        WATERTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.glassofwater);
+        WATERTOWER = Bitmap.createScaledBitmap(WATERTOWER, tileWidth*2, tileWidth*2, false);
+        WATERTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.glassofwater);
+        WATERTOWERICON = Bitmap.createScaledBitmap(WATERTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        WATERPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.waterprojectile);
+        WATERPROJECTILE = Bitmap.createScaledBitmap(WATERPROJECTILE, 65, 45, false);
+
+        //Pansy Tower
+        PANSYTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.pansytower);
+        PANSYTOWER = Bitmap.createScaledBitmap(PANSYTOWER , tileWidth*2, tileWidth*2, false);
+        PANSYTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.pansytower);
+        PANSYTOWERICON = Bitmap.createScaledBitmap(PANSYTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
+        PANSYPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.pansyprojectile);
+        PANSYPROJECTILE = Bitmap.createScaledBitmap(PANSYPROJECTILE, 90, 90, false);
 
 
 

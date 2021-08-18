@@ -28,11 +28,11 @@ public class SnowballTower extends Tower {
     public int attackDelayCounter;
 
     //Customizables
-    public static int attackDamage = 1;       //Amount of damage tower does
-    public static int attackRange = 250;       //Radius of attack
-    public static int projectileSpeed = 3;    //Speed of projectile animation
-    public static int tolerance = 4;           //Multiplies by projectile Radius
-    public static int projectileRadius = 6;
+    public static int attackDamage = 0;       //Amount of damage tower does
+    public static int attackRange = 0;       //Radius of attack
+    public static int projectileSpeed = 0;    //Speed of projectile animation
+    public static int tolerance = 0;           //Multiplies by projectile Radius
+    public static int projectileRadius = 0;
     public static final int cost = 3;
 
 
@@ -74,79 +74,16 @@ public class SnowballTower extends Tower {
 
 
     public void drawProjectile(Canvas canvas, AssetManager asset){
-        //Only draw projectile when projecting. Otherwise don't draw.
-        if(projecting) {
-            // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
-            // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
-
-
-             paint.setARGB(11, 20, 20, 45);   //Shadow
-             canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
-             paint.setARGB(255, 220, 220, 255);
-             canvas.drawCircle(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/6, projectileRadius, paint);  //Adds to 10 account for enemy's animation offset.
-        }
+        //Snowball tower doesn't attack.
     }
-
 
 
     //Constantly called by DefenceView towerHandler. Look for nearby enemies and attack!
     public synchronized Enemy[] watch(Enemy[] enemies, int waveID) {
-        //Get pythagorean values
-        double a;
-        double b;
-        double c;
-
-        //Check each enemy in range. If found an enemy, set aggro
-        for (int i = 0; i < enemies.length; i++){
-            a = Math.abs(towerCenterX - enemies[i].x) * Math.abs(towerCenterX - enemies[i].x);
-            b = Math.abs(towerCenterY - enemies[i].y) * Math.abs(towerCenterY - enemies[i].y);
-            c = attackRange * attackRange;
-
-            if (Math.sqrt(a + b) < Math.sqrt(c) && enemies[i].health > 0 && enemies[i].alive && aggroEnemy == -1 && enemies[i].y > 0) { //If enemy is in range,
-                //attack!
-                aggroEnemy = i;
-                currentWaveID = waveID;
-                projectileX = towerCenterX;
-                projectileY = towerCenterY;
-            }
-        }
-
-        //If an enemy is aggro'd, attack!
-        if(aggroEnemy != -1 && waveID == currentWaveID){
-            this.projecting = true;
-            enemies[aggroEnemy] = updateProjectile(enemies[aggroEnemy]);
-        }
-
-
         return enemies;
     }
 
     public synchronized Enemy updateProjectile(Enemy enemy){
-        int velocityX = enemy.x - towerCenterX;
-        int velocityY = enemy.y - towerCenterY;
-        double length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-        velocityX *= projectileSpeed/length;
-        velocityY *= projectileSpeed/length;
-        angle = (float) Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX);  //For bitmap rotation!
-
-        //Adjust projectile position
-        if ((Math.abs(projectileX - enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY - enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
-            enemy.health -= attackDamage;
-            projecting = false;
-            aggroEnemy = -1;
-        } else if (projectileX < DefenceView.xGridStart || projectileX > DefenceView.xGridEnd || projectileY < DefenceView.yGridStart || projectileY > DefenceView.yGridEnd) { //If out of bounds it's a miss!
-            projecting = false;
-            aggroEnemy = -1;
-        } else if (!enemy.alive) {  //If enemy is already dead, then quit trying to attack it!
-            projecting = false;
-            aggroEnemy = -1;
-        } else {
-            projectileX += velocityX;
-            projectileY += velocityY;
-        }
-
-
-
         return enemy;
     }
 }
