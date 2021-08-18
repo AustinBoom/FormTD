@@ -29,12 +29,12 @@ public class WaterTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 2;       //Amount of damage tower does
-    public static int attackRange = 500;       //Radius of attack
-    public static int projectileSpeed = 8;    //Speed of projectile animation
+    public static int attackDamage = 24000;       //Amount of damage tower does
+    public static int attackRange = 160;       //Radius of attack
+    public static int projectileSpeed = 11;    //Speed of projectile animation
     public static int tolerance = 4;
-    public static int projectileRadius = 10;
-    public static final int cost = 15;
+    public static int projectileRadius = 8;
+    public static final int cost = 1800;
 
     public WaterTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);

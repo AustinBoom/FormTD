@@ -31,7 +31,7 @@ public class ArrowTower extends Tower{
 
     //Customizables
     public static int attackDamage = 2;       //Amount of damage tower does
-    public static int attackRange = 500;       //Radius of attack
+    public static int attackRange = 375;       //Radius of attack
     public static int projectileSpeed = 8;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 10;

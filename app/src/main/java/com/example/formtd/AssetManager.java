@@ -205,7 +205,7 @@ public class AssetManager {
         BULBTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.bulbtower);
         BULBTOWERICON = Bitmap.createScaledBitmap(BULBTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         BULBPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.bulbprojectile);
-        BULBPROJECTILE = Bitmap.createScaledBitmap(BULBPROJECTILE, 80, 40, false);
+        BULBPROJECTILE = Bitmap.createScaledBitmap(BULBPROJECTILE, 120, 40, false);
 
         //Water Tower
         WATERTOWER = BitmapFactory.decodeResource(context.getResources(), R.drawable.glassofwater);
@@ -221,7 +221,7 @@ public class AssetManager {
         PANSYTOWERICON = BitmapFactory.decodeResource(context.getResources(), R.drawable.pansytower);
         PANSYTOWERICON = Bitmap.createScaledBitmap(PANSYTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         PANSYPROJECTILE = BitmapFactory.decodeResource(context.getResources(), R.drawable.pansyprojectile);
-        PANSYPROJECTILE = Bitmap.createScaledBitmap(PANSYPROJECTILE, 90, 90, false);
+        PANSYPROJECTILE = Bitmap.createScaledBitmap(PANSYPROJECTILE, tileWidth, tileWidth, false);
 
 
 

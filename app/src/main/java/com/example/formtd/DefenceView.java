@@ -98,7 +98,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
     protected int waveTimer = 60000;           //Time between waves (ex. 60000ms = 60 seconds)
-    protected int firstWaveReduction = 30000;   //Make the first wave shorter
+    protected int firstWaveReduction = 55000;   //Make the first wave shorter
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -616,36 +616,36 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconSevenY < motionEvent.getY() && motionEvent.getY() < towerIconSevenY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconSevenX;
                 currentTowerIconHighlightY = towerIconSevenY;
-                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorDescription = "An overloaded lightbulb is really dangerous.";
                 towerDescriptorCost  = BulbTower.cost;
                 towerDescriptorDamage = BulbTower.attackDamage;
                 towerDescriptorRange = BulbTower.attackRange;
-                towerDescriptorSpeed = "Fast";
-                towerDescriptorAccuracy = "Good";
+                towerDescriptorSpeed = "Extreme";
+                towerDescriptorAccuracy = "Very good";
                 selectedTowerIcon = 7;
             }
             else if(towerIconEightX < motionEvent.getX() && motionEvent.getX() < towerIconEightX + towerIconWidth
                     && towerIconEightY < motionEvent.getY() && motionEvent.getY() < towerIconEightY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconEightX;
                 currentTowerIconHighlightY = towerIconEightY;
-                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorDescription = "Being slapped with water at high speed.";
                 towerDescriptorCost  = WaterTower.cost;
                 towerDescriptorDamage = WaterTower.attackDamage;
                 towerDescriptorRange = WaterTower.attackRange;
-                towerDescriptorSpeed = "Fast";
-                towerDescriptorAccuracy = "Good";
+                towerDescriptorSpeed = "Very Fast";
+                towerDescriptorAccuracy = "Great";
                 selectedTowerIcon = 8;
             }
             else if(towerIconNineX < motionEvent.getX() && motionEvent.getX() < towerIconNineX + towerIconWidth
                     && towerIconNineY < motionEvent.getY() && motionEvent.getY() < towerIconNineY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconNineX;
                 currentTowerIconHighlightY = towerIconNineY;
-                towerDescriptorDescription = "Can't go wrong with sending out the troops. The range is huge!";
+                towerDescriptorDescription = "Why do they use \"pansy\" as an insult? Pansies are tough!";
                 towerDescriptorCost  = PansyTower.cost;
                 towerDescriptorDamage = PansyTower.attackDamage;
                 towerDescriptorRange = PansyTower.attackRange;
                 towerDescriptorSpeed = "Fast";
-                towerDescriptorAccuracy = "Good";
+                towerDescriptorAccuracy = "Great";
                 selectedTowerIcon = 9;
             }
     }

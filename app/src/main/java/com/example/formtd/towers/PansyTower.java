@@ -29,12 +29,12 @@ public class PansyTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 2;       //Amount of damage tower does
-    public static int attackRange = 500;       //Radius of attack
-    public static int projectileSpeed = 8;    //Speed of projectile animation
-    public static int tolerance = 4;
-    public static int projectileRadius = 10;
-    public static final int cost = 15;
+    public static int attackDamage = 750000;       //Amount of damage tower does
+    public static int attackRange = 600;       //Radius of attack
+    public static int projectileSpeed = 9;    //Speed of projectile animation
+    public static int tolerance = 5;
+    public static int projectileRadius = 15;
+    public static final int cost = 4250;
 
     public PansyTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
@@ -61,8 +61,8 @@ public class PansyTower extends Tower{
 
     public void drawTower(Canvas canvas, AssetManager asset){
         //Shadow
-        paint.setARGB(17, 10, 10, 10);
-        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth - 5, paint);
+        paint.setARGB(20, 252, 15, 192);
+        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth*3, paint);
 
         canvas.drawBitmap(asset.PANSYTOWER, left, top, null);
     }
@@ -79,8 +79,8 @@ public class PansyTower extends Tower{
             // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
 
             //Shadow
-            paint.setARGB(11, 20, 20, 45);   //Shadow
-            canvas.drawCircle(projectileX + DefenceView.tileWidth/4 +4, projectileY - DefenceView.tileWidth/6 +7, projectileRadius, paint);
+            paint.setARGB(25, 252, 15, 192);
+            canvas.drawCircle(projectileX + asset.PANSYPROJECTILE.getWidth()/2, projectileY, DefenceView.tileWidth, paint);
 
             //Arrow
             matrix.setRotate(angle, asset.ARROWPROJECTILE.getWidth()/2, asset.ARROWPROJECTILE.getHeight()/2);

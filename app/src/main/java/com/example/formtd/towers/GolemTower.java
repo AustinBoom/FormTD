@@ -29,8 +29,8 @@ public class GolemTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 1300;       //Amount of damage tower does
-    public static int attackRange = 500;       //Radius of attack
+    public static int attackDamage = 1500;       //Amount of damage tower does
+    public static int attackRange = 450;       //Radius of attack
     public static int projectileSpeed = 3;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 15;

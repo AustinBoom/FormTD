@@ -29,7 +29,7 @@ public class FruitStandTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 60;       //Amount of damage tower does
+    public static int attackDamage = 100;       //Amount of damage tower does
     public static int attackRange = 700;       //Radius of attack
     public static int projectileSpeed = 12;    //Speed of projectile animation
     public static int tolerance = 3;

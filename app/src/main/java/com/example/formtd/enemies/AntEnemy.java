@@ -9,7 +9,7 @@ public class AntEnemy extends Enemy{
     public Bitmap art;
     public final int enemySpacing = 120;
     public final int movementSpeed = 1;
-    public int health = 16;
+    public int health = 12;
     public int goldReward = 1;
 
     public AntEnemy(AssetManager asset) {

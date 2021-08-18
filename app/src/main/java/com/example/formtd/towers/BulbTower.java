@@ -29,12 +29,12 @@ public class BulbTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 2;       //Amount of damage tower does
-    public static int attackRange = 500;       //Radius of attack
-    public static int projectileSpeed = 8;    //Speed of projectile animation
-    public static int tolerance = 4;
-    public static int projectileRadius = 10;
-    public static final int cost = 15;
+    public static int attackDamage = 2000;       //Amount of damage tower does
+    public static int attackRange = 800;       //Radius of attack
+    public static int projectileSpeed = 30;    //Speed of projectile animation
+    public static int tolerance = 5;
+    public static int projectileRadius = 15;
+    public static final int cost = 1200;
 
     public BulbTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
@@ -62,7 +62,7 @@ public class BulbTower extends Tower{
     public void drawTower(Canvas canvas, AssetManager asset){
         //Bulb glow!
         paint.setARGB(30, 255, 255, 225);
-        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth, paint);
+        canvas.drawCircle(left + DefenceView.tileWidth, top + DefenceView.tileWidth*1.5f,  DefenceView.tileWidth*2, paint);
 
         canvas.drawBitmap(asset.BULBTOWER, left, top, null);
     }
@@ -75,14 +75,7 @@ public class BulbTower extends Tower{
     public void drawProjectile(Canvas canvas, AssetManager asset){
         //Only draw projectile when projecting. Otherwise don't draw.
         if(projecting) {
-            // paint.setARGB(10, 255, 0, 255);   //uncomment to see attack range.
-            // canvas.drawCircle(towerCenterX, towerCenterY, attackRange, paint);
-
-            //Shadow
-            paint.setARGB(15, 255, 255, 225);   //Shadow
-            canvas.drawCircle(projectileX, projectileY, projectileRadius, paint);
-
-            //Arrow
+            //Lightning
             matrix.setRotate(angle, asset.ARROWPROJECTILE.getWidth()/2, asset.ARROWPROJECTILE.getHeight()/2);
             matrix.postTranslate(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/5);
             canvas.drawBitmap(asset.BULBPROJECTILE, matrix, null);
