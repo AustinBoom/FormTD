@@ -29,7 +29,7 @@ public class PansyTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 750000;       //Amount of damage tower does
+    public static int attackDamage = 500000;       //Amount of damage tower does
     public static int attackRange = 600;       //Radius of attack
     public static int projectileSpeed = 9;    //Speed of projectile animation
     public static int tolerance = 5;

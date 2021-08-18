@@ -29,12 +29,12 @@ public class BulbTower extends Tower{
     Matrix matrix = new Matrix();       //For projectile angle
 
     //Customizables
-    public static int attackDamage = 2500;       //Amount of damage tower does
+    public static int attackDamage = 2250;       //Amount of damage tower does
     public static int attackRange = 800;       //Radius of attack
     public static int projectileSpeed = 30;    //Speed of projectile animation
     public static int tolerance = 5;
     public static int projectileRadius = 15;
-    public static final int cost = 1100;
+    public static final int cost = 1200;
 
     public BulbTower(RectanglePoints rect, PlacementManager placementManager) {
         super(rect, placementManager);
