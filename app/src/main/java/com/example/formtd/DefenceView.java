@@ -98,7 +98,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
     protected int waveTimer = 70000;           //Time between waves (ex. 60000ms = 60 seconds)
-    protected int firstWaveReduction = 65000;   //Make the first wave shorter
+    protected int firstWaveReduction = 40000;   //Make the first wave shorter
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
