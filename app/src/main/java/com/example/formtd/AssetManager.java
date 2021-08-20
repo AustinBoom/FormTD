@@ -57,6 +57,8 @@ public class AssetManager {
     public Bitmap FRUITSTANDTOWER;
     public Bitmap FRUITSTANDTOWERICON;
     public Bitmap BANANA;
+    public Bitmap WATERMELON;
+    public Bitmap APPLE;
     public Bitmap CASTLETOWER;
     public Bitmap CASTLETOWERICON;
     public Bitmap CASTLEKNIGHT;
@@ -189,6 +191,10 @@ public class AssetManager {
         FRUITSTANDTOWERICON = Bitmap.createScaledBitmap(FRUITSTANDTOWERICON, DefenceView.towerIconWidth, DefenceView.towerIconWidth, false);
         BANANA = BitmapFactory.decodeResource(context.getResources(), R.drawable.banana);
         BANANA = Bitmap.createScaledBitmap(BANANA, 30, 30, false);
+        WATERMELON = BitmapFactory.decodeResource(context.getResources(), R.drawable.watermelon);
+        WATERMELON = Bitmap.createScaledBitmap(WATERMELON, 30, 30, false);
+        APPLE = BitmapFactory.decodeResource(context.getResources(), R.drawable.apple);
+        APPLE = Bitmap.createScaledBitmap(APPLE, 20, 20, false);
 
 
         //Golem Tower

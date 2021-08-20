@@ -31,7 +31,7 @@ public class CastleTower extends Tower{
     //Customizables
     public static int attackDamage = 1500;       //Amount of damage tower does
     public static int attackRange = 2000;       //Radius of attack
-    public static int projectileSpeed = 11;    //Speed of projectile animation
+    public static int projectileSpeed = 12;    //Speed of projectile animation
     public static int tolerance = 4;
     public static int projectileRadius = 10;
     public static final int cost = 525;

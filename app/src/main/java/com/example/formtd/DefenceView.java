@@ -98,7 +98,7 @@ public class DefenceView extends View implements View.OnTouchListener {
     ArrayList<Wave> wave;            //Holds every wave that exists
     public boolean begin = false;   //When game has begun
     protected int waveTimer = 70000;           //Time between waves (ex. 60000ms = 60 seconds)
-    protected int firstWaveReduction = 40000;   //Make the first wave shorter
+    protected int firstWaveReduction = 65000;   //Make the first wave shorter
     protected int countdown = 0;              //Countdown timer. Set to waveTimer/1000 then counts down each wave. (do not set here)
     public static boolean gameOver = false;
     public static boolean lastWave = false;
@@ -592,12 +592,12 @@ public class DefenceView extends View implements View.OnTouchListener {
                     && towerIconFiveY < motionEvent.getY() && motionEvent.getY() < towerIconFiveY + towerIconWidth){
                 currentTowerIconHighlightX = towerIconFiveX;
                 currentTowerIconHighlightY = towerIconFiveY;
-                towerDescriptorDescription = "Not very nimble, but no escaping a boulder...";
+                towerDescriptorDescription = "Not very nimble, but being hit by a boulder hurts.";
                 towerDescriptorCost  = GolemTower.cost;
                 towerDescriptorDamage = GolemTower.attackDamage;
                 towerDescriptorRange = GolemTower.attackRange;
                 towerDescriptorSpeed = "Slow";
-                towerDescriptorAccuracy = "Good";
+                towerDescriptorAccuracy = "Medium";
                 selectedTowerIcon = 5;
             }
             else if(towerIconSixX < motionEvent.getX() && motionEvent.getX() < towerIconSixX + towerIconWidth
@@ -659,7 +659,7 @@ public class DefenceView extends View implements View.OnTouchListener {
             case 3:
                 return new FishSpyTower(highlightManager.getHighlightPlacement(), placementManager);
             case 4:
-                return new FruitStandTower(highlightManager.getHighlightPlacement(), placementManager);
+                return new FruitStandTower(highlightManager.getHighlightPlacement(), placementManager, asset);
             case 5:
                 return new GolemTower(highlightManager.getHighlightPlacement(), placementManager);
             case 6:

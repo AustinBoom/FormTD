@@ -1,5 +1,7 @@
 package com.example.formtd.towers;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -9,6 +11,8 @@ import com.example.formtd.DefenceView;
 import com.example.formtd.PlacementManager;
 import com.example.formtd.RectanglePoints;
 import com.example.formtd.enemies.Enemy;
+import java.util.Random;
+
 
 public class FruitStandTower extends Tower{
     PlacementManager placementManager;
@@ -28,6 +32,11 @@ public class FruitStandTower extends Tower{
     private int projectileY;
     Matrix matrix = new Matrix();       //For projectile angle
 
+    //To cycle through different fruits.
+    Bitmap[] currentFruit;
+    private int current;
+    Random ran;
+
     //Customizables
     public static int attackDamage = 100;       //Amount of damage tower does
     public static int attackRange = 700;       //Radius of attack
@@ -36,7 +45,7 @@ public class FruitStandTower extends Tower{
     public static int projectileRadius = 6;
     public static final int cost = 200;
 
-    public FruitStandTower(RectanglePoints rect, PlacementManager placementManager) {
+    public FruitStandTower(RectanglePoints rect, PlacementManager placementManager, AssetManager asset) {
         super(rect, placementManager);
         this.placementManager = placementManager;
         placementManager.placeTower(rect);
@@ -53,6 +62,14 @@ public class FruitStandTower extends Tower{
         this.projectileX = towerCenterX;
         this.projectileY = towerCenterY;
         this.aggroEnemy = -1;
+
+        //To cycle through fruits
+        currentFruit = new Bitmap[3];
+        currentFruit[0] = asset.BANANA;
+        currentFruit[1] = asset.WATERMELON;
+        currentFruit[2] = asset.APPLE;
+        current = 0;
+        ran = new Random();
 
         //Upon creation charge gold
         DefenceView.gold -= cost;
@@ -81,7 +98,8 @@ public class FruitStandTower extends Tower{
             //Arrow
             matrix.setRotate(angle, asset.ARROWPROJECTILE.getWidth()/2, asset.ARROWPROJECTILE.getHeight()/2);
             matrix.postTranslate(projectileX + DefenceView.tileWidth/4, projectileY - DefenceView.tileWidth/5);
-            canvas.drawBitmap(asset.BANANA, matrix, null);
+            canvas.drawBitmap(currentFruit[current], matrix, null);
+
         }
     }
 
@@ -106,6 +124,7 @@ public class FruitStandTower extends Tower{
                 currentWaveID = waveID;
                 projectileX = towerCenterX;
                 projectileY = towerCenterY;
+                current = ran.nextInt(currentFruit.length);
             }
         }
 
@@ -126,12 +145,14 @@ public class FruitStandTower extends Tower{
         velocityX *= projectileSpeed/length;
         velocityY *= projectileSpeed/length;
         angle = (float) Math.atan2(enemy.y - towerCenterY, enemy.x - towerCenterX) *60;  //For bitmap rotation!
+        angle += projectileY + projectileX; //Make them spin!
 
         //Adjust projectile position
         if ((Math.abs(projectileX-enemy.x) < tolerance * projectileRadius) && (Math.abs(projectileY-enemy.y) < tolerance * projectileRadius)) { //If projectile has reached enemy, then clear it.
             enemy.health -= attackDamage;
             projecting = false;
             aggroEnemy = -1;
+            //Cycle through different fruits.
         }
         else if(projectileX < DefenceView.xGridStart || projectileX > DefenceView.xGridEnd || projectileY < DefenceView.yGridStart || projectileY > DefenceView.yGridEnd){ //If out of bounds it's a miss!
             projecting = false;
